@@ -1,0 +1,1050 @@
+:root {
+    /* Colores */
+    --primary: #4CAF50; /* color primario botones */
+    --primary-color-dark: #45a049; /* color primario botones hover */
+    --secondary: #2196F3;
+    --white: #ffffff;
+    --gray-100: #f3f4f6; /* color de fondo de la página de inicio de sesión */
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563; /*texto*/
+    --gray-700: #374151;
+    --red-600: #dc2626; /* error */
+    
+    /* Sombras */
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    
+    /* Bordes */
+    --radius-sm: 4px;
+    --radius-md: 5px;
+    --radius-lg: 8px;
+    
+    /* Breakpoints */
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* INICIO DE ESTILOS PARA PÁGINA EN MANTENIMIENTO */
+/* Contenedor Flexbox */
+.ContenedorDemo {
+    display: flex;
+    justify-content: center;  /* Alineación horizontal */
+    align-items: center; /* Alineación vertical */
+}
+  
+/* Elemento en posición absoluta y alineado con Flexbox */
+.ElementoDemo {
+    position: absolute; /* Posición absoluta */
+    top: 60%; /* Alineación vertical */
+    left: 50%; /* Alineación horizontal */
+    transform: translate(-50%, -50%); /* Centrado exacto */
+}
+
+/* INICIO DE ESTILOS PARA PLANTILLA PRINCIPAL */
+.BodyPlantilla {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--gray-100);
+    color: var(--gray-700);
+    line-height: 1.5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.Sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 95px;
+    height: 100vh;
+    background: var(--white); /*CAMBIO PENDIENTE color de fondo del sidebar */
+    transition: width 0.3s ease-in-out;
+    z-index: 200;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.Sidebar:hover {
+    width: 220px;
+}
+.Sidebar:hover ~ .MainContent {
+    margin-left: 205px;
+}
+
+/* Logo */
+.LogoContainer {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0 2rem 0;
+    padding-bottom: 10px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.Logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 0.5rem;
+    transition: width 0.3s ease;
+}
+.Sidebar:not(:hover) .Logo {
+    width: 100px;
+}
+
+/* Navegación */
+.NavMenu {
+    width: 100%;
+    padding-top: 35px;
+    position: absolute;
+    top: 21%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.NavItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    color: var(--gray-600);
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+    border-radius: var(--radius-sm);
+}
+.NavItem i {
+    font-size: 20px;
+    width: 30px;
+    text-align: center;
+}
+.NavItem:hover, .NavItem.active {
+    background: var(--gray-100);
+    color: var(--secondary);
+}
+.NavText {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: opacity 0.3s ease, width 0.3s ease;
+}
+.Sidebar:hover .NavText {
+    opacity: 1;
+    width: auto;
+}
+
+/* Contenido principal */
+.MainContent {
+    margin-left: 76px;
+    transition: margin-left 0.3s ease-in-out;
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+/* Barra superior */
+.TopBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 15px;
+    border: 2px solid #f6f1f1;
+    background-color: --w;
+    width: 100%;
+    margin-top: -23px;
+}
+.UserInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.UserAvatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.UserName {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+.CurrentDate {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--radius-md);
+    background-color: #f5f5f5;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Acciones del encabezado */
+.HeaderActions {
+    display: flex;
+    align-items: center;
+}
+
+/*
+#IconBack {
+      position: absolute;
+      top: 200px;          ajusta según necesites 
+      left: 110px;         ajusta según necesites 
+      font-size: 2rem;
+      cursor: pointer;
+      color: var(--secondary);  Color Bootstrap Primary 
+      transition: color 0.2s ease;
+      margin-top: -50px;
+    }
+
+    #IconBack:hover {
+      color: #084298;  Color más oscuro al pasar el mouse 
+    }
+*/
+
+.Btn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.BtnHelp {
+    background-color: var(--white);
+    color: var(--gray-700);
+    border: 1px solid var(--gray-300);
+}
+.BtnHelp:hover {
+    background-color: var(--gray-100);
+}
+.BtnLogout {
+    background-color: var(--red-600);
+    color: var(--white);
+}
+.BtnLogout:hover {
+    background-color: #b91c1c;
+}
+.Divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--gray-300);
+    margin: 0 1rem;
+}
+
+/* Barra de notificaciones */
+.NotificationBar {
+    background-color: var(--white);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    margin-top: -24px;
+    color: var(--gray-500);
+    box-shadow: var(--shadow-sm);
+}
+
+/* INICIO DE ESTILOS PARA PÁGINA DE LOGIN */
+.BodyLogin {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: var(--gray-100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.LoginContainer {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    height: 500px;
+}
+
+.LoginFormContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background-color: var(--white);
+    border-top-left-radius: var(--radius-lg);
+    border-bottom-left-radius: var(--radius-lg);
+}
+
+.LoginForm {
+    width: 100%;
+    max-width: 300px;
+}
+
+.BodyLogin h1 {
+    text-align: center;
+    color: var(--gray-600);
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.FormGroup {
+    margin-bottom: 15px;
+}
+
+.FormGroup label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--gray-600);
+}
+
+.FormGroup input,
+.FormGroup select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+}
+
+.PasswordInputContainer {
+    position: relative;
+}
+
+#TogglePassword {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#TogglePassword svg {
+    width: 20px;
+    height: 20px;
+    color: var(--gray-600);
+}
+
+.ForgotPassword {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.LoginButton {
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.LoginButton:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.ErrorMessage {
+    color: var(--red-600);
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    display: none; /* El mensaje está oculto por defecto */
+}
+
+.ImageContainer {
+    flex: 1;
+    background-color: var(--white);
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.ImageContent {
+    padding-top: 50px;
+    width: 100%;
+    height: 80%;
+}
+
+/* Estilos para el Dashboard */
+.DashboardGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.DashboardGrid i {
+    font-size: 2.8rem;
+}
+
+.DashboardCard {
+    background-color: var(--white);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.DashboardCard:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.DashboardCard h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.DashboardCard.Disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.DashboardCard.Disabled:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.CardIcon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+}
+
+.CardIcon svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--gray-600);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+/* INICIO DE ESTILOS PARA BOTONES */
+/* Button styles - Comentado originalmente en el CSS secundario */
+/*
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+*/
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.btn-outline {
+    background-color: white;
+    border-color: #ccc;
+    color: #555;
+}
+
+.btn-outline:hover {
+    background-color: #f5f5f5;
+}
+
+.btn-red {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-red:hover {
+    background-color: #c82333;
+}
+
+.btn-green {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-green:hover {
+    background-color: #218838;
+}
+
+.btn-blue {
+    background-color: #e6f7ff;
+    border-color: #91d5ff;
+    color: #1890ff;
+}
+
+.btn-blue:hover {
+    background-color: #d6f0ff;
+}
+
+/* INICIO DE ESTILOS PARA CONTENIDO */
+.Content {
+    flex: 1;
+    overflow: auto;
+}
+
+.ContentHeader {
+    background-color: #e0e0e0;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ParishInfo {
+    display: flex;
+    align-items: center;
+}
+
+.ParishLogo {
+    height: 80px;
+    margin-right: 1rem;
+}
+
+.ParishDetails {
+    text-align: center;
+    color: #444;
+    font-weight: 500;
+}
+
+.ReportInfo {
+    margin-left: 20px;
+    text-align: right;
+    color: #444;
+}
+
+.ContentBody {
+    padding: 1rem;
+    background-color: white;
+}
+
+.FiltersContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.DateFilter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #555;
+}
+
+.DateFilter input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    width: 140px;
+    cursor: pointer;
+}
+
+.SearchFilter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.SearchBox {
+    position: relative;
+}
+
+.SearchBox i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.SearchBox input {
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 250px;
+}
+
+/* INICIO DE ESTILOS PARA DROPDOWN */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    min-width: 200px;
+    padding: 0.75rem;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.FilterGroup {
+    margin-bottom: 0.75rem;
+}
+
+.FilterGroup h4 {
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-size: 0.875rem;
+}
+
+.FilterOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.FilterOptions label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.FilterActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #eee;
+}
+
+/* INICIO DE ESTILOS PARA TABLAS */
+.TableContainer {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #f5f5f5;
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #ddd;
+}
+
+td {
+    padding: 0.75rem 0.5rem;
+    border-top: 1px solid #ddd;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Update these class names to PascalCase */
+.StatusBadge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.StatusCompleted {
+    background-color: #28a745;
+    color: white;
+}
+
+.StatusPending {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.StatusCanceled {
+    background-color: #6c757d;
+    color: white;
+}
+
+.StatusMissed {
+    background-color: #dc3545;
+    color: white;
+}
+
+.ActionButtons {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.ActionBtn {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    cursor: pointer;
+}
+
+.EditBtn {
+    background-color: #fff3e0;
+    border-color: #ffcc80;
+    color: #ff9800;
+}
+
+.DeleteBtn {
+    background-color: #ffebee;
+    border-color: #ef9a9a;
+    color: #f44336;
+}
+
+.PrintBtn {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #2196f3;
+}
+
+/* INICIO DE ESTILOS PARA MODALES */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    color: #333;
+    font-weight: 600;
+}
+
+.close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #777;
+}
+
+.modal-body {
+    padding: 1rem;
+}
+
+.calendar-container {
+    margin-bottom: 1rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+}
+
+.weekday {
+    text-align: center;
+    font-weight: 500;
+    color: #555;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 0.5rem 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    background-color: #f0f0f0;
+}
+
+.calendar-day.selected {
+    background-color: #e6f7ff;
+    color: #1890ff;
+    font-weight: 500;
+}
+
+.calendar-day.today {
+    border: 1px solid #1890ff;
+}
+
+.calendar-day.other-month {
+    color: #ccc;
+}
+
+.modal-footer {
+    padding: 1rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* INICIO DE ESTILOS MEJORADOS PARA DROPDOWN */
+/* Estilos mejorados para el menú desplegable de filtros */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+/* Mejora del menú desplegable */
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  min-width: 300px; /* Ancho mínimo aumentado */
+  max-width: 400px; /* Ancho máximo para control */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Sombra mejorada */
+  z-index: 1000;
+  padding: 15px;
+  margin-top: 5px;
+  display: none; /* Oculto por defecto */
+  overflow-y: auto; /* Scroll vertical si es necesario */
+  max-height: 80vh; /* Altura máxima del 80% de la ventana */
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+/* Estilos para los grupos de filtros */
+.FilterGroup {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.FilterGroup:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.FilterGroup h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.FilterOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.FilterOptions label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #444;
+}
+
+.FilterOptions label:hover {
+  color: #000;
+}
+
+.FilterActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+/* INICIO DE ESTILOS RESPONSIVOS */
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 90%;
+    max-height: 80vh;
+    z-index: 1100;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Overlay para cuando el menú está abierto */
+  .dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    display: none;
+  }
+
+  .dropdown-overlay.show {
+    display: block;
+  }
+}
+
+/* Estilos para la tabla responsive */
+.TableContainer {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  #TablaCitas {
+    min-width: 800px; /* Asegura que la tabla tenga un ancho mínimo para todas las columnas */
+  }
+}
+
+/* INICIO DE ESTILOS PARA TABLAS ESPECÍFICAS */
+th:nth-child(1) { width: 2%; }
+th:nth-child(2) { width: 10%; }
+th:nth-child(3) { width: 10%; }
+th:nth-child(4) { width: 10%; }
+th:nth-child(5) { width: 10%; }
+th:nth-child(6) { width: 10%; }
+th:nth-child(7) { width: 10%; }
+th:nth-child(8) { width: 10%; }
+th:nth-child(9) { width: 10%; }
+
+/* Mejoras de accesibilidad */
+.NavItem:focus-visible,
+.Btn:focus-visible,
+.LoginButton:focus-visible,
+.FormGroup input:focus-visible,
+.FormGroup select:focus-visible {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
+}
+
+/* Media queries usando variables */
+@media (max-width: var(--breakpoint-lg)) {
+    .DashboardGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: var(--breakpoint-md)) {
+    .LoginContainer {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .ImageContainer {
+        display: none;
+    }
+
+    .LoginFormContainer {
+        border-radius: var(--radius-lg);
+    }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+    .DashboardGrid {
+        grid-template-columns: 1fr;
+    }
+}
