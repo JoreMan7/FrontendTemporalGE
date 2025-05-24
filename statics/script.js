@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await simulateApiCall(documentType, documentNumber, password);
                 
                 if (response.success) {
-                    window.location.href = 'NavInicio.html';
+                    window.location.href = './NavInicio.html';
                 } else {
                     errorMessage.textContent = response.message;
                     errorMessage.style.display = 'block';
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Botones de ayuda y logout
     document.querySelector('.BtnLogout')?.addEventListener('click', () => {
-        window.location.href = 'index.html';
+        window.location.href = './index.html';
     });
 
     document.querySelector('.BtnHelp')?.addEventListener('click', () => {
