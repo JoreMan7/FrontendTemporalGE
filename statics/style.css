@@ -57,8 +57,10 @@
     background-color: var(--gray-100);
     color: var(--gray-700);
     line-height: 1.5;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    margin: 0;
+    padding: 0;
 }
 
 /* Sidebar */
@@ -156,6 +158,10 @@
     flex: 1;
     padding: 1.5rem;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
 }
 
 /* Barra superior */
@@ -401,6 +407,8 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     padding: 1.5rem;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .DashboardGrid i {
