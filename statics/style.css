@@ -11,6 +11,7 @@
     --gray-600: #4b5563; /*texto*/
     --gray-700: #374151;
     --red-600: #dc2626; /* error */
+    --red-800: #b91c1c; /* error hover */
     
     /* Sombras */
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -169,10 +170,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    /*margin-bottom: 1.5rem;*/
     padding: 15px;
     border: 2px solid #f6f1f1;
-    background-color: --w;
+    /*background-color: --w;*/
     width: 100%;
     margin-top: -23px;
 }
@@ -225,7 +226,7 @@
     }
 */
 
-.Btn {
+.btn {
     padding: 0.5rem 1rem;
     border-radius: var(--radius-sm);
     font-size: 0.875rem;
@@ -234,22 +235,25 @@
     transition: all 0.2s;
     border: none;
 }
-
-.BtnHelp {
+.btn-help {
     background-color: var(--white);
     color: var(--gray-700);
     border: 1px solid var(--gray-300);
 }
-.BtnHelp:hover {
-    background-color: var(--gray-100);
+.btn-help:hover {
+    background-color: var(--gray-300);
+
 }
-.BtnLogout {
+.btn-logout {
     background-color: var(--red-600);
     color: var(--white);
 }
-.BtnLogout:hover {
-    background-color: #b91c1c;
+.btn-logout:hover {
+    background-color: var(--red-800);
+    color: var(--gray-100)
 }
+
+
 .Divider {
     width: 1px;
     height: 24px;
@@ -409,6 +413,18 @@
     padding: 1.5rem;
     flex-grow: 1;
     overflow-y: auto;
+}
+
+.DashboardGridAbout {
+    grid-template-columns: 30% 60%;
+
+}
+
+.DashboardGrid img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  align-items: center;
 }
 
 .DashboardGrid i {
@@ -713,7 +729,7 @@ tr:nth-child(even) {
     display: inline-block;
 }
 
-.StatusCompleted {
+/*.StatusCompleted {
     background-color: #28a745;
     color: white;
 }
@@ -766,7 +782,7 @@ tr:nth-child(even) {
     border-color: #90caf9;
     color: #2196f3;
 }
-
+*/
 /* INICIO DE ESTILOS PARA MODALES */
 .modal {
     display: none;
@@ -1030,13 +1046,23 @@ th:nth-child(9) { width: 10%; }
 }
 
 /* Media queries usando variables */
-@media (max-width: var(--breakpoint-lg)) {
+@media (max-width: 1024px) {
     .DashboardGrid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .DashboardGridAbout {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+    .DashboardGridAbout .AboutImg {
+        width: 40%;
+        height: auto;
+        align-items: center;
+        
+    }
 }
 
-@media (max-width: var(--breakpoint-md)) {
+@media (max-width: 768px) {
     .LoginContainer {
         flex-direction: column;
         height: auto;
@@ -1049,10 +1075,12 @@ th:nth-child(9) { width: 10%; }
     .LoginFormContainer {
         border-radius: var(--radius-lg);
     }
+   
 }
 
-@media (max-width: var(--breakpoint-sm)) {
+@media (max-width: 640px) {
     .DashboardGrid {
         grid-template-columns: 1fr;
     }
+    
 }
