@@ -136,3 +136,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+/* ========== VERSICULO AL AZAR ========== */
+
+const versiculos = [
+  'Genesis 1:1', 'Genesis 1:26', 'Genesis 1:27', 'Genesis 1:28',
+  'Genesis 2:7', 'Genesis 2:18', 'Genesis 2:21', 'Genesis 2:22',
+  'Exodus 20:13', 'Exodus 20:14', 'Exodus 20:15', 'Exodus 20:16', 'Exodus 20:17'
+];
+
+const aleatorio = versiculos[Math.floor(Math.random() * versiculos.length)];
+const apiUrl = `https://bible-api.com/${encodeURIComponent(aleatorio)}`;
+
+fetch(apiUrl)
+  .then(res => {
+    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+    return res.json();
+  })
+  .then(data => {
+    const resultado = document.getElementById('resultado');
+    resultado.innerHTML = `
+      <strong>${data.reference}</strong><br>
+      <em>${data.text}</em>
+    `;
+  })
+  .catch(error => {
+    document.getElementById('resultado').textContent = `Ocurrió un error: ${error.message}`;
+  });
+//       fIN DE VERSICULO AL AZAR;
+
+

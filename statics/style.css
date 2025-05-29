@@ -729,6 +729,203 @@ tr:nth-child(even) {
     display: inline-block;
 }
 
+.TituloBienvenida {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0;
+}
+
+/* Commitment Items */
+.commitment-item {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.commitment-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.commitment-avatar {
+    display: flex;
+    align-items: center;
+    padding-right: 2rem;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #0d6efd;
+    border-radius: 50%;
+    position: relative;
+}
+
+.commitment-details {
+  text-align: left;
+}
+
+.avatar-circle::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.avatar-circle::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: 8px;
+    width: 24px;
+    height: 16px;
+    background-color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.commitment-date {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+}
+
+.commitment-time {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.commitment-reminder {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+.DashboardScrollContainer {
+         /* o la altura que necesites */
+  overflow-y: auto;     /* scroll solo vertical */
+  overflow-x: hidden;   /* evita scroll horizontal */
+  width: 100%;          /* o el ancho que quieras, ej. 600px */
+ 
+  
+}
+
+/* Pagination */
+.pagination-container {
+    margin-top: 1.5rem;
+}
+
+.nav-arrow {
+    color: #6c757d;
+    font-size: 1.5rem;
+    padding: 0.25rem 0.5rem;
+    text-decoration: none;
+}
+
+.nav-arrow:hover {
+    color: #0d6efd;
+}
+
+.pagination-dots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #dee2e6;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #0d6efd;
+}
+
+/* Financial Table */
+.financial-table thead th {
+    background-color: var(--secondary);
+    color: white;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.75rem 0.5rem;
+}
+
+.financial-table tbody td {
+    font-size: 0.875rem;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.financial-table thead th :hover {
+    background-color: #dc2626; /* hover color for header */
+}
+
+/* Calendar */
+.calendar-widget {
+    font-size: 0.875rem;
+}
+
+.calendar-header {
+    margin-bottom: 0.5rem;
+}
+
+.calendar-day-header {
+    background-color: var(--secondary);
+    color: var(--gray-100);
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    margin: 0 1px;
+}
+
+.calendar-row {
+    margin-bottom: 0.25rem;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    margin: 0 1px;
+}
+
+.calendar-day:hover {
+    background-color: #e3f2fd;
+}
+
+.calendar-day.highlighted {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Card styling */
+.DashboardCard {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+
 /*.StatusCompleted {
     background-color: #28a745;
     color: white;
@@ -978,10 +1175,55 @@ tr:nth-child(even) {
   border-top: 1px solid #eee;
 }
 
+.TableContainer {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
 /* INICIO DE ESTILOS RESPONSIVOS */
-/* Estilos para dispositivos móviles */
+
+/* INICIO DE ESTILOS PARA TABLAS ESPECÍFICAS */
+th:nth-child(1) { width: 2%; }
+th:nth-child(2) { width: 10%; }
+th:nth-child(3) { width: 10%; }
+th:nth-child(4) { width: 10%; }
+th:nth-child(5) { width: 10%; }
+th:nth-child(6) { width: 10%; }
+th:nth-child(7) { width: 10%; }
+th:nth-child(8) { width: 10%; }
+th:nth-child(9) { width: 10%; }
+
+/* Mejoras de accesibilidad */
+.NavItem:focus-visible,
+.Btn:focus-visible,
+.LoginButton:focus-visible,
+.FormGroup input:focus-visible,
+.FormGroup select:focus-visible {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
+}
+
+
+@media (max-width: 1024px) {
+    .DashboardGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .DashboardGridAbout {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+    .DashboardGridAbout .AboutImg {
+        width: 40%;
+        height: auto;
+        align-items: center;
+        
+    }
+}
+
 @media (max-width: 768px) {
-  .dropdown-menu {
+    .dropdown-menu {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -1008,61 +1250,9 @@ tr:nth-child(even) {
   .dropdown-overlay.show {
     display: block;
   }
-}
-
-/* Estilos para la tabla responsive */
-.TableContainer {
-  width: 100%;
-  overflow-x: auto;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
-}
-
-@media (max-width: 768px) {
   #TablaCitas {
     min-width: 800px; /* Asegura que la tabla tenga un ancho mínimo para todas las columnas */
   }
-}
-
-/* INICIO DE ESTILOS PARA TABLAS ESPECÍFICAS */
-th:nth-child(1) { width: 2%; }
-th:nth-child(2) { width: 10%; }
-th:nth-child(3) { width: 10%; }
-th:nth-child(4) { width: 10%; }
-th:nth-child(5) { width: 10%; }
-th:nth-child(6) { width: 10%; }
-th:nth-child(7) { width: 10%; }
-th:nth-child(8) { width: 10%; }
-th:nth-child(9) { width: 10%; }
-
-/* Mejoras de accesibilidad */
-.NavItem:focus-visible,
-.Btn:focus-visible,
-.LoginButton:focus-visible,
-.FormGroup input:focus-visible,
-.FormGroup select:focus-visible {
-    outline: 2px solid var(--secondary);
-    outline-offset: 2px;
-}
-
-/* Media queries usando variables */
-@media (max-width: 1024px) {
-    .DashboardGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .DashboardGridAbout {
-        grid-template-columns: 1fr;
-        justify-items: center;
-    }
-    .DashboardGridAbout .AboutImg {
-        width: 40%;
-        height: auto;
-        align-items: center;
-        
-    }
-}
-
-@media (max-width: 768px) {
     .LoginContainer {
         flex-direction: column;
         height: auto;
@@ -1075,12 +1265,38 @@ th:nth-child(9) { width: 10%; }
     .LoginFormContainer {
         border-radius: var(--radius-lg);
     }
+    .TituloBienvenida {
+        font-size: 1.25rem;
+        text-align: center;
+    }
+    
+    .calendar-day-header,
+    .calendar-day {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.125rem;
+    }
    
 }
 
 @media (max-width: 640px) {
     .DashboardGrid {
         grid-template-columns: 1fr;
+    }
+    .container-fluid {
+        padding: 1rem !important;
+    }
+    
+    .TituloBienvenida {
+        font-size: 1.1rem;
+    }
+    
+    .financial-table {
+        font-size: 0.75rem;
+    }
+    
+    .financial-table thead th,
+    .financial-table tbody td {
+        padding: 0.5rem 0.25rem;
     }
     
 }
