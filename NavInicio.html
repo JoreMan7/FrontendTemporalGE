@@ -15,7 +15,7 @@
 </head>
 <body class="BodyPlantilla">
     <!--Inicio de Plantilla-->      
-    <aside class="Sidebar">
+    <div class="Sidebar" id="sidebar">
         <div class="LogoContainer">
             <img src="./Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
         </div>
@@ -41,21 +41,37 @@
                 <span class="NavText">Acerca De</span>
             </a>
         </nav>
-    </aside>
+    </div>
+    
     <main class="MainContent">
+        <button class="Hamburger" id="hamburger">☰</button>
         <header class="TopBar">
             <div class="UserInfo">
                 <img src="./Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
                 <div class="UserDetails">
-                    <h2 class="UserName">Héctor Lemus ▼</h2>
+                    <h2 class="UserName">Héctor Lemus</h2>
+
                     <p class="CurrentDate" id="CurrentDate"></p>
                 </div>
+
             </div>
             <div class="HeaderActions">
-                <button class="btn btn-help">Ayuda</button>
+                <button class="btn btn-help">
+                    <!-- Ícono solo visible en mobile (pantallas < 576px) -->
+                    <i class="bi bi-question-circle d-inline d-sm-none"></i>
+                    <!-- Texto visible solo en pantallas ≥ 576px -->
+                    <span class="d-none d-sm-inline">Ayuda</span>
+                </button>
                 <div class="Divider"></div>
-                <button class="btn btn-logout">Cerrar Sesión</button>
+                <button class="btn btn-logout">
+                    <!-- Ícono solo visible en mobile -->
+                    <i class="bi bi-box-arrow-right d-inline d-sm-none"></i>
+                    <!-- Texto visible en pantallas más grandes -->
+                    <span class="d-none d-sm-inline">Cerrar sesión</span>  
+                </button>
             </div>
+        
+       
         </header>
         <div class="NotificationBar">
             Acá mostrar una notificación de recordatorio de algo
@@ -144,7 +160,7 @@
                         <button class="btn btn-blue"><i class="fas fa-print"></i> Imprimir</button>
                     </div>
                     
-                    <div class="table-responsive">
+                    <div class="TableContainer">
                         <table class="table table-sm financial-table">
                             <thead>
                                 <tr>

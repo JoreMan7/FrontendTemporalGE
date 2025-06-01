@@ -17,47 +17,35 @@
 </head>
 <body class="BodyPlantilla">
     <!--Inicio de Plantilla-->      
-    <aside class="Sidebar">
-        <div class="LogoContainer">
-            <img src="../Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
-        </div>
-        <nav class="NavMenu">
-            <a href="../NavInicio.html" class="NavItem">
-                <i class="fas fa-home"></i> 
-                <span class="NavText">Inicio</span>
-            </a>
-           <a href="../NavOficina.html" class="NavItem active">
-                <i class="bi bi-suitcase-lg-fill"></i>
-                <span class="NavText">Oficina</span>
-            </a>
-            <a href="../NavCaja.html" class="NavItem">
-                <i class="fas fa-calculator"></i> 
-                <span class="NavText">Caja</span>
-            </a>
-            <a href="../NavAjustes.html" class="NavItem">
-                <i class="fas fa-cog"></i> 
-                <span class="NavText">Ajustes</span>
-            </a>
-            <a href="../About.html" class="NavItem">
-                <i class="bi-info-circle"></i> 
-                <span class="NavText">Acerca De</span>
-            </a>
-        </nav>
-    </aside>
     <main class="MainContent">
+        <button class="Hamburger" id="hamburger">☰</button>
         <header class="TopBar">
             <div class="UserInfo">
                 <img src="../Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
                 <div class="UserDetails">
-                    <h2 class="UserName">Héctor Lemus ▼</h2>
+                    <h2 class="UserName">Héctor Lemus</h2>
+
                     <p class="CurrentDate" id="CurrentDate"></p>
                 </div>
+
             </div>
             <div class="HeaderActions">
-                <button class="btn btn-help">Ayuda</button>
+                <button class="btn btn-help">
+                    <!-- Ícono solo visible en mobile (pantallas < 576px) -->
+                    <i class="bi bi-question-circle d-inline d-sm-none"></i>
+                    <!-- Texto visible solo en pantallas ≥ 576px -->
+                    <span class="d-none d-sm-inline">Ayuda</span>
+                </button>
                 <div class="Divider"></div>
-                <button class="btn btn-logout">Cerrar Sesión</button>
+                <button class="btn btn-logout">
+                    <!-- Ícono solo visible en mobile -->
+                    <i class="bi bi-box-arrow-right d-inline d-sm-none"></i>
+                    <!-- Texto visible en pantallas más grandes -->
+                    <span class="d-none d-sm-inline">Cerrar sesión</span>  
+                </button>
             </div>
+        
+       
         </header>
         <div class="NotificationBar">
             Acá mostrar una notificación de recordatorio de algo
@@ -202,7 +190,7 @@
      <!-- Fin Tabla con encabezado -->
     </main>
 
-<script src="scriptPrueba.js" ></script> 
+<!--<script src="../statics/scriptPrueba.js" ></script> -->
 <script src="../statics/script.js" ></script>
 </body>
 </html>

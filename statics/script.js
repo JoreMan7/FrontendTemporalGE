@@ -1,27 +1,30 @@
-/* ========== FUNCIONES COMPARTIDAS ========== */
+/* ========== FUNCIONES UTILITARIAS ========== */
 function setupBackButton(selector) {
     const backButton = document.querySelector(selector);
-    if (backButton) {
-        backButton.addEventListener('click', () => window.history.back());
-    }
+    backButton?.addEventListener('click', () => window.history.back());
 }
 
-function setCurrentDate(elementId) {
+function setCurrentDate(elementId, options = { day: 'numeric', month: 'short', year: 'numeric' }) {
     const element = document.getElementById(elementId);
     if (element) {
-        const options = { day: 'numeric', month: 'short', year: 'numeric' };
         element.textContent = new Date().toLocaleDateString('es-ES', options);
     }
 }
 
-/* ========== INICIALIZACIÓN PRINCIPAL ========== */
-document.addEventListener('DOMContentLoaded', function() {
-    // Configuración común
-    setCurrentDate('CurrentDate');
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
+/* ========== INICIALIZACIÓN ========== */
+document.addEventListener('DOMContentLoaded', () => {
+    /* === Fecha actual === */
+    setCurrentDate('CurrentDate', { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+    /* === Botones de retroceso === */
     setupBackButton('#btnVolver');
     setupBackButton('#IconBack');
 
-    /* ===== LOGIN ===== */
+    /* === Formulario de Login === */
     const loginForm = document.getElementById('LoginForm');
     if (loginForm) {
         const errorMessage = document.getElementById('ErrorMessage');
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const documentType = document.getElementById('DocumentType').value;
             const documentNumber = document.getElementById('DocumentNumber').value;
             const password = passwordInput.value;
@@ -43,26 +46,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 const response = await simulateApiCall(documentType, documentNumber, password);
-                
                 if (response.success) {
                     window.location.href = './NavInicio.html';
                 } else {
                     errorMessage.textContent = response.message;
                     errorMessage.style.display = 'block';
                 }
-            } catch (error) {
+            } catch {
                 errorMessage.textContent = 'Error en el servidor. Por favor, intente más tarde.';
                 errorMessage.style.display = 'block';
             }
         });
 
-        if (togglePassword && passwordInput) {
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.classList.toggle('show');
-            });
-        }
+        togglePassword?.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('show');
+        });
 
         async function simulateApiCall(documentType, documentNumber, password) {
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -72,97 +72,100 @@ document.addEventListener('DOMContentLoaded', function() {
                 pa: { number: 'AB123456', password: 'pasaporte2024' },
                 pep: { number: 'PEP78901', password: 'permiso2024' }
             };
-
-            const userCredentials = validCredentials[documentType];
-            return userCredentials?.number === documentNumber && userCredentials?.password === password
+            const user = validCredentials[documentType];
+            return user?.number === documentNumber && user?.password === password
                 ? { success: true }
                 : { success: false, message: 'Credenciales incorrectas' };
         }
     }
 
-    /* ===== DASHBOARD ===== */
-    // Tarjetas clickeables
+    /* === Tarjetas clickeables (dashboard) === */
     document.querySelectorAll(".DashboardCard:not(.Disabled)").forEach(card => {
         card.style.cursor = "pointer";
-        card.addEventListener("click", function() {
-            const url = this.getAttribute("data-url");
+        card.addEventListener("click", () => {
+            const url = card.getAttribute("data-url");
             if (url) window.location.href = url;
         });
     });
 
-    // Botones de ayuda y logout
-    document.querySelector('.BtnLogout')?.addEventListener('click', () => {
+    /* === Botones Ayuda y Cerrar sesión === */
+    document.querySelector('.btn-logout')?.addEventListener('click', () => {
         window.location.href = './index.html';
     });
 
-    document.querySelector('.BtnHelp')?.addEventListener('click', () => {
+    document.querySelector('.btn-help')?.addEventListener('click', () => {
         alert('Sistema de Ayuda\n\nPara más información, contacte al administrador.');
     });
 
-    /* ===== FILTROS Y TABLAS (SECUNDARIO) ===== */
-    // Solo se ejecuta si existe el contenedor de filtros
-    if (document.getElementById('FilterButton')) {
-        // [Todo el código de filtros y datepicker del secundario]
-        // Filter dropdown toggle
-        const filterButton = document.getElementById('FilterButton');
-        const filterMenu = document.getElementById('FilterMenu');
+    /* === Filtros y tablas (si existen) === */
+    const filterButton = document.getElementById('FilterButton');
+    const filterMenu = document.getElementById('FilterMenu');
 
-        filterButton.addEventListener('click', function(e) {
+    if (filterButton && filterMenu) {
+        filterButton.addEventListener('click', e => {
             e.stopPropagation();
             filterMenu.classList.toggle('show');
         });
 
-        document.addEventListener('click', function() {
-            filterMenu.classList.remove('show');
-        });
+        document.addEventListener('click', () => filterMenu.classList.remove('show'));
+        filterMenu.addEventListener('click', e => e.stopPropagation());
 
-        filterMenu.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        // Date picker functionality
         const startDateInput = document.getElementById('StartDate');
         const endDateInput = document.getElementById('EndDate');
-        
-        if (startDateInput && endDateInput) {
-            // [Resto del código del datepicker...]
-        }
+        // Aquí puedes agregar funcionalidad de datepicker si aplica
 
-        // Select all checkbox
-        document.getElementById('SelectAll')?.addEventListener('change', function() {
+        document.getElementById('SelectAll')?.addEventListener('change', function () {
             document.querySelectorAll('tbody input[type="checkbox"]').forEach(checkbox => {
                 checkbox.checked = this.checked;
             });
         });
     }
+
+    /* === Sidebar Responsive para móvil === */
+    const sidebar = document.getElementById("sidebar");
+    const hamburger = document.getElementById("hamburger");
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+    const userInfo = document.querySelector(".UserInfo");
+
+    if (sidebar && hamburger) {
+        const overlay = document.createElement("div");
+        overlay.className = "Overlay";
+        document.body.appendChild(overlay);
+
+        hamburger.addEventListener("click", () => {
+            sidebar.classList.toggle("mobile-visible");
+            overlay.classList.toggle("show");
+        });
+
+        sidebarToggle?.addEventListener("click", () => {
+            sidebar.classList.remove("mobile-visible");
+            overlay.classList.remove("show");
+        });
+
+        overlay.addEventListener("click", () => {
+            sidebar.classList.remove("mobile-visible");
+            overlay.classList.remove("show");
+        });
+
+        if (userInfo && dropdownMenu) {
+            userInfo.addEventListener("click", (event) => {
+                event.stopPropagation();
+                dropdownMenu.classList.toggle("show");
+            });
+
+            document.addEventListener("click", (event) => {
+                if (!event.target.closest(".UserInfo")) {
+                    dropdownMenu.classList.remove("show");
+                }
+            });
+        }
+
+        window.addEventListener("resize", () => {
+            if (!isMobile()) {
+                sidebar.classList.remove("mobile-visible");
+                overlay.classList.remove("show");
+            }
+        });
+    }
 });
-
-/* ========== VERSICULO AL AZAR ========== */
-
-const versiculos = [
-  'Genesis 1:1', 'Genesis 1:26', 'Genesis 1:27', 'Genesis 1:28',
-  'Genesis 2:7', 'Genesis 2:18', 'Genesis 2:21', 'Genesis 2:22',
-  'Exodus 20:13', 'Exodus 20:14', 'Exodus 20:15', 'Exodus 20:16', 'Exodus 20:17'
-];
-
-const aleatorio = versiculos[Math.floor(Math.random() * versiculos.length)];
-const apiUrl = `https://bible-api.com/${encodeURIComponent(aleatorio)}`;
-
-fetch(apiUrl)
-  .then(res => {
-    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
-    return res.json();
-  })
-  .then(data => {
-    const resultado = document.getElementById('resultado');
-    resultado.innerHTML = `
-      <strong>${data.reference}</strong><br>
-      <em>${data.text}</em>
-    `;
-  })
-  .catch(error => {
-    document.getElementById('resultado').textContent = `Ocurrió un error: ${error.message}`;
-  });
-//       fIN DE VERSICULO AL AZAR;
-
-

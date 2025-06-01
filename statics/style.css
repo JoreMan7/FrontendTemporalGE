@@ -1,17 +1,20 @@
+/* ==================== */
+/* VARIABLES GLOBALES */
+/* ==================== */
 :root {
     /* Colores */
-    --primary: #4CAF50; /* color primario botones */
-    --primary-color-dark: #45a049; /* color primario botones hover */
+    --primary: #4CAF50;
+    --primary-color-dark: #45a049;
     --secondary: #2196F3;
     --white: #ffffff;
-    --gray-100: #f3f4f6; /* color de fondo de la página de inicio de sesión */
+    --gray-100: #f3f4f6;
     --gray-200: #e5e7eb;
     --gray-300: #d1d5db;
     --gray-500: #6b7280;
-    --gray-600: #4b5563; /*texto*/
+    --gray-600: #4b5563;
     --gray-700: #374151;
-    --red-600: #dc2626; /* error */
-    --red-800: #b91c1c; /* error hover */
+    --red-600: #dc2626;
+    --red-800: #b91c1c;
     
     /* Sombras */
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -29,30 +32,19 @@
     --breakpoint-lg: 1024px;
 }
 
-/* Reset básico */
+/* ==================== */
+/* RESET Y BASE */
+/* ==================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* INICIO DE ESTILOS PARA PÁGINA EN MANTENIMIENTO */
-/* Contenedor Flexbox */
-.ContenedorDemo {
-    display: flex;
-    justify-content: center;  /* Alineación horizontal */
-    align-items: center; /* Alineación vertical */
-}
-  
-/* Elemento en posición absoluta y alineado con Flexbox */
-.ElementoDemo {
-    position: absolute; /* Posición absoluta */
-    top: 60%; /* Alineación vertical */
-    left: 50%; /* Alineación horizontal */
-    transform: translate(-50%, -50%); /* Centrado exacto */
-}
 
-/* INICIO DE ESTILOS PARA PLANTILLA PRINCIPAL */
+/* ==================== */
+/* ESTRUCTURA PRINCIPAL */
+/* ==================== */
 .BodyPlantilla {
     font-family: 'Roboto', sans-serif;
     background-color: var(--gray-100);
@@ -64,29 +56,36 @@
     padding: 0;
 }
 
-/* Sidebar */
+/* ==================== */
+/* COMPONENTE SIDEBAR */
+/* ==================== */
 .Sidebar {
     position: fixed;
     left: 0;
     top: 0;
     width: 95px;
     height: 100vh;
-    background: var(--white); /*CAMBIO PENDIENTE color de fondo del sidebar */
-    transition: width 0.3s ease-in-out;
+    background: var(--white);
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
     z-index: 200;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .Sidebar:hover {
     width: 220px;
 }
+
 .Sidebar:hover ~ .MainContent {
     margin-left: 205px;
 }
 
-/* Logo */
+.Sidebar.mobile-visible {
+    left: 0;
+}
+
 .LogoContainer {
     height: 100px;
     display: flex;
@@ -104,11 +103,11 @@
     margin-bottom: 0.5rem;
     transition: width 0.3s ease;
 }
+
 .Sidebar:not(:hover) .Logo {
     width: 100px;
 }
 
-/* Navegación */
 .NavMenu {
     width: 100%;
     padding-top: 35px;
@@ -119,6 +118,7 @@
     flex-direction: column;
     gap: 0.5rem;
 }
+
 .NavItem {
     display: flex;
     align-items: center;
@@ -131,15 +131,19 @@
     transition: 0.3s;
     border-radius: var(--radius-sm);
 }
+
 .NavItem i {
     font-size: 20px;
     width: 30px;
     text-align: center;
 }
-.NavItem:hover, .NavItem.active {
+
+.NavItem:hover, 
+.NavItem.active {
     background: var(--gray-100);
     color: var(--secondary);
 }
+
 .NavText {
     opacity: 0;
     width: 0;
@@ -147,12 +151,15 @@
     white-space: nowrap;
     transition: opacity 0.3s ease, width 0.3s ease;
 }
+
 .Sidebar:hover .NavText {
     opacity: 1;
     width: auto;
 }
 
-/* Contenido principal */
+/* ==================== */
+/* COMPONENTE MAIN CONTENT */
+/* ==================== */
 .MainContent {
     margin-left: 76px;
     transition: margin-left 0.3s ease-in-out;
@@ -165,67 +172,76 @@
     box-sizing: border-box;
 }
 
-/* Barra superior */
+/* ==================== */
+/* COMPONENTE TOPBAR */
+/* ==================== */
 .TopBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /*margin-bottom: 1.5rem;*/
     padding: 15px;
     border: 2px solid #f6f1f1;
-    /*background-color: --w;*/
     width: 100%;
     margin-top: -23px;
 }
+
 .UserInfo {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
+
 .UserAvatar {
     width: 48px;
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
 }
+
 .UserName {
     font-size: 1.125rem;
     font-weight: 500;
     color: var(--gray-700);
 }
+
 .CurrentDate {
     display: inline-block;
     padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: var(--radius-md);
     background-color: #f5f5f5;
-    font-size: 14px;
+    font-size: 0.8rem;
     color: #333;
 }
 
-/* Acciones del encabezado */
 .HeaderActions {
     display: flex;
     align-items: center;
 }
 
-/*
-#IconBack {
-      position: absolute;
-      top: 200px;          ajusta según necesites 
-      left: 110px;         ajusta según necesites 
-      font-size: 2rem;
-      cursor: pointer;
-      color: var(--secondary);  Color Bootstrap Primary 
-      transition: color 0.2s ease;
-      margin-top: -50px;
-    }
+.Divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--gray-300);
+    margin: 0 1rem;
+}
 
-    #IconBack:hover {
-      color: #084298;  Color más oscuro al pasar el mouse 
-    }
-*/
+/* ==================== */
+/* COMPONENTE NOTIFICATION BAR */
+/* ==================== */
+.NotificationBar {
+    background-color: var(--white);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    margin-top: -24px;
+    color: var(--gray-500);
+    box-shadow: var(--shadow-sm);
+}
 
+/* ==================== */
+/* COMPONENTES DE BOTONES */
+/* ==================== */
 .btn {
     padding: 0.5rem 1rem;
     border-radius: var(--radius-sm);
@@ -235,41 +251,142 @@
     transition: all 0.2s;
     border: none;
 }
+
 .btn-help {
     background-color: var(--white);
     color: var(--gray-700);
     border: 1px solid var(--gray-300);
 }
+
 .btn-help:hover {
     background-color: var(--gray-300);
-
+    color: var(--gray-700);
 }
+
 .btn-logout {
     background-color: var(--red-600);
     color: var(--white);
 }
+
 .btn-logout:hover {
     background-color: var(--red-800);
-    color: var(--gray-100)
+    color: var(--gray-100);
 }
 
-
-.Divider {
-    width: 1px;
-    height: 24px;
-    background-color: var(--gray-300);
-    margin: 0 1rem;
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
 }
 
-/* Barra de notificaciones */
-.NotificationBar {
+.btn-outline {
+    background-color: white;
+    border-color: #ccc;
+    color: #555;
+}
+
+.btn-outline:hover {
+    background-color: #f5f5f5;
+}
+
+.btn-red {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-red:hover {
+    background-color: #c82333;
+}
+
+.btn-green {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-green:hover {
+    background-color: #218838;
+}
+
+.btn-blue {
+    background-color: #e6f7ff;
+    border-color: #91d5ff;
+    color: #1890ff;
+}
+
+.btn-blue:hover {
+    background-color: #d6f0ff;
+}
+
+/* ==================== */
+/* COMPONENTES MÓVILES */
+/* ==================== */
+.Hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray-700);
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1001;
     background-color: var(--white);
-    padding: 1rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.5rem;
-    margin-top: -24px;
-    color: var(--gray-500);
-    box-shadow: var(--shadow-sm);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.SidebarToggle {
+    display: none;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background: none;
+    border: none;
+    color: var(--gray-600);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.Overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* ==================== */
+/* COMPONENTES DE ACCESIBILIDAD */
+/* ==================== */
+.NavItem:focus-visible,
+.btn:focus-visible,
+.LoginButton:focus-visible,
+.FormGroup input:focus-visible,
+.FormGroup select:focus-visible {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
+}
+
+/* ==================== */
+/* COMPONENTES NUEVOS DEL TERCER CSS */
+/* ==================== */
+/* INICIO DE ESTILOS PARA PÁGINA EN MANTENIMIENTO */
+.ContenedorDemo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.ElementoDemo {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* INICIO DE ESTILOS PARA PÁGINA DE LOGIN */
@@ -388,7 +505,7 @@
     text-align: center;
     margin-top: 10px;
     font-size: 14px;
-    display: none; /* El mensaje está oculto por defecto */
+    display: none;
 }
 
 .ImageContainer {
@@ -405,7 +522,7 @@
     height: 80%;
 }
 
-/* Estilos para el Dashboard */
+/* INICIO DE ESTILOS PARA DASHBOARD */
 .DashboardGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -417,14 +534,13 @@
 
 .DashboardGridAbout {
     grid-template-columns: 30% 60%;
-
 }
 
 .DashboardGrid img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  align-items: center;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    align-items: center;
 }
 
 .DashboardGrid i {
@@ -478,63 +594,10 @@
     fill: none;
 }
 
-/* INICIO DE ESTILOS PARA BOTONES */
-/* Button styles - Comentado originalmente en el CSS secundario */
-/*
-.btn {
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    transition: all 0.2s;
-}
-*/
-
-.btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-}
-
-.btn-outline {
-    background-color: white;
-    border-color: #ccc;
-    color: #555;
-}
-
-.btn-outline:hover {
-    background-color: #f5f5f5;
-}
-
-.btn-red {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-red:hover {
-    background-color: #c82333;
-}
-
-.btn-green {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-green:hover {
-    background-color: #218838;
-}
-
-.btn-blue {
-    background-color: #e6f7ff;
-    border-color: #91d5ff;
-    color: #1890ff;
-}
-
-.btn-blue:hover {
-    background-color: #d6f0ff;
+.DashboardScrollContainer {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 /* INICIO DE ESTILOS PARA CONTENIDO */
@@ -720,7 +783,6 @@ tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* Update these class names to PascalCase */
 .StatusBadge {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
@@ -755,7 +817,7 @@ tr:nth-child(even) {
     padding-right: 2rem;
 }
 
-.commitment-avatar i{
+.commitment-avatar i {
     padding-top: 0.5rem;
     color: var(--white);
 }
@@ -769,9 +831,8 @@ tr:nth-child(even) {
 }
 
 .commitment-details {
-  text-align: left;
+    text-align: left;
 }
-
 
 .commitment-date {
     font-size: 1.1rem;
@@ -790,15 +851,6 @@ tr:nth-child(even) {
     font-size: 0.9rem;
     color: #6c757d;
     margin-bottom: 0;
-}
-
-.DashboardScrollContainer {
-         /* o la altura que necesites */
-  overflow-y: auto;     /* scroll solo vertical */
-  overflow-x: hidden;   /* evita scroll horizontal */
-  width: 100%;          /* o el ancho que quieras, ej. 600px */
- 
-  
 }
 
 /* Pagination */
@@ -851,7 +903,7 @@ tr:nth-child(even) {
 }
 
 .financial-table thead th :hover {
-    background-color: #dc2626; /* hover color for header */
+    background-color: #dc2626;
 }
 
 /* Calendar */
@@ -909,61 +961,6 @@ tr:nth-child(even) {
     color: #212529;
 }
 
-
-/*.StatusCompleted {
-    background-color: #28a745;
-    color: white;
-}
-
-.StatusPending {
-    background-color: #fd7e14;
-    color: white;
-}
-
-.StatusCanceled {
-    background-color: #6c757d;
-    color: white;
-}
-
-.StatusMissed {
-    background-color: #dc3545;
-    color: white;
-}
-
-.ActionButtons {
-    display: flex;
-    gap: 0.25rem;
-}
-
-.ActionBtn {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid;
-    cursor: pointer;
-}
-
-.EditBtn {
-    background-color: #fff3e0;
-    border-color: #ffcc80;
-    color: #ff9800;
-}
-
-.DeleteBtn {
-    background-color: #ffebee;
-    border-color: #ef9a9a;
-    color: #f44336;
-}
-
-.PrintBtn {
-    background-color: #e3f2fd;
-    border-color: #90caf9;
-    color: #2196f3;
-}
-*/
 /* INICIO DE ESTILOS PARA MODALES */
 .modal {
     display: none;
@@ -1079,94 +1076,89 @@ tr:nth-child(even) {
 }
 
 /* INICIO DE ESTILOS MEJORADOS PARA DROPDOWN */
-/* Estilos mejorados para el menú desplegable de filtros */
 .dropdown {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .dropdown-toggle {
-  cursor: pointer;
+    cursor: pointer;
 }
 
-/* Mejora del menú desplegable */
 .dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  min-width: 300px; /* Ancho mínimo aumentado */
-  max-width: 400px; /* Ancho máximo para control */
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Sombra mejorada */
-  z-index: 1000;
-  padding: 15px;
-  margin-top: 5px;
-  display: none; /* Oculto por defecto */
-  overflow-y: auto; /* Scroll vertical si es necesario */
-  max-height: 80vh; /* Altura máxima del 80% de la ventana */
+    position: absolute;
+    right: 0;
+    top: 100%;
+    min-width: 300px;
+    max-width: 400px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding: 15px;
+    margin-top: 5px;
+    display: none;
+    overflow-y: auto;
+    max-height: 80vh;
 }
 
 .dropdown-menu.show {
-  display: block;
+    display: block;
 }
 
-/* Estilos para los grupos de filtros */
 .FilterGroup {
-  margin-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0;
-  padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
 }
 
 .FilterGroup:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
+    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .FilterGroup h4 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 16px;
-  color: #333;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
 }
 
 .FilterOptions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .FilterOptions label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #444;
 }
 
 .FilterOptions label:hover {
-  color: #000;
+    color: #000;
 }
 
 .FilterActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 15px;
-  padding-top: 10px;
-  border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
 }
 
 .TableContainer {
-  width: 100%;
-  overflow-x: auto;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
 }
-
-/* INICIO DE ESTILOS RESPONSIVOS */
 
 /* INICIO DE ESTILOS PARA TABLAS ESPECÍFICAS */
 th:nth-child(1) { width: 2%; }
@@ -1179,17 +1171,9 @@ th:nth-child(7) { width: 10%; }
 th:nth-child(8) { width: 10%; }
 th:nth-child(9) { width: 10%; }
 
-/* Mejoras de accesibilidad */
-.NavItem:focus-visible,
-.Btn:focus-visible,
-.LoginButton:focus-visible,
-.FormGroup input:focus-visible,
-.FormGroup select:focus-visible {
-    outline: 2px solid var(--secondary);
-    outline-offset: 2px;
-}
-
-
+/* ==================== */
+/* MEDIA QUERIES */
+/* ==================== */
 @media (max-width: 1024px) {
     .DashboardGrid {
         grid-template-columns: repeat(2, 1fr);
@@ -1202,41 +1186,41 @@ th:nth-child(9) { width: 10%; }
         width: 40%;
         height: auto;
         align-items: center;
-        
     }
 }
 
 @media (max-width: 768px) {
     .dropdown-menu {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 90%;
-    max-height: 80vh;
-    z-index: 1100;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  }
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 90%;
+        max-height: 80vh;
+        z-index: 1100;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
 
-  /* Overlay para cuando el menú está abierto */
-  .dropdown-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1050;
-    display: none;
-  }
+    .dropdown-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        display: none;
+    }
 
-  .dropdown-overlay.show {
-    display: block;
-  }
-  #TablaCitas {
-    min-width: 800px; /* Asegura que la tabla tenga un ancho mínimo para todas las columnas */
-  }
+    .dropdown-overlay.show {
+        display: block;
+    }
+
+    #TablaCitas {
+        min-width: 800px;
+    }
+
     .LoginContainer {
         flex-direction: column;
         height: auto;
@@ -1249,6 +1233,7 @@ th:nth-child(9) { width: 10%; }
     .LoginFormContainer {
         border-radius: var(--radius-lg);
     }
+
     .TituloBienvenida {
         font-size: 1.25rem;
         text-align: center;
@@ -1259,13 +1244,59 @@ th:nth-child(9) { width: 10%; }
         font-size: 0.75rem;
         padding: 0.375rem 0.125rem;
     }
-   
+
+    .HeaderActions p {
+        display: none;
+    }
+
+    /* Sidebar móvil */
+    .Sidebar {
+        width: 220px;
+        left: -220px;
+    }
+
+    .Sidebar:hover {
+        width: 220px;
+    }
+
+    .Sidebar:hover ~ .MainContent,
+    .Sidebar.mobile-visible ~ .MainContent {
+        margin-left: 0;
+    }
+
+    .MainContent {
+        margin-left: 0 !important;
+        width: 100%;
+        min-width: 344px;
+    }
+
+    .NavText {
+        opacity: 1;
+        width: auto;
+    }
+
+    .Logo {
+        width: 150px !important;
+    }
+
+    .Hamburger {
+        display: block;
+    }
+
+    .btn-help {
+        margin-left: 0.35rem;
+    }
+
+    .Divider {
+        margin: 0 0.1rem;
+    }
 }
 
 @media (max-width: 640px) {
     .DashboardGrid {
         grid-template-columns: 1fr;
     }
+    
     .container-fluid {
         padding: 1rem !important;
     }
@@ -1282,5 +1313,4 @@ th:nth-child(9) { width: 10%; }
     .financial-table tbody td {
         padding: 0.5rem 0.25rem;
     }
-    
 }
