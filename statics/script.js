@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* === Sidebar Responsive para móvil === */
+    /* === Sidebar Responsive para móvil === 
     const sidebar = document.getElementById("sidebar");
     const hamburger = document.getElementById("hamburger");
     const sidebarToggle = document.getElementById("sidebarToggle");
@@ -167,5 +167,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 overlay.classList.remove("show");
             }
         });
-    }
+    }*/
 });
