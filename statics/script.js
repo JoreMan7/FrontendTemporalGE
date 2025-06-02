@@ -89,14 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* === Botones Ayuda y Cerrar sesión === */
-    document.querySelector('.btn-logout')?.addEventListener('click', () => {
+    document.querySelectorAll('.logout')?.forEach(btn => {
+    btn.addEventListener('click', () => {
         window.location.href = './index.html';
     });
+});
 
-    document.querySelector('.btn-help')?.addEventListener('click', () => {
+document.querySelectorAll('.help')?.forEach(btn => {
+    btn.addEventListener('click', () => {
         alert('Sistema de Ayuda\n\nPara más información, contacte al administrador.');
     });
-
+});
     /* === Filtros y tablas (si existen) === */
     const filterButton = document.getElementById('FilterButton');
     const filterMenu = document.getElementById('FilterMenu');
@@ -168,4 +171,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }*/
+
+        document.querySelector('.profile-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.querySelector('.profile-menu').classList.toggle('show');
+});
+
+document.addEventListener('click', () => {
+  document.querySelector('.profile-menu').classList.remove('show');
+});
 });

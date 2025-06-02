@@ -375,10 +375,10 @@
     outline-offset: 2px;
 }
 
-/* ==================== */
-/* COMPONENTES NUEVOS DEL TERCER CSS */
+
 /* ==================== */
 /* INICIO DE ESTILOS PARA PÁGINA EN MANTENIMIENTO */
+/* ==================== */
 .ContenedorDemo {
     display: flex;
     justify-content: center;
@@ -1391,5 +1391,104 @@ th:nth-child(9) { width: 10%; }
 
     .Sidebar:hover ~ .MainContent {
         margin-left: 0;
+    }
+}
+
+
+
+.profile {
+  position: relative;
+  display: none;
+}
+
+.MobileLogo {display: none;}
+
+@media (max-width: 768px) {
+
+.profile{display: inline-block;}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-btn img {
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+
+.profile-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  width: 200px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 10px;
+}
+
+.profile-menu.show {
+  display: block;
+}
+
+.profile img{width: 48px; height: 48px;}
+
+.profile-header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+
+}
+
+.profile-header img {
+  border-radius: 50%;
+}
+
+.profile-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-menu button:hover {
+  background: #f5f5f5;
+
+  }
+/* Cuando el menú está abierto (show) */
+.profile-menu.show ~ .profile-btn {
+  display: none;
+}
+
+.profile-menu.show ~ .profile-btn {
+  display: inline;
+}
+
+.UserInfo {
+        display: none !important; /* Añadir !important para asegurar que se aplique */
+    }
+    .MobileLogo {
+        display: flex !important; /* Mostrar solo en mobile */
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 0.5rem;
+    }
+
+    .MobileLogo img {
+        width: 80px;
+        height: 80px;
+    }
+
+    /* Ocultar botones de escritorio */
+    .btn-help, .btn-logout, .Divider {
+        display: none;
     }
 }
