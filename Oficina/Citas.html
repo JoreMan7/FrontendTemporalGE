@@ -50,28 +50,34 @@
                 <img src="../Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
                 <div class="UserDetails">
                     <h2 class="UserName">Héctor Lemus</h2>
-
                     <p class="CurrentDate" id="CurrentDate"></p>
                 </div>
-
             </div>
+            <div class="MobileLogo">
+               <img src="../Img/Logo_Mobile.png" alt="Logo Eclesial">
+                </div>
+            
             <div class="HeaderActions">
-                <button class="btn btn-help">
-                    <!-- Ícono solo visible en mobile (pantallas < 576px) -->
-                    <i class="bi bi-question-circle d-inline d-sm-none"></i>
-                    <!-- Texto visible solo en pantallas ≥ 576px -->
-                    <span class="d-none d-sm-inline">Ayuda</span>
-                </button>
+                <button class="btn btn-help help">Ayuda</button>
                 <div class="Divider"></div>
-                <button class="btn btn-logout">
-                    <!-- Ícono solo visible en mobile -->
-                    <i class="bi bi-box-arrow-right d-inline d-sm-none"></i>
-                    <!-- Texto visible en pantallas más grandes -->
-                    <span class="d-none d-sm-inline">Cerrar sesión</span>  
-                </button>
+                <button class="btn btn-logout logout">Cerrar sesión</button>
+                <div class="profile">
+                    <button class="profile-btn">
+                      <img src="../Img/sacerdote.jpg" alt="Usuario"><i class="bi bi-caret-down-fill"></i></button>
+                    <div class="profile-menu">
+                      <div class="profile-header">
+                        <img src="../Img/sacerdote.jpg" alt="Usuario">
+                        <div>
+                          <h4>Héctor Lemus</h4>
+                          <small>Administrador</small>
+                        </div>
+                      </div>
+                      <hr>
+                      <button class="help"><i class="bi bi-question-circle"></i> Ayuda</button>
+                      <button class="logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</button>
+                    </div>
+                </div>
             </div>
-        
-       
         </header>
         <div class="NotificationBar">
             Acá mostrar una notificación de recordatorio de algo

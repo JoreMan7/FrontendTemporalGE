@@ -181,10 +181,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 15px; 
     border: 2px solid #f6f1f1;
     width: 100%;
-    margin-top: -23px;
+    
+    
 }
 
 .UserInfo {
@@ -1483,7 +1484,7 @@ th:nth-child(9) { width: 10%; }
     }
 
     .MobileLogo img {
-        width: 80px;
+        width: auto;
         height: 80px;
     }
 
@@ -1491,4 +1492,22 @@ th:nth-child(9) { width: 10%; }
     .btn-help, .btn-logout, .Divider {
         display: none;
     }
+
+    .MainContent {
+    padding: 0 !important;
+}
+
+/* ==================== */
+/* COMPONENTE TOPBAR */
+/* ==================== */
+.TopBar {
+    
+    background: var(--white) !important;
+    padding: 0px 5px ;
+}
+
+.NotificationBar{
+    display: none;
+}
+
 }
