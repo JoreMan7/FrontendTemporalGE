@@ -186,6 +186,7 @@
     border: 2px solid #f6f1f1;
     width: 100%;
     background: var(--white);
+    box-shadow: var(--shadow-sm);
 
 
 }
@@ -266,7 +267,7 @@
     border: none;
 }
 
-.btn-help {
+.btn-help { 
     background-color: var(--white);
     color: var(--gray-700);
     border: 1px solid var(--gray-300);
