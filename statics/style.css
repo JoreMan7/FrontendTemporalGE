@@ -17,17 +17,17 @@
     --gray-700: #374151;
     --red-600: #dc2626;
     --red-800: #b91c1c;
-    
+
     /* Sombras */
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    
+
     /* Bordes */
     --radius-sm: 4px;
     --radius-md: 5px;
     --radius-lg: 8px;
-    
+
     /* Breakpoints */
     --breakpoint-sm: 640px;
     --breakpoint-md: 768px;
@@ -80,7 +80,7 @@
     width: 220px;
 }
 
-.Sidebar:hover ~ .MainContent {
+.Sidebar:hover~.MainContent {
     margin-left: 205px;
 }
 
@@ -140,7 +140,7 @@
     text-align: center;
 }
 
-.NavItem:hover, 
+.NavItem:hover,
 .NavItem.active {
     background: var(--gray-100);
     color: var(--secondary);
@@ -166,7 +166,8 @@
     margin-left: 76px;
     transition: margin-left 0.3s ease-in-out;
     flex: 1;
-    padding: 1.5rem;
+    padding-left: 1.2rem;
+    padding-top: 0px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -181,11 +182,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px; 
+    padding: 15px;
     border: 2px solid #f6f1f1;
     width: 100%;
-    
-    
+    background: var(--white);
+
+
 }
 
 .UserInfo {
@@ -230,11 +232,13 @@
 }
 
 .profile {
-  position: relative;
-  display: none;
+    position: relative;
+    display: none;
 }
 
-.MobileLogo {display: none;}
+.MobileLogo {
+    display: none;
+}
 
 /* ==================== */
 /* COMPONENTE NOTIFICATION BAR */
@@ -392,7 +396,7 @@
     justify-content: center;
     align-items: center;
 }
-  
+
 .ElementoDemo {
     position: absolute;
     top: 60%;
@@ -963,7 +967,7 @@ tr:nth-child(even) {
 /* Card styling */
 .DashboardCard {
     border: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
@@ -1173,15 +1177,41 @@ tr:nth-child(even) {
 }
 
 /* INICIO DE ESTILOS PARA TABLAS ESPECÍFICAS */
-th:nth-child(1) { width: 2%; }
-th:nth-child(2) { width: 10%; }
-th:nth-child(3) { width: 10%; }
-th:nth-child(4) { width: 10%; }
-th:nth-child(5) { width: 10%; }
-th:nth-child(6) { width: 10%; }
-th:nth-child(7) { width: 10%; }
-th:nth-child(8) { width: 10%; }
-th:nth-child(9) { width: 10%; }
+th:nth-child(1) {
+    width: 2%;
+}
+
+th:nth-child(2) {
+    width: 10%;
+}
+
+th:nth-child(3) {
+    width: 10%;
+}
+
+th:nth-child(4) {
+    width: 10%;
+}
+
+th:nth-child(5) {
+    width: 10%;
+}
+
+th:nth-child(6) {
+    width: 10%;
+}
+
+th:nth-child(7) {
+    width: 10%;
+}
+
+th:nth-child(8) {
+    width: 10%;
+}
+
+th:nth-child(9) {
+    width: 10%;
+}
 
 /* ==================== */
 /* MEDIA QUERIES */
@@ -1190,10 +1220,12 @@ th:nth-child(9) { width: 10%; }
     .DashboardGrid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .DashboardGridAbout {
         grid-template-columns: 1fr;
         justify-items: center;
     }
+
     .DashboardGridAbout .AboutImg {
         width: 40%;
         height: auto;
@@ -1213,7 +1245,8 @@ th:nth-child(9) { width: 10%; }
         z-index: 1100;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
-/*
+
+    /*
     .dropdown-overlay {
         position: fixed;
         top: 0;
@@ -1250,7 +1283,7 @@ th:nth-child(9) { width: 10%; }
         font-size: 1.25rem;
         text-align: center;
     }
-    
+
     .calendar-day-header,
     .calendar-day {
         font-size: 0.75rem;
@@ -1310,19 +1343,19 @@ th:nth-child(9) { width: 10%; }
     .DashboardGrid {
         grid-template-columns: 1fr;
     }
-    
+
     .container-fluid {
         padding: 1rem !important;
     }
-    
+
     .TituloBienvenida {
         font-size: 1.1rem;
     }
-    
+
     .financial-table {
         font-size: 0.75rem;
     }
-    
+
     .financial-table thead th,
     .financial-table tbody td {
         padding: 0.5rem 0.25rem;
@@ -1348,7 +1381,8 @@ th:nth-child(9) { width: 10%; }
     }
 
     .LogoContainer {
-        display: none; /* Ocultamos el logo en móvil */
+        display: none;
+        /* Ocultamos el logo en móvil */
     }
 
     .NavMenu {
@@ -1390,89 +1424,100 @@ th:nth-child(9) { width: 10%; }
 
     .MainContent {
         margin-left: 0;
-        margin-bottom: 60px; /* Deja espacio para la barra inferior */
+        margin-bottom: 60px;
+        /* Deja espacio para la barra inferior */
     }
 
     .Sidebar:hover {
-        width: 100%; /* No efecto hover en móvil */
+        width: 100%;
+        /* No efecto hover en móvil */
     }
 
-    .Sidebar:hover ~ .MainContent {
+    .Sidebar:hover~.MainContent {
         margin-left: 0;
     }
 
-    .profile{display: inline-block;}
-
-.profile-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.profile-btn img {
-  border-radius: 50%;
-  border: 2px solid #ccc;
-}
-
-.profile-menu {
-  display: none;
-  position: absolute;
-  right: 0;
-  width: 200px;
-  background: white;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  padding: 10px;
-}
-
-.profile-menu.show {
-  display: block;
-}
-
-.profile img{width: 48px; height: 48px;}
-
-.profile-header {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-
-}
-
-.profile-header img {
-  border-radius: 50%;
-}
-
-.profile-menu button {
-  display: block;
-  width: 100%;
-  padding: 8px;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.profile-menu button:hover {
-  background: #f5f5f5;
-
-  }
-/* Cuando el menú está abierto (show) */
-.profile-menu.show ~ .profile-btn {
-  display: none;
-}
-
-.profile-menu.show ~ .profile-btn {
-  display: inline;
-}
-
-.UserInfo {
-        display: none !important; /* Añadir !important para asegurar que se aplique */
+    .profile {
+        display: inline-block;
     }
+
+    .profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .profile-btn img {
+        border-radius: 50%;
+        border: 2px solid #ccc;
+    }
+
+    .profile-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        width: 200px;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    .profile-menu.show {
+        display: block;
+    }
+
+    .profile img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .profile-header {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+
+    }
+
+    .profile-header img {
+        border-radius: 50%;
+    }
+
+    .profile-menu button {
+        display: block;
+        width: 100%;
+        padding: 8px;
+        text-align: left;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .profile-menu button:hover {
+        background: #f5f5f5;
+
+    }
+
+    /* Cuando el menú está abierto (show) */
+    .profile-menu.show~.profile-btn {
+        display: none;
+    }
+
+    .profile-menu.show~.profile-btn {
+        display: inline;
+    }
+
+    .UserInfo {
+        display: none !important;
+        /* Añadir !important para asegurar que se aplique */
+    }
+
     .MobileLogo {
-        display: flex !important; /* Mostrar solo en mobile */
+        display: flex !important;
+        /* Mostrar solo en mobile */
         justify-content: center;
         align-items: center;
         padding-bottom: 0.5rem;
@@ -1484,30 +1529,134 @@ th:nth-child(9) { width: 10%; }
     }
 
     /* Ocultar botones de escritorio */
-    .btn-help, .btn-logout, .Divider {
+    .btn-help,
+    .btn-logout,
+    .Divider {
         display: none;
     }
 
     .MainContent {
-    padding: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* ==================== */
+    /* COMPONENTE TOPBAR */
+    /* ==================== */
+    .TopBar {
+
+        background: var(--white) !important;
+        padding: 0px 5px;
+    }
+
+    .NotificationBar {
+        display: none;
+    }
+
+
 }
 
-/* ==================== */
-/* COMPONENTE TOPBAR */
-/* ==================== */
-.TopBar {
-    
-    background: var(--white) !important;
-    padding: 0px 5px;
+/* Contenedor principal */
+.tab-scroll-container {
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
 }
 
-.NotificationBar{
+/* Barra de navegación estilo pestañas */
+.tab-nav {
+  display: flex;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-300);
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  justify-content: center  ;
+}
+
+.tab-nav::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.tab-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  color: var(--gray-600);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  color: var(--secondary);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--secondary);
+}
+
+.tab-btn i {
+  font-size: 1.1rem;
+}
+
+/* Contenedor del contenido */
+.tab-content-container {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.tab-content {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Efecto de transición suave */
+.tab-content {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive para móvil */
+@media (max-width: 768px) {
+  .tab-scroll-container {
+    height: calc(100vh - 140px);
+  }
+  
+  .tab-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .tab-btn span {
     display: none;
+  }
+  
+  .tab-btn i {
+    font-size: 1.3rem;
+  }
 }
-
-    
-}
-
-
-
 

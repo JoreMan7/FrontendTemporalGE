@@ -124,54 +124,6 @@ document.querySelectorAll('.help')?.forEach(btn => {
         });
     }
 
-    /* === Sidebar Responsive para móvil === 
-    const sidebar = document.getElementById("sidebar");
-    const hamburger = document.getElementById("hamburger");
-    const sidebarToggle = document.getElementById("sidebarToggle");
-    const dropdownMenu = document.getElementById("dropdownMenu");
-    const userInfo = document.querySelector(".UserInfo");
-
-    if (sidebar && hamburger) {
-        const overlay = document.createElement("div");
-        overlay.className = "Overlay";
-        document.body.appendChild(overlay);
-
-        hamburger.addEventListener("click", () => {
-            sidebar.classList.toggle("mobile-visible");
-            overlay.classList.toggle("show");
-        });
-
-        sidebarToggle?.addEventListener("click", () => {
-            sidebar.classList.remove("mobile-visible");
-            overlay.classList.remove("show");
-        });
-
-        overlay.addEventListener("click", () => {
-            sidebar.classList.remove("mobile-visible");
-            overlay.classList.remove("show");
-        });
-
-        if (userInfo && dropdownMenu) {
-            userInfo.addEventListener("click", (event) => {
-                event.stopPropagation();
-                dropdownMenu.classList.toggle("show");
-            });
-
-            document.addEventListener("click", (event) => {
-                if (!event.target.closest(".UserInfo")) {
-                    dropdownMenu.classList.remove("show");
-                }
-            });
-        }
-
-        window.addEventListener("resize", () => {
-            if (!isMobile()) {
-                sidebar.classList.remove("mobile-visible");
-                overlay.classList.remove("show");
-            }
-        });
-    }*/
-
         document.querySelector('.profile-btn').addEventListener('click', (e) => {
   e.stopPropagation();
   document.querySelector('.profile-menu').classList.toggle('show');
@@ -180,4 +132,45 @@ document.querySelectorAll('.help')?.forEach(btn => {
 document.addEventListener('click', () => {
   document.querySelector('.profile-menu').classList.remove('show');
 });
+    
+ // Navegación por pestañas
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Cargar inicialmente el contenido de la pestaña activa
+        const firstButton = document.querySelector(".tab-btn.active");
+        if (firstButton) {
+            loadTabContent(firstButton.dataset.target, firstButton.dataset.url);
+        }
+
+        // Listener para cambiar de pestaña
+        tabButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                tabButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                tabContents.forEach(c => c.classList.remove("active"));
+                const targetId = btn.dataset.target;
+                const targetContent = document.getElementById(targetId);
+                if (targetContent) {
+                    targetContent.classList.add("active");
+                    loadTabContent(targetId, btn.dataset.url);
+                }
+            });
+        });
+
+        // Función que carga el contenido externo
+        function loadTabContent(id, url) {
+            const container = document.getElementById(id);
+            if (container) {
+                container.innerHTML = "Cargando...";
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => container.innerHTML = html)
+                    .catch(() => container.innerHTML = "<p>Error al cargar contenido.</p>");
+            }
+        }
+
+//Fin del DOM
 });
+

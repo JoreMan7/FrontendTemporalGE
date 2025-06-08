@@ -28,9 +28,9 @@
                 <i class="bi bi-suitcase-lg-fill"></i>
                 <span class="NavText">Oficina</span>
             </a>
-            <a href="./NavCaja.html" class="NavItem">
+            <a href="./NavEstadisticas.html" class="NavItem">
                 <i class="fas fa-calculator"></i> 
-                <span class="NavText">Caja</span>
+                <span class="NavText">estadísticas</span>
             </a>
             <a href="./NavAjustes.html" class="NavItem active">
                 <i class="fas fa-cog"></i> 
@@ -82,21 +82,62 @@
         </div>
         <!--Fin de Plantilla--> 
         <!-- Contenido DEMO DE LA PÁGINA -->
-        <div class="ContenedorDemo">
-            <div class="ElementoDemo custom-bg text-dark">
-                <div class="d-flex align-items-center justify-content-center min-vh-100 px-2">
-                    <div class="text-center">
-                        <img src="./Img/EnMantenimiento.png" alt="EN MANTENIMIENTO" class="img-fluid" width="200px">
-                        <p class="fs-2 fw-medium mt-4">Estamos en construcción - (Menú Ajustes)</p>
-                        <p class="mt-4 mb-5">Nuestro sitio web está en construcción, estamos trabajando muy duro para brindarle la mejor experiencia</p>
-                        <a href="./NavInicio.html" class="btn btn-primary fw-semibold rounded-pill px-4 py-2 custom-btn">
-                            Volver al inicio
-                        </a>
-                    </div>
+        <div class="DashboardGrid">
+            <div class="DashboardCard" id="citas-card" data-url="./EnMantenimiento.html">
+                <div class="CardIcon">
+                    <i class="bi bi-people"></i>
                 </div>
+                <h3>Usuarios</h3>
             </div>
-        </div>
+        
+            <div class="DashboardCard" id="IngresosEgresos-card" data-url="./EnMantenimiento.html">
+                <div class="CardIcon">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <h3>Perfil</h3>
+            </div>
+        
+            <div class="DashboardCard" id="GVoluntarios-card" data-url="./EnMantenimiento.html">
+                <div class="CardIcon">
+                        <i class="bi bi-sliders"></i>
+                </div>
+                <h3>Parametrización</h3>
+            </div>
+        
+            <div class="DashboardCard" id="RHabitantes-card" data-url="./EnMantenimiento.html">
+                <div class="CardIcon">
+                <i class="bi bi-gear"></i>
+                </div>
+                <h3>Ajustes Generales</h3>
+            </div>
+        
+            <div class="DashboardCard Disabled" id="BusquedaRapida-card" data-url="./EnMantenimiento.html">
+                <div class="CardIcon">
+                <i class="bi bi-file-earmark-text"></i></div>
+                <h3>Vacío</h3>
+            </div>
+        
+            <div class="DashboardCard Disabled" id="Resumen-card" data-url="./EnMantenimiento.html">
+                <div class="CardIcon">
+                <i class="bi bi-file-earmark-text"></i></div>
+                <h3>Vacío</h3>
+            </div>
+            <div class="DashboardCard Disabled" id="cursos-card" data-url="./EnMantenimiento.html">
+                <div class="CardIcon">
+                    <i class="bi bi-file-earmark-text"></i></div>
+                <h3>Vacío</h3>
+            </div>
+
+            
+            <!--<div class="DashboardCard" id="tareas-card" data-url="./EnMantenimiento.html">
+                <div class="CardIcon">
+                    <i class="bi bi-list-check"></i> 
+                </div>
+                <h3>Tareas</h3>
+            </div>
+        </div>-->
         <!-- Fin Contenido DEMO DE LA PÁGINA -->
+
     </main>
 </body>
 <script src="./statics/script.js"></script>
