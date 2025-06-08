@@ -1,3 +1,2 @@
 QUITAR LA NOTIFICACION QUE SE MUESTRA SIEMPRE
-CAMBIAR LA FORMA DE CERRAR SESION - Perfil.html 
-Crear parametrización
+Modificar el archivo ModificarCITA, aun no está adaptado y sacarlo del gitignore
