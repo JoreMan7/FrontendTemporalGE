@@ -2,7 +2,7 @@
 import { AuthManager } from './auth.js';
 
 export class ApiClient {
-    static BASE_URL = 'http://127.0.0.1:5000';
+    static BASE_URL = 'https://nombre-app.onrender.com';
 
     static async request(endpoint, options = {}) {
         const url = `${this.BASE_URL}${endpoint}`;
