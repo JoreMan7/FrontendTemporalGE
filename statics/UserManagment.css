@@ -1,0 +1,380 @@
+wh
+
+.UserManagement * {
+    box-sizing: border-box;
+}
+
+.UserManagement .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray-300);
+}
+
+.UserManagement .dashboard-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin: 0;
+}
+
+.UserManagement .btn-create-user {
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+}  
+
+.UserManagement .btn-create-user:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.UserManagement .filters-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.UserManagement .search-box {
+    position: relative;
+    flex: 1;
+    min-width: 250px;
+}
+
+.UserManagement .search-box i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-500);
+}
+
+.UserManagement .search-box input {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+}
+
+.UserManagement .filter-select {
+    padding: 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    background-color: var(--white);
+    min-width: 180px;
+}
+
+.UserManagement .actions-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.UserManagement .btn-action {
+    background-color: var(--white);
+    color: var(--gray-700);
+    border: 1px solid var(--gray-300);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.UserManagement .btn-action:hover {
+    background-color: var(--gray-100);
+}
+
+.UserManagement .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.UserManagement .users-table th {
+    background-color: var(--gray-100);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-300);
+}
+
+.UserManagement .users-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-300);
+    color: var(--gray-600);
+}
+
+.UserManagement .users-table tr:last-child td {
+    border-bottom: none;
+}
+
+.UserManagement .users-table tr:hover {
+    background-color: var(--gray-100);
+}
+
+.UserManagement .status-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.UserManagement .status-active {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.UserManagement .status-inactive {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+}
+
+.UserManagement .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.UserManagement .btn-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.UserManagement .btn-edit {
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.UserManagement .btn-edit:hover {
+    background-color: #DBEAFE;
+}
+
+.UserManagement .btn-delete {
+    background-color: #FEF2F2;
+    color: #DC2626;
+}
+
+.UserManagement .btn-delete:hover {
+    background-color: #FEE2E2;
+}
+
+.UserManagement .btn-lock {
+    background-color: #FEF3C7;
+    color: #D97706;
+}
+
+.UserManagement .btn-lock:hover {
+    background-color: #FDE68A;
+}
+
+/* Modales para el sistema de usuarios */
+.UserManagement .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.UserManagement .modal.show {
+    display: flex;
+}
+
+.UserManagement .modal-content {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.UserManagement .modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--gray-300);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.UserManagement .modal-header h3 {
+    color: var(--gray-700);
+    font-weight: 600;
+    margin: 0;
+}
+
+.UserManagement .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray-500);
+}
+
+.UserManagement .modal-body {
+    padding: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.UserManagement .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--gray-300);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.UserManagement .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.UserManagement .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.UserManagement .form-input,
+.UserManagement .form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.UserManagement .form-input:focus,
+.UserManagement .form-select:focus {
+    outline: none;
+    border-color: var(--secondary);
+}
+
+.UserManagement .btn-cancel {
+    background-color: var(--gray-200);
+    color: var(--gray-700);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.UserManagement .btn-cancel:hover {
+    background-color: var(--gray-300);
+}
+
+.UserManagement .btn-confirm {
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.UserManagement .btn-confirm:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.UserManagement .btn-danger {
+    background-color: var(--red-600);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.UserManagement .btn-danger:hover {
+    background-color: var(--red-800);
+}
+
+.UserManagement .user-info {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: var(--gray-100);
+    border-radius: var(--radius-sm);
+}
+
+.UserManagement .user-info p {
+    margin: 0.5rem 0;
+    color: var(--gray-700);
+}
+
+.UserManagement .user-info strong {
+    color: var(--gray-800);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .UserManagement .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .UserManagement .filters-container {
+        flex-direction: column;
+    }
+
+    .UserManagement .search-box {
+        min-width: 100%;
+    }
+
+    .UserManagement .actions-container {
+        flex-wrap: wrap;
+    }
+
+    .UserManagement .users-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .UserManagement .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+
+    .UserManagement .action-buttons {
+        flex-wrap: wrap;
+    }
+}

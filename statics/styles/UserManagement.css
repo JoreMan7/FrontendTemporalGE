@@ -1,0 +1,608 @@
+/* ==================== */
+/* SISTEMA DE GESTIÓN DE USUARIOS */
+/* ==================== */
+
+/* Tabla de habitantes */
+#TablaHabitantes {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+#TablaHabitantes th {
+    background-color: var(--gray-800);
+    color: var(--white);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+#TablaHabitantes td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+#TablaHabitantes tr:hover {
+    background-color: var(--gray-50);
+}
+
+#TablaHabitantes .row-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+}
+
+/* ==================== */
+/* PAGINACIÓN USUARIOS */
+/* ==================== */
+.TablePagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.PaginationControls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.PaginationButtons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.BulkActions {
+    display: flex;
+    gap: 10px;
+}
+
+/* ==================== */
+/* FILTROS AVANZADOS USUARIOS */
+/* ==================== */
+.AdvancedFilters {
+    background: var(--gray-50);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.FilterRow {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.FilterGroup {
+    flex: 1;
+    min-width: 200px;
+}
+
+.FilterGroup label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.FilterGroup select,
+.FilterGroup input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    background-color: var(--white);
+    color: var(--gray-700);
+}
+
+.FilterActions {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.DateRangeFilter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.DateRangeFilter input {
+    flex: 1;
+    background-color: var(--white);
+    color: var(--gray-700);
+}
+
+/* ==================== */
+/* PERFIL DE USUARIO */
+/* ==================== */
+.Content.PerfilSeccion {
+    padding: 1rem;
+    background-color: var(--gray-100);
+}
+
+.profile-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.profile-sidebar {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--gray-200);
+    margin: 0 auto 15px;
+    box-shadow: var(--shadow-sm);
+}
+
+.user-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--gray-800);
+}
+
+.user-role {
+    color: var(--secondary);
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.user-department {
+    background-color: var(--gray-100);
+    padding: 5px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: var(--gray-600);
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+}
+
+.profile-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 20px;
+}
+
+.card-header {
+    border-bottom: 1px solid var(--secondary);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.info-group {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.info-group:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.activity-icon {
+    background-color: var(--gray-100);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: var(--secondary);
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: var(--gray-700);
+}
+
+.activity-time {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+}
+
+.skill-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.skill-name {
+    width: 100px;
+    font-size: 0.9rem;
+    color: var(--gray-600);
+}
+
+.skill-level {
+    flex: 1;
+    height: 8px;
+    background-color: var(--gray-200);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.skill-progress {
+    height: 100%;
+    background-color: var(--secondary);
+    border-radius: 4px;
+}
+
+.skill-percent {
+    width: 50px;
+    text-align: right;
+    font-size: 0.9rem;
+    color: var(--gray-500);
+}
+
+.tab-container {
+    margin-top: 20px;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--gray-300);
+    margin-bottom: 20px;
+    background-color: var(--white);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+.tab.active {
+    border-bottom: 3px solid var(--secondary);
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.stat-item i {
+    font-size: 28px;
+    color: var(--secondary);
+    margin-bottom: 8px;
+}
+
+.info-group.editable:hover {
+    background-color: var(--gray-100);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    margin: 0 -10px;
+}
+
+/* ============================= */
+/* PERFIL - RESPONSIVE MÓVIL     */
+/* ============================= */
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .profile-sidebar {
+        padding: 15px;
+    }
+
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+    }
+
+    .user-name {
+        font-size: 1.2rem;
+    }
+
+    .stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .stat-item {
+        margin-bottom: 10px;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .info-label {
+        font-size: 0.75rem;
+    }
+
+    .info-value {
+        font-size: 0.95rem;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+
+    .tab {
+        padding: 8px 12px;
+        text-align: center;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .tab.active {
+        border-bottom: 3px solid var(--secondary);
+        background-color: var(--gray-50);
+    }
+}
+
+/* ==================== */
+/* MODAL DE FILTROS USUARIOS */
+/* ==================== */
+.FilterButtonContainer {
+    margin: 15px 0;
+}
+
+#filterModal .modal-content {
+    border-radius: var(--radius-xl);
+    border: none;
+}
+
+#filterModal .modal-header {
+    background-color: var(--gray-800);
+    color: var(--white);
+    border-bottom: none;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+#filterModal .modal-body {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+    background-color: var(--white);
+}
+
+.FilterGroup {
+    margin-bottom: 15px;
+}
+
+.FilterGroup label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: var(--gray-700);
+}
+
+.FilterGroup .form-select {
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-300);
+    padding: 8px 12px;
+    background-color: var(--white);
+    color: var(--gray-700);
+}
+
+.FilterGroup .form-select:focus {
+    border-color: var(--gray-800);
+    box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
+}
+
+.DateRangeFilter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.DateRangeFilter input {
+    flex: 1;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-300);
+    padding: 8px 12px;
+    background-color: var(--white);
+    color: var(--gray-700);
+}
+
+.DateRangeFilter span {
+    color: var(--gray-500);
+    font-weight: 500;
+}
+
+.filter-select[multiple] {
+    height: 120px;
+    background-color: var(--white);
+    color: var(--gray-700);
+}
+
+.filter-select[multiple] option {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--gray-200);
+    cursor: pointer;
+    background-color: var(--white);
+    color: var(--gray-700);
+}
+
+.filter-select[multiple] option:hover {
+    background-color: var(--gray-100);
+}
+
+.filter-select[multiple] option:checked {
+    background-color: var(--gray-800);
+    color: var(--white);
+}
+
+#filterModal .modal-footer {
+    border-top: 1px solid var(--gray-200);
+    padding: 15px 20px;
+    background-color: var(--gray-50);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+#filterModal .modal-footer .btn {
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+#filterModal .modal-footer .btn-primary {
+    background-color: var(--gray-800);
+    border-color: var(--gray-800);
+    color: var(--white);
+}
+
+#filterModal .modal-footer .btn-primary:hover {
+    background-color: var(--gray-900);
+    border-color: var(--gray-900);
+}
+
+.modal {
+    z-index: 1060 !important;
+}
+
+.modal-backdrop {
+    z-index: 1040 !important;
+    background-color: var(--overlay-color);
+}
+
+/* ==================== */
+/* BOTONES ESPECÍFICOS USER MANAGEMENT */
+/* ==================== */
+.btn-user-action {
+    background-color: var(--secondary);
+    color: var(--white);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.btn-user-action:hover {
+    background-color: var(--secondary-dark);
+    transform: translateY(-1px);
+}
+
+.btn-user-delete {
+    background-color: var(--red-500);
+    color: var(--white);
+}
+
+.btn-user-delete:hover {
+    background-color: var(--red-600);
+}
+
+.btn-user-edit {
+    background-color: var(--blue-500);
+    color: var(--white);
+}
+
+.btn-user-edit:hover {
+    background-color: var(--blue-600);
+}

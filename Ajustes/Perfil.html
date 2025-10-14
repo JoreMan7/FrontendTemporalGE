@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - GESTIÓN ECLESIAL</title>
+    <link rel="shortcut icon" href="../Img/Logo_Favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Iconos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../statics/css/style.css">
+
+</head>
+
+<body class="BodyPlantilla">
+    <!--Inicio de Plantilla-->
+    <aside class="Sidebar" id="sidebar">
+        <div class="LogoContainer">
+            <img src="../Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
+        </div>
+        <nav class="NavMenu">
+            <a href="../NavInicio.html" class="NavItem">
+                <i class="fas fa-home"></i>
+                <span class="NavText">Inicio</span>
+            </a>
+            <a href="../NavOficina.html" class="NavItem">
+                <i class="bi bi-suitcase-lg-fill"></i>
+                <span class="NavText">Oficina</span>
+            </a>
+            <a href="../NavEstadisticas.html" class="NavItem">
+                <i class="fas fa-calculator"></i>
+                <span class="NavText">estadísticas</span>
+            </a>
+            <a href="../NavAjustes.html" class="NavItem active">
+                <i class="fas fa-cog"></i>
+                <span class="NavText">Ajustes</span>
+            </a>
+            <a href="../About.html" class="NavItem">
+                <i class="bi bi-info-circle-fill"></i>
+                <span class="NavText">Acerca De</span>
+            </a>
+        </nav>
+    </aside>
+    <main class="MainContent">
+        <header class="TopBar">
+            <div class="UserInfo">
+                <img src="../Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
+                <div class="UserDetails">
+                    <h2 class="UserName">Héctor Lemus</h2>
+                    <p class="CurrentDate" id="CurrentDate"></p>
+                </div>
+            </div>
+            <div class="MobileLogo">
+                <img src="../Img/Logo_Mobile.png" alt="Logo Eclesial">
+            </div>
+
+            <div class="HeaderActions">
+                <button class="btn btn-help help">Ayuda</button>
+                <div class="Divider"></div>
+                <button class="btn btn-logout logout">Cerrar sesión</button>
+                <div class="profile">
+                    <button class="profile-btn">
+                        <img src="../Img/sacerdote.jpg" alt="Usuario"><i class="bi bi-caret-down-fill"></i></button>
+                    <div class="profile-menu">
+                        <div class="profile-header">
+                            <img src="../Img/sacerdote.jpg" alt="Usuario">
+                            <div>
+                                <h4>Héctor Lemus</h4>
+                                <small>Administrador</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <button class="help"><i class="bi bi-question-circle"></i> Ayuda</button>
+                        <button class="logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- <div class="NotificationBar">
+            Acá mostrar una notificación de recordatorio de algo
+        </div>-->
+        <section class="Content PerfilSeccion">
+
+
+            <div class="profile-container">
+                <div class="profile-sidebar">
+                    <img src="../Img/sacerdote.jpg" alt="Foto de perfil" class="profile-picture">
+                    <h2 class="user-name">Hector Lemus</h2>
+                    <p class="user-role">Administrador</p>
+                    <span class="user-department">Sacerdote Parroquial</span>
+
+                    <div class="stats">
+                        <div class="stat-item">
+                            <i class="fas fa-bible"></i>
+                            <div class="stat-value">41</div>
+                            <div class="stat-label">sacramentos celebrados</div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-users"></i>
+                            <div class="stat-value">32</div>
+                            <div class="stat-label">parroquias atendidas </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-hand-holding-heart"></i>
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">actividades pastorales </div>
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Estado</div>
+                        <div class="info-value"><span style="color:green;"><i class="fas fa-circle"></i>
+                                Activo</span></div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Último acceso</div>
+                        <div class="info-value">Hoy, 09:24 AM</div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Miembro desde</div>
+                        <div class="info-value">15 Ene, 2022</div>
+                    </div>
+                </div>
+
+                <div class="profile-content">
+                    <!-- Información Personal -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Información Personal</h3>
+                        </div>
+                        <div class="grid-2">
+                            <!-- Nombre -->
+                            <div class="info-group editable" onclick="ProfileModule.openFieldModal('nombre')">
+                                <div class="info-label"><i class="fas fa-user"></i> Nombre completo</div>
+                                <div class="info-value" id="nombreField">Juan Pérez <i
+                                        class="fas fa-chevron-right edit-arrow"></i></div>
+                            </div>
+
+                            <!-- Sexo -->
+                            <div class="info-group editable" onclick="ProfileModule.openFieldModal('sexo')">
+                                <div class="info-label"><i class="fas fa-venus-mars"></i> Sexo</div>
+                                <div class="info-value" id="sexoField">Masculino <i
+                                        class="fas fa-chevron-right edit-arrow"></i></div>
+                            </div>
+
+                            <!-- Documento -->
+                            <div class="info-group">
+                                <div class="info-label"><i class="fas fa-id-card"></i> Documento de identidad</div>
+                                <div class="info-value" id="docField">123456789</div>
+                            </div>
+
+                            <!-- Fecha -->
+                            <div class="info-group editable" onclick="ProfileModule.openFieldModal('fecha')">
+                                <div class="info-label"><i class="fas fa-birthday-cake"></i> Fecha de nacimiento</div>
+                                <div class="info-value" id="fechaField">22/09/1975 <i
+                                        class="fas fa-chevron-right edit-arrow"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contacto -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Contacto</h3>
+                        </div>
+                        <div class="grid-2">
+                            <div class="info-group">
+                                <div class="info-label"><i class="fas fa-envelope"></i> Correo electrónico</div>
+                                <div class="info-value">juan.perez@iglesia.com</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label"><i class="fas fa-phone"></i> Teléfono</div>
+                                <div class="info-value">+1 (555) 123-4567</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label"><i class="fas fa-home"></i> Dirección</div>
+                                <div class="info-value">Calle Principal #123</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información Eclesial -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Información Eclesial</h3>
+                        </div>
+                        <div class="grid-2">
+                            <div class="info-group">
+                                <div class="info-label"><i class="fas fa-church"></i> Parroquia asignada</div>
+                                <div class="info-value">San José</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label"><i class="fas fa-briefcase"></i> Cargo</div>
+                                <div class="info-value">Párroco</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label"><i class="fas fa-cross"></i> Fecha de ordenación</div>
+                                <div class="info-value">15/08/2005</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label"><i class="fas fa-hourglass-half"></i> Tiempo en la parroquia
+                                </div>
+                                <div class="info-value">7 años</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Actividad Reciente</h3>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-church"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Celebró misa de la comunidad juvenil</div>
+                                <div class="activity-time">Hoy, 10:00 AM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Se reunió con el consejo parroquial</div>
+                                <div class="activity-time">Ayer, 7:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Agendó bautizo de la familia Ramírez</div>
+                                <div class="activity-time">Ayer, 4:30 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Subió la homilía del domingo pasado</div>
+                                <div class="activity-time">20 Ago, 6:45 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Registró nuevos miembros en la parroquia</div>
+                                <div class="activity-time">18 Ago, 11:15 AM</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-container">
+                <!-- Pestañas -->
+                <div class="tabs">
+                    <div class="tab active" data-tab="settings">Configuración</div>
+                    <div class="tab" data-tab="security">Seguridad</div>
+                    <div class="tab" data-tab="notifications">Notificaciones</div>
+                    <div class="tab" data-tab="permissions">Permisos</div>
+                </div>
+
+                <!-- Contenido de Configuración -->
+                <div class="tab-content active" id="settings">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Preferencias de Usuario</h3>
+                        </div>
+                        <div class="grid-2">
+                            <div class="info-group">
+                                <div class="info-label">Idioma</div>
+                                <div class="info-value">Español</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Zona horaria</div>
+                                <div class="info-value">GMT-5 (Ciudad de México)</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Formato de fecha</div>
+                                <div class="info-value">DD/MM/AAAA</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Tema de interfaz</div>
+                                <div class="info-value">Claro</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido de Seguridad -->
+                <div class="tab-content" id="security">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Seguridad de la Cuenta</h3>
+                        </div>
+                        <div class="grid-2">
+                            <div class="info-group">
+                                <div class="info-label">Contraseña</div>
+                                <div class="info-value">********</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Autenticación 2FA</div>
+                                <div class="info-value">Desactivada</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Último inicio de sesión</div>
+                                <div class="info-value">28/08/2025 - 10:15 AM</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Dispositivos vinculados</div>
+                                <div class="info-value">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido de Notificaciones -->
+                <div class="tab-content" id="notifications">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Preferencias de Notificación</h3>
+                        </div>
+                        <div class="grid-2">
+                            <div class="info-group">
+                                <div class="info-label">Correo electrónico</div>
+                                <div class="info-value">Activado</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">SMS</div>
+                                <div class="info-value">Desactivado</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Notificaciones en la App</div>
+                                <div class="info-value">Activado</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Recordatorios de agenda</div>
+                                <div class="info-value">Activado</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido de Permisos -->
+                <div class="tab-content" id="permissions">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Gestión de Permisos</h3>
+                        </div>
+                        <div class="grid-2">
+                            <div class="info-group">
+                                <div class="info-label">Rol</div>
+                                <div class="info-value">Administrador</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Permisos especiales</div>
+                                <div class="info-value">Aprobación de reportes</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Acceso a estadísticas</div>
+                                <div class="info-value">Sí</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Gestión de usuarios</div>
+                                <div class="info-value">Sí</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal para edición de campos -->
+            <!-- Modal para edición de campos -->
+            <div class="modal" id="editModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalTitle">Editar campo</h2>
+                        <button class="close-btn" onclick="ProfileModule.closeModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Campos para nombre y apellido (inicialmente ocultos) -->
+                        <div id="nombreFields" style="display: none;">
+                            <div class="form-group">
+                                <label for="nombreValue">Nombre:</label>
+                                <input type="text" class="form-control" id="nombreValue">
+                                <div class="error-message" id="nombreError"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="apellidoValue">Apellido:</label>
+                                <input type="text" class="form-control" id="apellidoValue">
+                                <div class="error-message" id="apellidoError"></div>
+                            </div>
+                        </div>
+
+                        <!-- Select para sexo (inicialmente oculto) -->
+                        <div class="form-group" id="sexoFieldGroup" style="display: none;">
+                            <label id="fieldLabel" for="fieldSelect">Selecciona tu sexo:</label>
+                            <select class="form-select" id="fieldSelect">
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Otro">Otro</option>
+                                <option value="Prefiero no decir">Prefiero no decir</option>
+                            </select>
+                            <div class="error-message" id="fieldError"></div>
+                        </div>
+
+                        <!-- Campo para fecha (inicialmente oculto) -->
+                        <div class="form-group" id="fechaFieldGroup" style="display: none;">
+                            <label id="fieldLabelFecha" for="fieldDate">Fecha de nacimiento:</label>
+                            <input type="date" class="form-control" id="fieldDate">
+                            <div class="error-message" id="fieldErrorFecha"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="ProfileModule.closeModal()">Cancelar</button>
+                        <button class="btn btn-primary" onclick="ProfileModule.saveField()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </section>
+
+
+        <!--Fin de Plantilla-->
+
+
+
+    </main>
+
+
+    <script src="../statics/js/app.js"></script>
+</body>
+
+</html>

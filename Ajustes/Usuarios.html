@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - GESTIÓN ECLESIAL</title>
+    <link rel="shortcut icon" href="../Img/Logo_Favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Iconos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../statics/css/style.css">
+    <link rel="stylesheet" href="../statics/UserManagment.css">
+
+</head>
+
+<body class="BodyPlantilla">
+    <!--Inicio de Plantilla-->
+    <aside class="Sidebar" id="sidebar">
+        <div class="LogoContainer">
+            <img src="../Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
+        </div>
+        <nav class="NavMenu">
+            <a href="../NavInicio.html" class="NavItem">
+                <i class="fas fa-home"></i>
+                <span class="NavText">Inicio</span>
+            </a>
+            <a href="../NavOficina.html" class="NavItem">
+                <i class="bi bi-suitcase-lg-fill"></i>
+                <span class="NavText">Oficina</span>
+            </a>
+            <a href="../NavEstadisticas.html" class="NavItem">
+                <i class="fas fa-calculator"></i>
+                <span class="NavText">estadísticas</span>
+            </a>
+            <a href="../NavAjustes.html" class="NavItem active">
+                <i class="fas fa-cog"></i>
+                <span class="NavText">Ajustes</span>
+            </a>
+            <a href="../About.html" class="NavItem">
+                <i class="bi bi-info-circle-fill"></i>
+                <span class="NavText">Acerca De</span>
+            </a>
+        </nav>
+    </aside>
+    <main class="MainContent">
+        <header class="TopBar">
+            <div class="UserInfo">
+                <img src="../Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
+                <div class="UserDetails">
+                    <h2 class="UserName">Héctor Lemus</h2>
+                    <p class="CurrentDate" id="CurrentDate"></p>
+                </div>
+            </div>
+            <div class="MobileLogo">
+                <img src="../Img/Logo_Mobile.png" alt="Logo Eclesial">
+            </div>
+
+            <div class="HeaderActions">
+                <button class="btn btn-help help">Ayuda</button>
+                <div class="Divider"></div>
+                <button class="btn btn-logout logout">Cerrar sesión</button>
+                <div class="profile">
+                    <button class="profile-btn">
+                        <img src="../Img/sacerdote.jpg" alt="Usuario"><i class="bi bi-caret-down-fill"></i></button>
+                    <div class="profile-menu">
+                        <div class="profile-header">
+                            <img src="../Img/sacerdote.jpg" alt="Usuario">
+                            <div>
+                                <h4>Héctor Lemus</h4>
+                                <small>Administrador</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <button class="help"><i class="bi bi-question-circle"></i> Ayuda</button>
+                        <button class="logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- <div class="NotificationBar">
+            Acá mostrar una notificación de recordatorio de algo
+        </div>-->
+        <!--Fin de Plantilla-->
+
+        <!-- Dashboard de Gestión de Usuarios -->
+        <div class="Content UserManagement">
+            <div class="dashboard-header">
+                <button class="btn-back" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+                <h1 class="dashboard-title">Gestión de Usuarios</h1>
+                <button class="btn-create-user" id="btnCreateUser">
+                    <i class="fas fa-plus"></i> Crear Usuario
+                </button>
+            </div>
+
+            <div class="filters-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar por nombre, correo o documento...">
+                </div>
+                <select class="filter-select">
+                    <option value="">Todos los roles</option>
+                    <option value="administrador">Administradores</option>
+                    <option value="sacerdote">Sacerdotes</option>
+                    <option value="ayudante">Ayudantes</option>
+                    <option value="feligres">Feligreses</option>
+                </select>
+            </div>
+
+            <div class="actions-container">
+                <button class="btn-action">
+                    <i class="fas fa-file-export"></i> Exportar
+                </button>
+                <button class="btn-action">
+                    <i class="fas fa-key"></i> Roles y permisos
+                </button>
+            </div>
+
+            <div class="TableContainer">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID / Documento</th>
+                            <th>Nombre </th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
+                            <th>Rol asignado</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1001234567</td>
+                            <td>Héctor </td>
+                            <td>lemus</td>
+                            <td>hector.lemus@iglesia.org</td>
+                            <td>Administrador</td>
+                            <td><span class="status-badge status-active">Activo</span></td>
+                            <td class="action-buttons">
+                                <button class="btn-icon btn-edit" title="Editar" onclick="openEditModal('1001234567')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" title="Eliminar"
+                                    onclick="openDeleteModal('1001234567', 'Héctor Lemus')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="btn-icon btn-lock" title="Desactivar"
+                                    onclick="openStatusModal('1001234567', 'Héctor Lemus', 'Activo')">
+                                    <i class="fas fa-lock"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2009876543</td>
+                            <td>María </td>
+                            <td> Lemus</td>
+                            <td>maria.gonzalez@iglesia.org</td>
+                            <td>Sacerdote</td>
+                            <td><span class="status-badge status-active">Activo</span></td>
+                            <td class="action-buttons">
+                                <button class="btn-icon btn-edit" title="Editar" onclick="openEditModal('2009876543')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" title="Eliminar"
+                                    onclick="openDeleteModal('2009876543', 'María González')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="btn-icon btn-lock" title="Desactivar"
+                                    onclick="openStatusModal('2009876543', 'María González', 'Activo')">
+                                    <i class="fas fa-lock"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3004567890</td>
+                            <td>Carlos </td>
+                            <td>Lemus</td>
+                            <td>carlos.rodriguez@iglesia.org</td>
+                            <td>Ayudante</td>
+                            <td><span class="status-badge status-inactive">Inactivo</span></td>
+                            <td class="action-buttons">
+                                <button class="btn-icon btn-edit" title="Editar" onclick="openEditModal('3004567890')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" title="Eliminar"
+                                    onclick="openDeleteModal('3004567890', 'Carlos Rodríguez')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="btn-icon btn-lock" title="Activar"
+                                    onclick="openStatusModal('3004567890', 'Carlos Rodríguez', 'Inactivo')">
+                                    <i class="fas fa-unlock"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modales para el sistema de usuarios -->
+            <div class="UserManagement">
+                <!-- Modal Crear Usuario -->
+                <div class="modal" id="createUserModal">
+                    <div class="modal-content">
+                        <span class="close" id="closeCreateUser">&times;</span>
+                        <h2>Crear Usuarios</h2>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Tipo de Documento</label>
+                                <select class="form-select">
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="cc">Cédula de Ciudadanía</option>
+                                    <option value="ce">Cédula de Extranjería</option>
+                                    <option value="ti">Tarjeta de Identidad</option>
+                                    <option value="pa">Pasaporte</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Número de Documento</label>
+                                <input type="text" class="form-input" placeholder="Ingrese el número de documento">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Nombre Completo</label>
+                                <input type="text" class="form-input" placeholder="Ingrese el nombre completo">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Apellido Completo</label>
+                                <input type="text" class="form-input" placeholder="Ingrese su apellido completo">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-input" placeholder="Ingrese el correo electrónico">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Rol de Usuario</label>
+                                <select class="form-select">
+                                    <option value="">Seleccionar rol</option>
+                                    <option value="administrador">Administrador</option>
+                                    <option value="sacerdote">Sacerdote</option>
+                                    <option value="ayudante">Ayudante</option>
+                                    <option value="feligres">Feligrés</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contraseña Temporal</label>
+                                <input type="password" class="form-input" value="Temp1234" readonly>
+                                <small>El usuario deberá cambiar esta contraseña en su primer inicio de sesión</small>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-cancel" onclick="closeModal('createUserModal')">Cancelar</button>
+                            <button class="btn-confirm" onclick="createUser()">Crear Usuario</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Editar Usuario -->
+            <div class="modal" id="editUserModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Editar Usuario</h3>
+                        <button class="modal" onclick="closeModal('editUserModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="form-label">Número de Documento</label>
+                            <input type="text" class="form-input" value="1001234567" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-input" value="Héctor Lemus">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-input" value="hector.lemus@iglesia.org">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Rol de Usuario</label>
+                            <select class="form-select">
+                                <option value="administrador" selected>Administrador</option>
+                                <option value="sacerdote">Sacerdote</option>
+                                <option value="ayudante">Ayudante</option>
+                                <option value="feligres">Feligrés</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select">
+                                <option value="activo" selected>Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeModal('editUserModal')">Cancelar</button>
+                        <button class="btn-confirm" onclick="updateUser()">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Eliminar Usuario -->
+            <div class="modal" id="deleteUserModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Eliminar Usuario</h3>
+                        <button class="modal" onclick="closeModal('deleteUserModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="user-info">
+                            <p><strong>¿Está seguro que desea eliminar este usuario?</strong></p>
+                            <p><strong>Documento:</strong> <span id="deleteUserDocument">1001234567</span></p>
+                            <p><strong>Nombre:</strong> <span id="deleteUserName">Héctor Lemus</span></p>
+                            <p><strong>Correo:</strong> hector.lemus@iglesia.org</p>
+                            <p><strong>Rol:</strong> Administrador</p>
+                        </div>
+                        <p>Esta acción no se puede deshacer. El usuario será eliminado permanentemente del sistema.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeModal('deleteUserModal')">Cancelar</button>
+                        <button class="btn-danger" onclick="deleteUser()">Eliminar Permanentemente</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Cambiar Estado -->
+            <div class="modal" id="statusUserModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="statusModalTitle">Cambiar Estado de Usuario</h3>
+                        <button class="modal-close" onclick="closeModal('statusUserModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="user-info">
+                            <p><strong>Documento:</strong> <span id="statusUserDocument">1001234567</span></p>
+                            <p><strong>Nombre:</strong> <span id="statusUserName">Héctor Lemus</span></p>
+                            <p><strong>Estado actual:</strong> <span id="currentStatus">Activo</span></p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nuevo estado</label>
+                            <select class="form-select" id="newStatusSelect">
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                        <p id="statusMessage">Al desactivar este usuario, no podrá acceder al sistema hasta que sea
+                            reactivado.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeModal('statusUserModal')">Cancelar</button>
+                        <button class="btn-confirm" onclick="changeUserStatus()">Cambiar Estado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script src="../statics/script.js"></script>
+</body>
+
+</html>

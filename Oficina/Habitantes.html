@@ -1,94 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habitantes - GESTIÓN ECLESIAL</title>
-    <link rel="shortcut icon" href="../Img/Logo_Favicon.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!--<link rel="stylesheet" href="stylePruebas.css">-->
-    <link rel="stylesheet" href="../statics/style.css">
-    <!-- Bootstrap -->
-    
-    <!-- Iconos de Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-</head>
-<body class="BodyPlantilla">
-    <!--Inicio de Plantilla-->      
-     <aside class="Sidebar" id="sidebar">
-        <div class="LogoContainer">
-            <img src="../Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
-        </div>
-        <nav class="NavMenu">
-            <a href="../NavInicio.html" class="NavItem">
-                <i class="fas fa-home"></i> 
-                <span class="NavText">Inicio</span>
-            </a>
-            <a href="../NavOficina.html" class="NavItem active">
-                <i class="bi bi-suitcase-lg-fill"></i>
-                <span class="NavText">Oficina</span>
-            </a>
-            <a href="../NavEstadisticas.html" class="NavItem">
-                <i class="fas fa-calculator"></i> 
-                <span class="NavText">estadísticas</span>
-            </a>
-            <a href="../NavAjustes.html" class="NavItem">
-                <i class="fas fa-cog"></i> 
-                <span class="NavText">Ajustes</span>
-            </a>
-            <a href="../About.html" class="NavItem">
-                <i class="bi-info-circle"></i> 
-                <span class="NavText">Acerca De</span>
-            </a>
-        </nav>
-    </aside>
-    <main class="MainContent">
-            
-        <header class="TopBar">
-            <div class="UserInfo">
-                <img src="../Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
-                <div class="UserDetails">
-                    <h2 class="UserName">Héctor Lemus</h2>
-                    <p class="CurrentDate" id="CurrentDate"></p>
-                </div>
-            </div>
-            <div class="MobileLogo">
-               <img src="../Img/Logo_Mobile.png" alt="Logo Eclesial">
-                </div>
-            
-            <div class="HeaderActions">
-                <button class="btn btn-help help">Ayuda</button>
-                <div class="Divider"></div>
-                <button class="btn btn-logout logout">Cerrar sesión</button>
-                <div class="profile">
-                    <button class="profile-btn">
-                      <img src="../Img/sacerdote.jpg" alt="Usuario"><i class="bi bi-caret-down-fill"></i></button>
-                    <div class="profile-menu">
-                      <div class="profile-header">
-                        <img src="../Img/sacerdote.jpg" alt="Usuario">
-                        <div>
-                          <h4>Héctor Lemus</h4>
-                          <small>Administrador</small>
-                        </div>
-                      </div>
-                      <hr>
-                      <button class="help"><i class="bi bi-question-circle"></i> Ayuda</button>
-                      <button class="logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</button>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <div class="NotificationBar">
-            Acá mostrar una notificación de recordatorio de algo
-        </div>
-        <!--Fin de Plantilla-->  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habitantes - GESTIÓN ECLESIAL</title>
+  <link rel="shortcut icon" href="../Img/Logo_Favicon.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-                <!-- Tabla con encabezado -->
-                 
-         
-<section class="Content">
+  <link rel="stylesheet" href="../statics/styles/style.css">
+  <link rel="stylesheet" href="../statics/styles/Utilidades.css">
+  <link rel="stylesheet" href="../statics/styles/TablasAvanzadas.css">
+  <link rel="stylesheet" href="../statics/styles/UserManagement.css">
+ 
+  
+  
+</head>
+
+
+<body class="BodyPlantilla">
+  <!-- Sidebar -->
+  <aside class="Sidebar" id="sidebar">
+    <div class="LogoContainer">
+      <img src="../Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
+    </div>
+    <nav class="NavMenu">
+      <a href="../NavInicio.html" class="NavItem"><i class="fas fa-home"></i><span class="NavText">Inicio</span></a>
+      <a href="../NavOficina.html" class="NavItem active"><i class="bi bi-suitcase-lg-fill"></i><span class="NavText">Oficina</span></a>
+      <a href="../NavEstadisticas.html" class="NavItem"><i class="fas fa-calculator"></i><span class="NavText">Estadísticas</span></a>
+      <a href="../NavAjustes.html" class="NavItem"><i class="fas fa-cog"></i><span class="NavText">Ajustes</span></a>
+      <a href="../About.html" class="NavItem"><i class="bi-info-circle"></i><span class="NavText">Acerca De</span></a>
+    </nav>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="MainContent">
+    <header class="TopBar">
+      <div class="UserInfo">
+        <img src="../Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
+        <div class="UserDetails">
+          <h2 class="UserName">Héctor Lemus</h2>
+          <p class="CurrentDate" id="CurrentDate"></p>
+        </div>
+      </div>
+      <div class="MobileLogo">
+        <img src="../Img/Logo_Mobile.png" alt="Logo Eclesial">
+      </div>
+      <div class="HeaderActions">
+        <button class="btn btn-help help">Ayuda</button>
+        <div class="Divider"></div>
+        <button class="btn btn-logout logout">Cerrar sesión</button>
+      </div>
+    </header>
     <!--<i id="IconBack" class="bi bi-arrow-left-circle-fill"></i> --- botón atras  -->  
     <div class="ContentHeader">
         <button class="btn btn-green"><i class="bi bi-bar-chart"></i> estadísticas</button>
@@ -105,134 +70,419 @@
             <div>DD-MM-AAAA</div> <!-- Fecha del reporte generarse al día de consulta -->
         </div>
         </div>
+    </div>
+    <!-- 🔹 Contenido principal -->
+    <div class="container-fluid py-3">
+    <!-- Header Controls -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <strong>Período:</strong>
+            <button id="btnPeriodo" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#periodoModal">
+              <i class="fas fa-calendar me-2"></i><span id="periodoTexto">Últimos 30 días</span>
+            </button>
+          </div>
 
+          <input type="hidden" id="fechaDesde" />
+          <input type="hidden" id="fechaHasta" />
 
-            
-        <div>
-            <button class="btn btn-blue"><i class="fas fa-print"></i> Imprimir</button>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filtersModal">
+              <i class="fas fa-filter me-2"></i>Filtros
+            </button>
+            <button class="btn btn-success" id="btnExportar">
+              <i class="fas fa-file-export me-2"></i>Exportar
+            </button>
+            <button class="btn btn-primary" id="btnNuevo">
+              <i class="fas fa-plus me-2"></i>Nuevo Habitante
+            </button>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div class="ContentBody">
-        <div class="FiltersContainer">
-            <div class="DateFilter">
-                <span>Seleccione período</span>
-                <input type="text" id="StartDate" value="De Ene 1, 2024" readonly>
-                <input type="text" id="EndDate" value="A Mar 31, 2024" readonly>
-            </div>
-
-            <div class="SearchFilter">
-                <div class="SearchBox">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Buscar...">
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-outline dropdown-toggle" id="FilterButton">
-                        <i class="fas fa-filter"></i> Filtros
-                    </button>
-                    <div class="dropdown-menu" id="FilterMenu">
-                        <div class="FilterGroup">
-                            <h4>Sacerdote</h4>
-                            <div class="FilterOptions">
-                                <label><input type="checkbox"> Padre Juan</label>
-                                <label><input type="checkbox"> Padre Pedro</label>
-                                <label><input type="checkbox"> Padre Miguel</label>
-                            </div>
-                        </div>
-                        <div class="FilterGroup">
-                            <h4>Estado</h4>
-                            <div class="FilterOptions">
-                                <label><input type="checkbox"> Cumplida</label>
-                                <label><input type="checkbox"> Pendiente</label>
-                                <label><input type="checkbox"> Cancelada</label>
-                                <label><input type="checkbox"> No asistió</label>
-                            </div>
-                        </div>
-                        <div class="FilterActions">
-                            <button class="btn btn-sm btn-outline">Limpiar</button>
-                            <button class="btn btn-sm btn-blue">Aplicar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-outline dropdown-toggle">
-                        Selección
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <div class="TableContainer">
-            <table id="TablaCitas">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="SelectAll"></th>
-                        <th>Número de Cita</th>
-                        <th>Tipo Doc</th>
-                        <th>Num Doc</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>Fecha de Nacimiento</th>
-                        <th>Hijos</th>
-                        <th>Sexo</th>
-                        <th>Familia</th>     
-                        <th>Sector</th> 
-			            <th>Estado Civil</th>
-                        <th>Población</th>
-                        <th>Religión</th>
-                        <th>Sacramentos</th>
-                        <th>Dirección</th>
-                        <th>Celular</th>
-                        <th>Email</th>     
-                        <th>Discapacidad para asistir</th>
-			            <th>Acción</th>     
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Table will be populated from database -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
-
-    <!-- Date picker modal -->
-    <div id="datePickerModal" class="modal">
+    <!-- Modal de Período -->
+    <div id="periodoModal" class="modal fade" tabindex="-1" data-bs-backdrop="static">
+      <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>Seleccionar Fecha</h3>
-                <span class="close">&times;</span>
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-calendar me-2"></i>Seleccione período
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="period-options">
+              <div class="mb-2">
+                <label class="d-block"><input type="radio" name="periodo" value="30dias" checked/> Últimos 30 días</label>
+              </div>
+              <div class="mb-2">
+                <label class="d-block"><input type="radio" name="periodo" value="mes"/> Último mes</label>
+              </div>
+              <div class="mb-2">
+                <label class="d-block"><input type="radio" name="periodo" value="trimestre"/> Último trimestre</label>
+              </div>
+              <div class="mb-2">
+                <label class="d-block"><input type="radio" name="periodo" value="semestre"/> Último semestre</label>
+              </div>
+              <div class="mb-2">
+                <label class="d-block"><input type="radio" name="periodo" value="anio"/> Último año</label>
+              </div>
+              <div class="mb-2">
+                <label class="d-block"><input type="radio" name="periodo" value="personalizado"/> Rango personalizado</label>
+              </div>
             </div>
-            <div class="modal-body">
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                        <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
-                        <h4 id="currentMonth">Enero 2024</h4>
-                        <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <div class="calendar-grid">
-                        <div class="weekday">Dom</div>
-                        <div class="weekday">Lun</div>
-                        <div class="weekday">Mar</div>
-                        <div class="weekday">Mié</div>
-                        <div class="weekday">Jue</div>
-                        <div class="weekday">Vie</div>
-                        <div class="weekday">Sáb</div>
-                        <!-- Calendar days will be generated by JavaScript -->
-                    </div>
+            <div id="rangoPersonalizado" style="display:none;margin-top:10px">
+              <div class="row g-2">
+                <div class="col-md-6">
+                  <label class="form-label">Desde:</label>
+                  <input type="date" id="fechaDesdePersonalizado" class="form-control"/>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-outline" id="cancelDate">Cancelar</button>
-                    <button class="btn btn-blue" id="applyDate">Aplicar</button>
+                <div class="col-md-6">
+                  <label class="form-label">Hasta:</label>
+                  <input type="date" id="fechaHastaPersonalizado" class="form-control"/>
                 </div>
+              </div>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="fas fa-times me-2"></i>Cancelar
+            </button>
+            <button class="btn btn-primary" id="btnPeriodoApply">
+              <i class="fas fa-check me-2"></i>Aplicar
+            </button>
+          </div>
         </div>
+      </div>
     </div>
-     <!-- Fin Tabla con encabezado -->
-    </main>
 
-<!--<script src="../statics/scriptPrueba.js" ></script> -->
-<script src="../statics/script.js" ></script>
+    <!-- Modal de Filtros Avanzados - MEJORADO -->
+    <div class="modal fade" id="filtersModal" tabindex="-1" data-bs-backdrop="static">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-filter me-2"></i>Filtros Avanzados - Habitantes
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
+          <div class="modal-body-scrollable">
+            <!--  ACORDEÓN PARA COLUMNAS VISIBLES - MEJORADO -->
+            <div class="accordion mb-4" id="columnsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="columnsHeading">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                          data-bs-target="#columnsCollapse" aria-expanded="false" aria-controls="columnsCollapse">
+                    <i class="fas fa-columns me-2"></i>Columnas visibles
+                  </button>
+                </h2>
+                <div id="columnsCollapse" class="accordion-collapse collapse" aria-labelledby="columnsHeading" 
+                     data-bs-parent="#columnsAccordion">
+                  <div class="accordion-body">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="id" id="col-id">
+                          <label class="form-check-label" for="col-id">ID</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="tipo-doc" id="col-tipo-doc" checked>
+                          <label class="form-check-label" for="col-tipo-doc">Tipo Doc</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="num-doc" id="col-num-doc" checked>
+                          <label class="form-check-label" for="col-num-doc">Núm Doc</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="nombres" id="col-nombres" checked>
+                          <label class="form-check-label" for="col-nombres">Nombres</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="apellidos" id="col-apellidos" checked>
+                          <label class="form-check-label" for="col-apellidos">Apellidos</label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="fecha-nacimiento" id="col-fecha-nacimiento">
+                          <label class="form-check-label" for="col-fecha-nacimiento">Fecha Nacimiento</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="fecha-ingreso" id="col-fecha-ingreso" checked>
+                          <label class="form-check-label" for="col-fecha-ingreso">Fecha Ingreso</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="hijos" id="col-hijos">
+                          <label class="form-check-label" for="col-hijos">Hijos</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="sexo" id="col-sexo">
+                          <label class="form-check-label" for="col-sexo">Sexo</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="familia" id="col-familia" checked>
+                          <label class="form-check-label" for="col-familia">Familia</label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="sector" id="col-sector" checked>
+                          <label class="form-check-label" for="col-sector">Sector</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="estado-civil" id="col-estado-civil" checked>
+                          <label class="form-check-label" for="col-estado-civil">Estado Civil</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="poblacion" id="col-poblacion">
+                          <label class="form-check-label" for="col-poblacion">Población</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="religion" id="col-religion" checked>
+                          <label class="form-check-label" for="col-religion">Religión</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="sacramentos" id="col-sacramentos" checked>
+                          <label class="form-check-label" for="col-sacramentos">Sacramentos</label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="direccion" id="col-direccion">
+                          <label class="form-check-label" for="col-direccion">Dirección</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="celular" id="col-celular" checked>
+                          <label class="form-check-label" for="col-celular">Celular</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="email" id="col-email">
+                          <label class="form-check-label" for="col-email">Email</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input col-visibility" type="checkbox" data-col="discapacidad" id="col-discapacidad">
+                          <label class="form-check-label" for="col-discapacidad">Discapacidad</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-3">
+                      <button type="button" class="btn btn-sm btn-outline-secondary" id="btnSelectAllColumns">
+                        <i class="fas fa-check-square me-1"></i>Seleccionar todas
+                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" id="btnDeselectAllColumns">
+                        <i class="fas fa-square me-1"></i>Deseleccionar todas
+                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-primary" id="btnResetColumns">
+                        <i class="fas fa-undo me-1"></i>Restablecer por defecto
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr/>
+
+            <!-- FILTROS AVANZADOS -->
+            <div class="row">
+              <div class="col-md-6">
+                <!-- Filtros de texto -->
+                <div class="filter-section">
+                  <h6><i class="fas fa-search me-2"></i>Búsqueda por texto</h6>
+                  <div class="mb-3">
+                    <label class="form-label">Número de documento</label>
+                    <input type="text" id="numDocFilter" class="form-control numeric-input" 
+                           placeholder="Ej: 123456789" pattern="[0-9]*" title="Solo se permiten números">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Nombres</label>
+                    <input type="text" id="nombresFilter" class="form-control" placeholder="Ej: María">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Apellidos</label>
+                    <input type="text" id="apellidosFilter" class="form-control" placeholder="Ej: González">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="text" id="emailFilter" class="form-control" placeholder="Ej: usuario@correo.com">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Teléfono/Celular</label>
+                    <input type="text" id="telefonoFilter" class="form-control numeric-input" 
+                           placeholder="Ej: 3001234567" pattern="[0-9]*" title="Solo se permiten números">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Dirección</label>
+                    <input type="text" id="direccionFilter" class="form-control" placeholder="Ej: Calle 123">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <!-- Filtros por categorías -->
+                <div class="filter-section">
+                  <h6><i class="fas fa-tags me-2"></i>Filtros por categoría</h6>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Tipo de documento</label>
+                    <select id="tipoDocFilter" class="form-select">
+                      <option value="">Todos los tipos</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Sexo</label>
+                    <div class="checkbox-group" id="sexoFilterContainer"></div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Estado civil</label>
+                    <div class="checkbox-group" id="estadoCivilFilterContainer"></div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Población</label>
+                    <div class="checkbox-group" id="poblacionFilterContainer"></div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Religión</label>
+                    <div class="checkbox-group" id="religionFilterContainer"></div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Discapacidad</label>
+                    <div class="checkbox-group">
+                      <div class="form-check">
+                        <input class="form-check-input discapacidad-filter" type="checkbox" value="Sí" id="disc-si">
+                        <label class="form-check-label" for="disc-si">Sí</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input discapacidad-filter" type="checkbox" value="No" id="disc-no">
+                        <label class="form-check-label" for="disc-no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Sacramentos</label>
+                    <select id="sacramentoFilter" class="form-select" multiple size="4"></select>
+                    <small class="text-muted">Mantén Ctrl (Cmd en Mac) para seleccionar múltiples</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTONES FIJOS -->
+          <div class="modal-footer-fixed">
+            <div class="d-flex justify-content-between w-100">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <i class="fas fa-times me-2"></i>Cancelar
+              </button>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-danger" id="btnClearFilters">
+                  <i class="fas fa-broom me-2"></i>Limpiar Filtros
+                </button>
+                <button class="btn btn-primary" id="btnApplyFilters">
+                  <i class="fas fa-check me-2"></i>Aplicar Filtros
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div class="bulk-actions alert alert-info d-none align-items-center gap-3 mb-3" id="bulkActions">
+      <div>
+        <i class="fas fa-users me-2"></i>
+        <span id="selectedCount">0</span> seleccionados
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-outline-success" id="btnPrintSelected">
+          <i class="fas fa-print me-1"></i>Imprimir
+        </button>
+        <button class="btn btn-sm btn-outline-info" id="btnExportSelected">
+          <i class="fas fa-file-excel me-1"></i>Exportar
+        </button>
+        <button class="btn btn-sm btn-outline-danger" id="btnDeleteSelected">
+          <i class="fas fa-trash me-1"></i>Eliminar
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table id="dataTable" class="table table-striped table-hover mb-0">
+            <thead class="table">
+              <tr>
+                <!--  CHECKBOX MEJORADO PARA TODA LA TABLA -->
+                <th width="50" class="text-center">
+                  <input type="checkbox" id="selectAll" class="form-check-input" title="Seleccionar todos los registros">
+                </th>
+                <th class="col-id">ID</th>
+                <th class="col-tipo-doc">Tipo Doc</th>
+                <th class="col-num-doc">Núm Doc</th>
+                <th class="col-nombres">Nombres</th>
+                <th class="col-apellidos">Apellidos</th>
+                <th class="col-fecha-nacimiento">Fecha Nacimiento</th>
+                <th class="col-fecha-ingreso">Fecha Ingreso</th>
+                <th class="col-hijos">Hijos</th>
+                <th class="col-sexo">Sexo</th>
+                <th class="col-familia">Familia</th>
+                <th class="col-sector">Sector</th>
+                <th class="col-estado-civil">Estado Civil</th>
+                <th class="col-poblacion">Población</th>
+                <th class="col-religion">Religión</th>
+                <th class="col-sacramentos">Sacramentos</th>
+                <th class="col-direccion">Dirección</th>
+                <th class="col-celular">Celular</th>
+                <th class="col-email">Email</th>
+                <th class="col-discapacidad">Discapacidad</th>
+                <th width="150" class="col-acciones">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td colspan="21" class="text-center py-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                  <p class="mt-2 text-muted">Cargando habitantes...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div id="paginationInfo" class="text-muted">Cargando...</div>
+      <div class="d-flex align-items-center gap-3">
+        <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
+          <option value="10">10 por página</option>
+          <option value="20">20 por página</option>
+          <option value="50">50 por página</option>
+          <option value="100">100 por página</option>
+        </select>
+        <div id="paginationButtons" class="d-flex gap-1"></div>
+      </div>
+    </div>
+  </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="../statics/js/app.js"></script>
 </body>
 </html>
