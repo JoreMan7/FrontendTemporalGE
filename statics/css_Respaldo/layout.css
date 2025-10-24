@@ -1,0 +1,440 @@
+/* LAYOUT */
+
+.DashboardScrollContainer {
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.Divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--gray-300);
+  margin: 0 1rem;
+}
+
+.ImageContainer {
+  flex: 1;
+  background-color: var(--white);
+  border-top-right-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.LoginContainer {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+}
+
+.LoginFormContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  background-color: var(--white);
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
+}
+
+.Logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 0.5rem;
+  transition: width 0.3s ease;
+}
+
+.LogoContainer {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0 2rem 0;
+  padding-bottom: 10px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.MobileLogo {
+  display: none;
+}
+
+.NavItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 15px;
+  color: var(--gray-600);
+  text-decoration: none;
+  font-size: 16px;
+  transition: 0.3s;
+  border-radius: var(--radius-sm);
+}
+
+.NavItem i {
+  font-size: 20px;
+  width: 30px;
+  text-align: center;
+}
+
+.NavItem.active {
+  background: var(--gray-100);
+  color: var(--secondary);
+}
+
+.NavItem:hover {
+  background: var(--gray-100);
+  color: var(--secondary);
+}
+
+.NavMenu {
+  width: 100%;
+  padding-top: 35px;
+  position: absolute;
+  top: 21%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.NavText {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+.ParishLogo {
+  height: 80px;
+  margin-right: 1rem;
+}
+
+.PasswordInputContainer {
+  position: relative;
+}
+
+.Sidebar.mobile-visible {
+  left: 0;
+}
+
+.Sidebar:hover {
+  width: 220px;
+}
+
+.Sidebar:hover .NavText {
+  opacity: 1;
+  width: auto;
+}
+
+.Sidebar:hover~.MainContent {
+  margin-left: 205px;
+}
+
+.Sidebar:not(:hover) .Logo {
+  width: 100px;
+}
+
+.SidebarToggle {
+  display: none;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background: none;
+  border: none;
+  color: var(--gray-600);
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 201;
+}
+
+.SidebarToggle:hover {
+  color: var(--gray-800);
+}
+
+.UserInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-logout {
+  background-color: var(--red-600);
+  color: var(--white);
+}
+
+.btn-logout:hover {
+  background-color: var(--red-800);
+  color: var(--gray-100);
+}
+
+.nav-arrow {
+  color: var(--gray-600);
+  font-size: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  text-decoration: none;
+}
+
+.nav-arrow:hover {
+  color: var(--blue-500);
+}
+
+.profile-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.profile-sidebar {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 20px;
+  text-align: center;
+}
+
+.tab-container {
+  margin-top: 20px;
+}
+
+.tab-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==================== */
+/* COMPONENTE MAIN CONTENT */
+/* ==================== */
+.MainContent {
+  margin-left: 76px;
+  transition: margin-left 0.3s ease-in-out;
+  flex: 1;
+  padding-left: 1.2rem;
+  padding-top: 0px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ==================== */
+/* COMPONENTE SIDEBAR */
+/* ==================== */
+.Sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 95px;
+  height: 100vh;
+  background: var(--white);
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+  z-index: 200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ==================== */
+/* COMPONENTE TOPBAR */
+/* ==================== */
+.TopBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid var(--gray-200);
+  width: 100%;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==================== */
+/* ESTRUCTURA PRINCIPAL */
+/* ==================== */
+.BodyPlantilla {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==================== */
+/* COMPONENTES DE ACCESIBILIDAD */
+/* ==================== */
+.NavItem:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+/* ==================== */
+/* COMPONENTES DE CALENDARIO */
+/* ==================== */
+.calendar-container {
+  margin-bottom: 1rem;
+}
+
+/* ==================== */
+/* COMPONENTES DE NAVEGACIÓN MÓVIL */
+/* ==================== */
+
+
+/* ==================== */
+/* UTILIDADES DE DISPLAY Y POSICIÓN */
+/* ==================== */
+.text-center {
+  text-align: center;
+}
+
+/* ==================== */
+/* CONTROLES SUPERIORES DE TABLAS */
+/* ==================== */
+.FiltersContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==================== */
+/* ESTRUCTURA PRINCIPAL DE TABLAS */
+/* ==================== */
+.TableContainer {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-md);
+  margin-top: 20px;
+  background-color: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==================== */
+/* MEDIA QUERIES */
+/* ==================== */
+
+
+
+
+
+
+/* ==================== */
+/* MODO MÓVIL: Barra inferior y Topbar */
+/* ==================== */
+
+
+.modal-backdrop.show {
+  z-index: 200;
+}
+
+/* ==================== */
+/* MODALES DE FILTROS AVANZADOS */
+/* ==================== */
+.FilterButtonContainer {
+  margin: 15px 0;
+}
+
+/* ==================== */
+/* PAGINACIÓN UNIFICADA */
+/* ==================== */
+.pagination-container {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--gray-200);
+  background-color: var(--white);
+}
+
+/* ============================= */
+/* PERFIL - RESPONSIVE MÓVIL     */
+/* ============================= */
+
+
+/* ==================== */
+/* MODAL DE FILTROS USUARIOS */
+/* ==================== */
+.FilterButtonContainer {
+  margin: 15px 0;
+}
+
+/* Barra de navegación estilo pestañas */
+.tab-nav {
+  display: flex;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-300);
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Firefox */
+    justify-content: center;
+}
+
+/* Contenedor del contenido */
+.tab-content-container {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* Contenedor principal */
+.tab-scroll-container {
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contenedor principal para tablas avanzadas */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+/* Pagination */
+.pagination-container {
+  margin-top: 1.5rem;
+}
+
+/*SidebarToggle */
+/* ==================== */
+.Hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-500);
+  position: fixed;
+  bottom: 40px;
+  left: 20px;
+  z-index: 1001;
+  background-color: var(--white);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+

@@ -1,0 +1,100 @@
+/* Define variables globales, colores, tipografías, y reglas base (reset general y utilidades genéricas).
+Es el núcleo visual del sistema. 
+:root { --primary, --secondary, --gray-*, --border-light, etc. }
+* { margin, padding, box-sizing }
+html, body
+a, a:hover
+p
+button
+.text-center, .text-right, .text-left
+.mt-1, .mt-2, .mt-3, .mb-1, .mb-2, .mb-3
+.d-flex, .align-center, .justify-between
+::-webkit-scrollbar, ::-webkit-scrollbar-thumb*/    
+@import url('base.css');
+
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Define la estructura del sitio, incluyendo sidebar, header, y distribución del contenido principal.
+Controla cómo se organizan las secciones visuales.
+.Sidebar, .SidebarHeader, .SidebarMenu, .SidebarItem
+.Topbar, .TopbarUser, .TopbarLogo
+.MainContainer, .MainContent, .ContentWrapper
+.LayoutFlex, .PageHeader, .PageBody
+.NavSection, .LogoContainer, .MenuFooter */
+@import url('layout.css');
+
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Contiene todos los componentes reutilizables del frontend: botones, formularios, modales, alertas, tarjetas, badges, etc. 
+.btn, .btn-primary, .btn-secondary, .btn-danger, .btn-sm
+.form-group, .form-label, .form-control, input, select, textarea
+.modal, .modal-content, .modal-header, .modal-footer, .modal-body
+.alert, .alert-success, .alert-error
+.card, .card-header, .card-body, .card-footer
+.badge, .StatusBadge
+.icon, .icon-btn
+*/
+@import url('components.css');
+
+@import url('faltantes.css');
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*Controla todos los estilos para tablas dinámicas, filtros, paginación, selección múltiple y cabeceras.
+Es fundamental para módulos con listados grandes.
+.TableContainer, table, th, td, tr
+#TablaHabitantes, .financial-table
+.FiltersContainer, .header-controls, .SearchBox, .DateFilter
+.bulk-actions, .BulkActions
+.filter-buttons, .AdvancedFilters, .FilterGroup, .FilterRow
+.pagination-container, .TablePagination, .page-btn, .page-size-selector
+.FilterOptions, .FilterActions
+.FilterModal, .accordion-item, .accordion-header, .accordion-content
+@media (max-width: 768px), @media (max-width: 480px)
+*/
+@import url('tables.css');
+
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*Diseñado para el módulo de gestión de usuarios (administradores, líderes, etc.).
+Aplica a tablas y formularios específicos del sistema de usuarios.
+.UserContainer, .UserCard, .UserForm, .UserProfile
+.StatusBadge, .user-active, .user-inactive
+.UserRole, .UserActions, .UserAvatar, .AvatarCircle
+.UserHeader, .UserFooter, .UserTable
+*/
+@import url('UserManagement.css');
+
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* 4️⃣ UTILITIES último - sobrescribe si es necesario 
+Optimiza la visualización en pantallas pequeñas y móviles.
+Contiene media queries que ajustan el sidebar, cabeceras y tablas.
+@media (max-width: 1024px)
+@media (max-width: 768px)
+@media (max-width: 480px)
+
+.Sidebar, .Topbar, .MainContainer
+.table, .pagination-container, .bulk-actions
+.FilterActions, .filter-modal, .header-controls
+*/
+@import url('responsive.css');
+
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*Archivo de respaldo que conserva los componentes antiguos o eliminados tras la reorganización de estilos.
+Sirve como referencia si se reactivan módulos como Calendario, Compromisos, Tabs, Bienvenida Parroquial, etc.
+.BodyPlantilla, .TituloBienvenida
+.ContenedorDemo, .ElementoDemo
+.ParishInfo, .ParishLogo, .ParishDetails, .ReportInfo
+.ContentHeader, .ContentBody
+.nav-arrow, .pagination-dots, .dot
+.avatar-circle
+.commitment-item, .commitment-avatar, .commitment-details
+.commitment-date, .commitment-time, .commitment-reminder
+.calendar-widget, .calendar-row, .calendar-day, .calendar-day-header
+.tab-scroll-container, .tab-content-container
+@media (max-width: 768px)
+
+@import url('faltantes.css');
+*/
+

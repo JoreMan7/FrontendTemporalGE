@@ -1,0 +1,203 @@
+/* =======================================================
+   📄 ARCHIVO: base.css
+   🎯 PROPÓSITO: Variables globales, resets, tipografía base
+   📌 ORDEN DE CARGA: 1/6 (PRIMERO)
+   
+   Contiene:
+   - Variables CSS (:root)
+   - Reset universal (*, html, body)
+   - Estilos base de elementos HTML (a, p, button)
+   - Scrollbar personalizado
+   - Utilidades básicas de texto y espaciado
+   ======================================================= */
+
+/* ========================================
+   🌐 VARIABLES GLOBALES
+   ======================================== */
+:root {
+  /* Colores principales */
+  --primary: #4caf50;
+  --primary-dark: #45a049;
+  --secondary: #2196f3;
+  --secondary-dark: #1976d2;
+
+  /* Escala de grises */
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-250: #e0e0e0;
+  --gray-300: #d1d5db;
+  --gray-400: #bbc1ca;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Colores de estado */
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-800: #b91c1c;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --orange-500: #f97316;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+
+  /* Colores específicos del sistema */
+  --light: #f8f9fa;
+  --dark: #212529;
+  --success: #28a745;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --info: #17a2b8;
+
+  /* Colores de componentes */
+  --border-color: #dee2e6;
+  --border-light: #e9ecef;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --overlay-color: rgba(0, 0, 0, 0.5);
+
+  /* Sombras */
+  --shadow-sm: 0 1px 3px 0 var(--shadow-color), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px var(--shadow-color);
+  --shadow-lg: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Bordes */
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* Tipografía */
+  --font-family: "Roboto", "Segoe UI", sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+/* ========================================
+   🔄 RESET UNIVERSAL
+   ======================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--gray-800);
+  background-color: var(--gray-100);
+  line-height: var(--line-height-base);
+}
+
+/* ========================================
+   🔗 ENLACES
+   ======================================== */
+a {
+  color: var(--secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+/* ========================================
+   📝 TEXTO
+   ======================================== */
+p {
+  line-height: var(--line-height-base);
+}
+
+/* ========================================
+   🔘 BOTONES BASE
+   ======================================== */
+button {
+  font-family: inherit;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ========================================
+   📜 SCROLLBAR PERSONALIZADO
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--gray-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gray-400);
+}
+
+/* ========================================
+   🧰 UTILIDADES BÁSICAS DE TEXTO
+   ======================================== */
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+
+/* ========================================
+   🧰 UTILIDADES BÁSICAS DE ESPACIADO
+   ======================================== */
+.mt-1 {
+  margin-top: 0.25rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
+}
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+/* ========================================
+   🧰 UTILIDADES BÁSICAS DE FLEXBOX
+   ======================================== */
+.d-flex {
+  display: flex;
+}
+.align-center {
+  align-items: center;
+}
+.justify-between {
+  justify-content: space-between;
+}

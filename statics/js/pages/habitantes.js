@@ -3,11 +3,13 @@ import { DataTable } from "../modules/data-table.js";
 import { ApiClient } from "../modules/api.js";
 
 export class HabitantesManager {
+    static _opciones = null;
+
     static async init() {
         try {
             console.log('Inicializando gestor de habitantes...');
             
-            // Cargar opciones primero para los filtros
+            // Cargar opciones primero para filtros y selects del modal
             await this.loadOpciones();
             
             // Configuración de la tabla adaptada al JSON real del backend
@@ -62,7 +64,7 @@ export class HabitantesManager {
                     {
                         key: 'Hijos',
                         label: 'Hijos',
-                        format: (value) => value || '0'
+                        format: (value) => (value ?? 0)
                     },
                     {
                         key: 'Sexo',
@@ -94,11 +96,39 @@ export class HabitantesManager {
                         label: 'Religión',
                         format: (value) => value || '<span class="text-muted">-</span>'
                     },
-                    {
-                        key: 'TipoSacramento',
-                        label: 'Sacramentos',
-                        format: (value) => value || '<span class="text-muted">Ninguno</span>'
-                    },
+                   {
+    key: 'TipoSacramento',
+    label: 'Sacramentos',
+    format: (value) => {
+        if (!value || value === 'Ninguno') {
+            return '<span class="text-muted">Ninguno</span>';
+        }
+        
+        const sacramentos = value.split(', ');
+        let html = `<div class="sacramentos-lista">`;
+        
+        // Dividir en grupos de 2
+        for (let i = 0; i < sacramentos.length; i += 2) {
+            const linea = sacramentos.slice(i, i + 2);
+            html += `<div class="d-flex gap-1 mb-1">`;
+            
+            // Primer sacramento de la línea
+            html += `<span class="badge bg-primary flex-fill text-center">${linea[0].trim()}</span>`;
+            
+            // Segundo sacramento (si existe) o espacio vacío
+            if (linea.length > 1) {
+                html += `<span class="badge bg-primary flex-fill text-center">${linea[1].trim()}</span>`;
+            } else {
+                html += `<span class="badge flex-fill" style="visibility: hidden;">-</span>`;
+            }
+            
+            html += `</div>`;
+        }
+        
+        html += `</div>`;
+        return html;
+    }
+},
                     {
                         key: 'Direccion',
                         label: 'Dirección',
@@ -121,7 +151,7 @@ export class HabitantesManager {
                     }
                 ],
                 
-                // Acciones por fila (SIEMPRE VISIBLES)
+                // Acciones por fila (ver, editar, desactivar)
                 rowActions: [
                     {
                         id: 'view',
@@ -178,7 +208,7 @@ export class HabitantesManager {
             // Inicializar la tabla
             window.habitantesDataTable = new DataTable(tableConfig);
 
-            // Configurar eventos adicionales
+            // Configurar eventos adicionales (incluye submit del formulario del modal)
             this.setupAdditionalEvents();
 
         } catch (error) {
@@ -187,10 +217,200 @@ export class HabitantesManager {
         }
     }
 
-    // Cargar opciones para filtros desde API
+    // =============================== CRUD con MODAL ===============================
+
+    // Abre modal en modo "nuevo" (usa el formulario y estilos de tu HTML)
+    static nuevoHabitante() {
+        this.resetHabitanteForm();
+        const title = document.getElementById('habitanteModalTitle');
+        if (title) title.innerHTML = `<i class="fas fa-user-plus me-2"></i>Nuevo Habitante`;
+
+        // asegurar selects cargados
+        if (this._opciones) this.populateModalOptions(this._opciones);
+
+        const modal = new bootstrap.Modal('#habitanteModal');
+        modal.show();
+    }
+
+    // Abre modal en modo "editar" y carga datos desde la API
+    static async editarHabitante(habitante) {
+        try {
+            // pedir detalle por ID para tener valores de llaves foráneas
+            const res = await ApiClient.request(`/api/habitantes/${habitante.IdHabitante}`);
+            if (!res || res.success === false || !res.habitante) throw new Error(res?.message || 'No se pudo cargar el habitante');
+
+            const h = res.habitante;
+
+            // ✅ CORRECCIÓN: Asegurar que las opciones estén cargadas ANTES de rellenar el formulario
+            if (!this._opciones) {
+                await this.loadOpciones();
+            }
+            
+            // ✅ CORRECCIÓN: Poblar los selects del modal antes de establecer los valores
+            this.populateModalOptions(this._opciones);
+            
+            // setear campos
+            const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v ?? ''); };
+            this.resetHabitanteForm();
+
+            set('habitanteId', h.IdHabitante);
+            set('habNombre', h.Nombre);
+            set('habApellido', h.Apellido);
+            set('habTipoDoc', h.IdTipoDocumento);
+            set('habNumDoc', h.NumeroDocumento);
+            if (h.FechaNacimiento) {
+                  const fecha = new Date(h.FechaNacimiento);
+                  set('habFechaNac', !isNaN(fecha) ? fecha.toISOString().split('T')[0] : '');
+                } else {
+                  set('habFechaNac', '');
+                }   
+            set('habSexo', h.IdSexo);
+            set('habEstadoCivil', h.IdEstadoCivil);
+            set('habReligion', h.IdReligion);
+            set('habPoblacion', h.IdTipoPoblacion);
+            set('habSacramento', h.IdTipoSacramento);
+            set('habSector', h.IdSector);
+            set('habDireccion', h.Direccion);
+            set('habTelefono', h.Telefono);
+            set('habCorreo', h.CorreoElectronico);
+            set('habDiscapacidad', h.DiscapacidadParaAsistir);
+            const imped = document.getElementById('habTieneImpedimento');
+            if (imped) imped.checked = !!h.TieneImpedimentoSalud;
+            set('habMotivoImpedimento', h.MotivoImpedimentoSalud);
+            set('habHijos', (h.Hijos ?? 0));
+            set('habGrupoFamiliar', h.IdGrupoFamiliar ?? '');
+
+            const title = document.getElementById('habitanteModalTitle');
+            if (title) title.innerHTML = `<i class="fas fa-user-pen me-2"></i>Editar Habitante`;
+
+            new bootstrap.Modal('#habitanteModal').show();
+        } catch (e) {
+            console.error(e);
+            this.showError('No se pudo cargar el habitante para edición');
+        }
+    }
+
+    // Guardar (crear / actualizar) según exista o no habitanteId
+    static async guardarHabitante() {
+        const form = document.getElementById('habitanteForm');
+        if (!form) return;
+
+        // Validación nativa + Bootstrap
+        form.classList.add('was-validated');
+        if (!form.checkValidity()) return;
+
+        const id = (document.getElementById('habitanteId')?.value || '').trim();
+
+        // Construir payload con TODOS los campos de la BD / backend
+        const payload = {
+            // campos básicos
+            nombre:  document.getElementById('habNombre')?.value.trim() || null,
+            apellido:document.getElementById('habApellido')?.value.trim() || null,
+
+            // llaves foráneas y datos
+            id_tipo_documento: +(document.getElementById('habTipoDoc')?.value || 0) || null,
+            numero_documento:  document.getElementById('habNumDoc')?.value.trim() || null,
+            fecha_nacimiento:  document.getElementById('habFechaNac')?.value || null,
+            hijos: +(document.getElementById('habHijos')?.value || 0),
+
+            id_sexo: +(document.getElementById('habSexo')?.value || 0) || null,
+            id_estado_civil: +(document.getElementById('habEstadoCivil')?.value || 0) || null,
+            id_religion: +(document.getElementById('habReligion')?.value || 0) || null,
+            id_tipo_poblacion: +(document.getElementById('habPoblacion')?.value || 0) || null,
+            id_tipo_sacramento: +(document.getElementById('habSacramento')?.value || 0) || null,
+            id_sector: +(document.getElementById('habSector')?.value || 0) || null,
+
+            direccion: document.getElementById('habDireccion')?.value.trim() || null,
+            telefono:  document.getElementById('habTelefono')?.value.trim() || null,
+            correo_electronico: document.getElementById('habCorreo')?.value.trim() || null,
+
+            discapacidad_para_asistir: document.getElementById('habDiscapacidad')?.value.trim() || 'Ninguna',
+            tiene_impedimento_salud: !!document.getElementById('habTieneImpedimento')?.checked,
+            motivo_impedimento_salud: document.getElementById('habMotivoImpedimento')?.value.trim() || null,
+
+            id_grupo_familiar: +(document.getElementById('habGrupoFamiliar')?.value || 0) || null
+        };
+
+        try {
+            let res;
+            if (id) {
+                // Actualizar (PUT) — requiere rol Administrador en backend
+                res = await ApiClient.request(`/api/habitantes/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload)
+                });
+            } else {
+                // Crear (POST)
+                res = await ApiClient.request('/api/habitantes/', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            if (!res || res.success === false) throw new Error(res?.message || 'No se pudo guardar');
+
+            // Cerrar modal y refrescar tabla
+            bootstrap.Modal.getInstance(document.getElementById('habitanteModal'))?.hide();
+            await window.habitantesDataTable?.refresh?.();
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('Éxito', res.message || 'Operación realizada correctamente', 'success');
+            }
+        } catch (err) {
+            console.error(err);
+            this.showError(err.message || 'Error al guardar el habitante');
+        }
+    }
+
+    // Desactivar (soft delete)
+    static async eliminarHabitante(habitante) {
+        // Confirmación
+        let confirm;
+        if (typeof Swal !== 'undefined') {
+            confirm = await Swal.fire({
+                title: '¿Desactivar habitante?',
+                text: `${habitante.Nombre} ${habitante.Apellido} (ID ${habitante.IdHabitante})`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, desactivar',
+                cancelButtonText: 'Cancelar'
+            });
+            if (!confirm.isConfirmed) return;
+        } else {
+            if (!window.confirm('¿Desactivar este habitante?')) return;
+        }
+
+        try {
+            const r = await ApiClient.request(`/api/habitantes/${habitante.IdHabitante}/desactivar`, { method: 'PATCH' });
+            if (!r || r.success === false) throw new Error(r?.message || 'No se pudo desactivar');
+
+            await window.habitantesDataTable?.refresh?.();
+            if (typeof Swal !== 'undefined') Swal.fire('Listo', 'Habitante desactivado correctamente', 'success');
+        } catch (e) {
+            console.error(e);
+            this.showError(e.message || 'No se pudo desactivar el habitante');
+        }
+    }
+
+    // Limpia el formulario del modal
+    static resetHabitanteForm() {
+        const form = document.getElementById('habitanteForm');
+        if (form) {
+            form.reset();
+            form.classList.remove('was-validated');
+        }
+        const set = (id, v = '') => { const el = document.getElementById(id); if (el) el.value = v; };
+        set('habitanteId', '');
+        const imped = document.getElementById('habTieneImpedimento');
+        if (imped) imped.checked = false;
+    }
+
+    // =============================== Opciones (filtros + modal) ===============================
+
+    // Cargar opciones para filtros desde API (y guardar para el modal)
     static async loadOpciones() {
         try {
-            const response = await fetch('http://localhost:5000/api/opciones/', {
+            const response = await fetch('http://127.0.0.1:5000/api/opciones/', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                 }
@@ -198,15 +418,18 @@ export class HabitantesManager {
             
             if (response.ok) {
                 const opciones = await response.json();
+                this._opciones = opciones;
                 this.populateFilterOptions(opciones);
+                this.populateModalOptions(opciones); // <-- para selects del modal
             }
         } catch (error) {
             console.error('Error cargando opciones:', error);
         }
     }
 
-    // Poblar opciones de filtros dinámicamente
+    // Poblar opciones de filtros dinámicamente (dejé tu lógica tal cual; solo saneé nombres)
     static populateFilterOptions(opciones) {
+        console.log('Opciones recibidas:', opciones); 
         // Tipo de documento
         const tipoDocSelect = document.getElementById('tipoDocFilter');
         if (tipoDocSelect && opciones.tiposDocumento) {
@@ -228,8 +451,8 @@ export class HabitantesManager {
         if (sexoContainer && opciones.sexos) {
             sexoContainer.innerHTML = opciones.sexos.map(sexo => `
                 <div class="form-check">
-                    <input class="form-check-input sexo-filter" type="checkbox" value="${sexo.Nombre}" id="sexo-${sexo.id}">
-                    <label class="form-check-label" for="sexo-${sexo.id}">${sexo.Nombre}</label>
+                    <input class="form-check-input sexo-filter" type="checkbox" value="${sexo.Nombre}" id="sexo-${sexo.IdSexo}">
+                    <label class="form-check-label" for="sexo-${sexo.IdSexo}">${sexo.Nombre}</label>
                 </div>
             `).join('');
         }
@@ -239,8 +462,8 @@ export class HabitantesManager {
         if (estadoCivilContainer && opciones.estadosCiviles) {
             estadoCivilContainer.innerHTML = opciones.estadosCiviles.map(estado => `
                 <div class="form-check">
-                    <input class="form-check-input estado-civil-filter" type="checkbox" value="${estado.Nombre}" id="ec-${estado.id}">
-                    <label class="form-check-label" for="ec-${estado.id}">${estado.Nombre}</label>
+                    <input class="form-check-input estado-civil-filter" type="checkbox" value="${estado.Nombre}" id="ec-${estado.IdEstadoCivil}">
+                    <label class="form-check-label" for="ec-${estado.IdEstadoCivil}">${estado.Nombre}</label>
                 </div>
             `).join('');
         }
@@ -250,8 +473,8 @@ export class HabitantesManager {
         if (poblacionContainer && opciones.poblaciones) {
             poblacionContainer.innerHTML = opciones.poblaciones.map(poblacion => `
                 <div class="form-check">
-                    <input class="form-check-input poblacion-filter" type="checkbox" value="${poblacion.Nombre}" id="pob-${poblacion.id}">
-                    <label class="form-check-label" for="pob-${poblacion.id}">${poblacion.Nombre}</label>
+                    <input class="form-check-input poblacion-filter" type="checkbox" value="${poblacion.Nombre}" id="pob-${poblacion.IdTipoPoblacion}">
+                    <label class="form-check-label" for="pob-${poblacion.IdTipoPoblacion}">${poblacion.Nombre}</label>
                 </div>
             `).join('');
         }
@@ -261,8 +484,8 @@ export class HabitantesManager {
         if (religionContainer && opciones.religiones) {
             religionContainer.innerHTML = opciones.religiones.map(religion => `
                 <div class="form-check">
-                    <input class="form-check-input religion-filter" type="checkbox" value="${religion.Nombre}" id="rel-${religion.id}">
-                    <label class="form-check-label" for="rel-${religion.id}">${religion.Nombre}</label>
+                    <input class="form-check-input religion-filter" type="checkbox" value="${religion.Nombre}" id="rel-${religion.IdReligion}">
+                    <label class="form-check-label" for="rel-${religion.IdReligion}">${religion.Nombre}</label>
                 </div>
             `).join('');
         }
@@ -270,11 +493,33 @@ export class HabitantesManager {
         // Sacramentos
         const sacramentoSelect = document.getElementById('sacramentoFilter');
         if (sacramentoSelect && opciones.sacramentos) {
-            sacramentoSelect.innerHTML = opciones.sacramentos.map(sacramento => `
+            sacramentoSelect.innerHTML = `<option value="">Todos</option>` + opciones.sacramentos.map(sacramento => `
                 <option value="${sacramento.Descripcion}">${sacramento.Descripcion}</option>
             `).join('');
         }
     }
+
+    // Poblar selects del modal (usa los ids del modal que ya tienes en Habitantes.html)
+    static populateModalOptions(opciones) {
+        const setOptions = (id, arr, valueKey, textKey) => {
+            const el = document.getElementById(id);
+            if (!el || !Array.isArray(arr)) return;
+            const current = el.value; // conserva selección si existe
+            el.innerHTML = `<option value="">-- Seleccione --</option>` +
+                arr.map(o => `<option value="${o[valueKey]}">${o[textKey]}</option>`).join('');
+            if (current) el.value = current;
+        };
+
+        setOptions('habTipoDoc', opciones.tiposDocumento, 'IdTipoDocumento', 'Descripcion');
+        setOptions('habSexo', opciones.sexos, 'IdSexo', 'Nombre');
+        setOptions('habEstadoCivil', opciones.estadosCiviles, 'IdEstadoCivil', 'Nombre');
+        setOptions('habReligion', opciones.religiones, 'IdReligion', 'Nombre');
+        setOptions('habPoblacion', opciones.poblaciones, 'Idpoblaciones', 'Nombre');
+        setOptions('habSacramento', opciones.sacramentos, 'Idsacramentos', 'Descripcion');
+        setOptions('habSector', opciones.sectores, 'IdSector', 'Descripcion');
+    }
+
+    // =============================== Eventos extra ===============================
 
     // Configurar eventos adicionales
     static setupAdditionalEvents() {
@@ -292,10 +537,8 @@ export class HabitantesManager {
         document.querySelectorAll('input[name="periodo"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 const rangoPersonalizado = document.getElementById('rangoPersonalizado');
-                if (e.target.value === 'personalizado') {
-                    rangoPersonalizado.style.display = 'block';
-                } else {
-                    rangoPersonalizado.style.display = 'none';
+                if (rangoPersonalizado) {
+                    rangoPersonalizado.style.display = (e.target.value === 'personalizado') ? 'block' : 'none';
                 }
             });
         });
@@ -304,6 +547,16 @@ export class HabitantesManager {
         document.getElementById('btnResetColumns')?.addEventListener('click', () => {
             this.resetColumnVisibilityToDefault();
         });
+
+        // ✅ Submit del formulario del modal (crear/editar)
+        const form = document.getElementById('habitanteForm');
+        if (form && !form.dataset.bound) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.guardarHabitante();
+            });
+            form.dataset.bound = '1';
+        }
     }
 
     // Restablecer columnas visibles por defecto
@@ -341,12 +594,12 @@ export class HabitantesManager {
         if (!fechaStr) return '-';
         
         try {
-            // Manejar formato del backend: "Wed, 26 Aug 1959 00:00:00 GMT"
+            // Manejar formato del backend
             let fecha = new Date(fechaStr);
             
             if (isNaN(fecha.getTime())) {
                 // Intentar otro formato si falla
-                fecha = new Date(fechaStr.replace('GMT', '').trim());
+                fecha = new Date(String(fechaStr).replace('GMT', '').trim());
             }
             
             if (isNaN(fecha.getTime())) return '-';
@@ -361,19 +614,21 @@ export class HabitantesManager {
         }
     }
 
-    // Métodos de acción (mantener igual)
+    // =============================== Otras acciones UI (tus originales) ===============================
+
+    // Ver (manteniendo tu estilo)
     static verHabitante(habitante) {
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 title: `Habitante: ${habitante.Nombre} ${habitante.Apellido}`,
                 html: `
                     <div class="text-start">
-                        <p><strong>Documento:</strong> ${habitante.TipoDocumento} ${habitante.NumeroDocumento}</p>
+                        <p><strong>Documento:</strong> ${habitante.TipoDocumento || ''} ${habitante.NumeroDocumento || ''}</p>
                         <p><strong>Fecha Nacimiento:</strong> ${this.formatFecha(habitante.FechaNacimiento)}</p>
                         <p><strong>Fecha Ingreso:</strong> ${this.formatFecha(habitante.FechaRegistro)}</p>
-                        <p><strong>Sexo:</strong> ${habitante.Sexo}</p>
-                        <p><strong>Estado Civil:</strong> ${habitante.EstadoCivil}</p>
-                        <p><strong>Religión:</strong> ${habitante.Religion}</p>
+                        <p><strong>Sexo:</strong> ${habitante.Sexo || '-'}</p>
+                        <p><strong>Estado Civil:</strong> ${habitante.EstadoCivil || '-'}</p>
+                        <p><strong>Religión:</strong> ${habitante.Religion || '-'}</p>
                         <p><strong>Dirección:</strong> ${habitante.Direccion || 'No registrada'}</p>
                         <p><strong>Teléfono:</strong> ${habitante.Telefono || 'No registrado'}</p>
                         <p><strong>Email:</strong> ${habitante.CorreoElectronico || 'No registrado'}</p>
@@ -383,63 +638,11 @@ export class HabitantesManager {
                 confirmButtonText: 'Cerrar'
             });
         } else {
-            alert(`Habitante: ${habitante.Nombre} ${habitante.Apellido}\nDocumento: ${habitante.TipoDocumento} ${habitante.NumeroDocumento}`);
+            alert(`Habitante: ${habitante.Nombre} ${habitante.Apellido}\nDocumento: ${habitante.TipoDocumento || ''} ${habitante.NumeroDocumento || ''}`);
         }
     }
 
-    static editarHabitante(habitante) {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                title: 'Editar Habitante',
-                text: `Editando: ${habitante.Nombre} ${habitante.Apellido}`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Continuar',
-                cancelButtonText: 'Cancelar'
-            });
-        } else {
-            if (confirm(`¿Editar a ${habitante.Nombre} ${habitante.Apellido}?`)) {
-                console.log('Editando habitante:', habitante);
-            }
-        }
-    }
-
-    static eliminarHabitante(habitante) {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                title: '¿Está seguro?',
-                text: `Va a eliminar a ${habitante.Nombre} ${habitante.Apellido}`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire('Eliminado!', 'El habitante ha sido eliminado.', 'success');
-                }
-            });
-        } else {
-            if (confirm(`¿Eliminar a ${habitante.Nombre} ${habitante.Apellido}?`)) {
-                alert('Habitante eliminado');
-            }
-        }
-    }
-
-    static nuevoHabitante() {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                title: 'Nuevo Habitante',
-                text: 'Funcionalidad en desarrollo...',
-                icon: 'info',
-                confirmButtonText: 'Entendido'
-            });
-        } else {
-            alert('Nuevo Habitante - Funcionalidad en desarrollo');
-        }
-    }
-
+    // Impresión / export / eliminar seleccionados (placeholders como tenías)
     static imprimirSeleccionados(habitantes) {
         if (typeof Swal !== 'undefined') {
             Swal.fire({
@@ -526,381 +729,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentPage.includes('habitantes.html')) {
         HabitantesManager.init();
     }
-});
 
-/* Módulo para la gestión de habitantes - Versión completa
-import { ApiClient } from '../modules/api.js';
-
-export class HabitantesManager {
-    static currentPage = 1;
-    static pageSize = 10;
-    static allData = [];
-    static filteredData = [];
-    static currentFilters = {};
-
-    static init() {
-        console.log('Inicializando gestor de habitantes...');
-        this.setupEventListeners();
-        this.loadHabitantes();
-    }
-
-    static setupEventListeners() {
-        // Botón para abrir modal de filtros
-        document.getElementById('OpenFilterModal')?.addEventListener('click', () => {
-            this.openFiltersModal();
-        });
-
-        // Select all checkbox
-        document.getElementById('SelectAll')?.addEventListener('change', (e) => {
-            this.toggleSelectAll(e.target.checked);
-        });
-
-        // Paginación
-        document.getElementById('pageSizeSelect')?.addEventListener('change', (e) => {
-            this.pageSize = parseInt(e.target.value);
-            this.currentPage = 1;
-            this.renderTable();
-        });
-
-        // Botones de paginación
-        document.getElementById('prevPage')?.addEventListener('click', () => this.prevPage());
-        document.getElementById('nextPage')?.addEventListener('click', () => this.nextPage());
-    }
-
-    static async loadHabitantes() {
-        try {
-            console.log('Cargando habitantes desde API...');
-            const response = await ApiClient.getHabitantes();
-            
-            if (response.success) {
-                console.log('Habitantes cargados:', response.habitantes.length);
-                this.allData = response.habitantes;
-                this.filteredData = [...this.allData];
-                this.renderTable();
-            } else {
-                console.error('Error loading habitantes:', response.message);
-                this.showError(response.message || 'Error al cargar los datos de habitantes');
-            }
-        } catch (error) {
-            console.error('Error loading habitantes:', error);
-            this.showError('Error de conexión al cargar habitantes');
-        }
-    }
-
-    static renderTable() {
-        const tbody = document.querySelector('#TablaHabitantes tbody');
-        if (!tbody) {
-            console.error('No se encontró el tbody de la tabla');
-            return;
-        }
-
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        const endIndex = startIndex + this.pageSize;
-        const pageData = this.filteredData.slice(startIndex, endIndex);
-
-        tbody.innerHTML = pageData.map(item => `
-            <tr data-id="${item.IdHabitante || item.id || ''}">
-                <td><input type="checkbox" class="row-checkbox" data-id="${item.IdHabitante || item.id || ''}" onchange="HabitantesManager.updateBulkActions()"></td>
-                <td class="col-id">${item.IdHabitante || item.id || ''}</td>
-                <td class="col-tipo-doc">${this.getTipoDocumento(item.IdTipoDocumento || item.tipo_documento)}</td>
-                <td class="col-num-doc">${item.NumeroDocumento || item.numero_documento || item.documento || ''}</td>
-                <td class="col-nombres">${item.Nombre || item.nombre || ''}</td>
-                <td class="col-apellidos">${item.Apellido || item.apellido || ''}</td>
-                <td class="col-fecha-nacimiento">${this.formatDate(item.FechaNacimiento || item.fecha_nacimiento)}</td>
-                <td class="col-hijos">${item.Hijos || item.hijos || item.numero_hijos || 0}</td>
-                <td class="col-sexo">${item.Sexo || item.sexo || ''}</td>
-                <td class="col-familia">${this.getNombreFamilia(item.IdGrupoFamiliar || item.familia_id)}</td>
-                <td class="col-sector">${this.getSector(item.IdSector || item.sector_id)}</td>
-                <td class="col-estado-civil">${this.getEstadoCivil(item.IdEstadoCivil || item.estado_civil_id)}</td>
-                <td class="col-poblacion">${this.getTipoPoblacion(item.IdTipoPoblacion || item.tipo_poblacion_id)}</td>
-                <td class="col-religion">${item.TipoReligion || item.religion || item.religion_tipo || 'Católico'}</td>
-                <td class="col-sacramentos">${this.getSacramentos(item.sacramentos)}</td>
-                <td class="col-direccion">${item.Direccion || item.direccion || ''}</td>
-                <td class="col-celular">${item.Telefono || item.telefono || item.celular || ''}</td>
-                <td class="col-email">${item.CorreoElectronico || item.email || item.correo || ''}</td>
-                <td class="col-discapacidad">${item.DiscapacidadParaAsistir || item.discapacidad || 'Ninguna'}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn btn-edit btn-sm">Editar</button>
-                        <button class="btn btn-delete btn-sm">Eliminar</button>
-                        <button class="btn btn-print btn-sm">Imprimir</button>
-                    </div>
-                </td>
-            </tr>
-        `).join('');
-
-        this.updatePaginationInfo();
-        this.updateBulkActions();
-    }
-
-    // Helper methods para datos
-    static getTipoDocumento(idTipoDoc) {
-        const tiposDocumento = {
-            1: 'CC', // Cédula de Ciudadanía
-            2: 'TI', // Tarjeta de Identidad
-            3: 'CE', // Cédula de Extranjería
-            4: 'PA', // Pasaporte
-            5: 'RC'  // Registro Civil
-        };
-        return tiposDocumento[idTipoDoc] || 'CC';
-    }
-
-    static getNombreFamilia(idGrupoFamiliar) {
-        return idGrupoFamiliar ? `Familia ${idGrupoFamiliar}` : 'Sin familia';
-    }
-
-    static getSector(idSector) {
-        const sectores = {
-            1: 'Norte',
-            2: 'Sur', 
-            3: 'Este',
-            4: 'Oeste',
-            5: 'Centro'
-        };
-        return sectores[idSector] || `Sector ${idSector}`;
-    }
-
-    static getEstadoCivil(idEstadoCivil) {
-        const estados = {
-            1: 'Soltero',
-            2: 'Casado',
-            3: 'Divorciado', 
-            4: 'Viudo',
-            5: 'Unión Libre'
-        };
-        return estados[idEstadoCivil] || 'Soltero';
-    }
-
-    static getTipoPoblacion(idTipoPoblacion) {
-        const tipos = {
-            1: 'Infantil',
-            2: 'Juvenil',
-            3: 'Adulto',
-            4: 'Adulto Mayor',
-            5: 'Familiar'
-        };
-        return tipos[idTipoPoblacion] || 'Adulto';
-    }
-
-    static getSacramentos(sacramentos) {
-        if (!sacramentos || !Array.isArray(sacramentos)) return 'Ninguno';
-        
-        const nombresSacramentos = sacramentos.map(s => {
-            if (typeof s === 'string') return s;
-            return s.Descripcion || s.sacramento || s.nombre || 'Sacramento';
-        });
-        
-        return nombresSacramentos.join(', ') || 'Ninguno';
-    }
-
-    static formatDate(dateString) {
-        if (!dateString) return '';
-        try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('es-ES');
-        } catch (error) {
-            return dateString;
-        }
-    }
-
-    static updatePaginationInfo() {
-        const total = this.filteredData.length;
-        const start = ((this.currentPage - 1) * this.pageSize) + 1;
-        const end = Math.min(start + this.pageSize - 1, total);
-
-        document.getElementById('startRecord').textContent = start;
-        document.getElementById('endRecord').textContent = end;
-        document.getElementById('totalRecords').textContent = total;
-        document.getElementById('currentPage').textContent = this.currentPage;
-
-        // Habilitar/deshabilitar botones de paginación
-        document.getElementById('prevPage').disabled = this.currentPage === 1;
-        document.getElementById('nextPage').disabled = this.currentPage >= Math.ceil(total / this.pageSize);
-    }
-
-    static toggleSelectAll(checked) {
-        const checkboxes = document.querySelectorAll('.row-checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = checked;
-        });
-        this.updateBulkActions();
-    }
-
-    static updateBulkActions() {
-        const checkboxes = document.querySelectorAll('.row-checkbox:checked');
-        const bulkActions = document.getElementById('bulkActions');
-        const selectedCount = document.getElementById('selectedCount');
-        
-        if (checkboxes.length > 0) {
-            bulkActions.classList.add('active');
-            selectedCount.textContent = `${checkboxes.length} seleccionados`;
-        } else {
-            bulkActions.classList.remove('active');
-        }
-        
-        // Update select all checkbox state
-        const allCheckboxes = document.querySelectorAll('.row-checkbox');
-        const selectAll = document.getElementById('SelectAll');
-        selectAll.checked = checkboxes.length === allCheckboxes.length;
-    }
-
-    static openFiltersModal() {
-        const modal = document.getElementById('filtersModal');
-        modal.style.display = 'block';
-    }
-
-    static closeFiltersModal() {
-        const modal = document.getElementById('filtersModal');
-        modal.style.display = 'none';
-    }
-
-    static applyFilters() {
-        this.currentFilters = this.getCurrentFilters();
-        this.filterTable();
-        this.closeFiltersModal();
-    }
-
-    static getCurrentFilters() {
-        const filters = {};
-        
-        // Filtros de texto
-        filters.numDoc = document.getElementById('numDocFilter').value.toLowerCase();
-        filters.nombres = document.getElementById('nombresFilter').value.toLowerCase();
-        filters.apellidos = document.getElementById('apellidosFilter').value.toLowerCase();
-        filters.email = document.getElementById('emailFilter').value.toLowerCase();
-        filters.celular = document.getElementById('celularFilter').value.toLowerCase();
-        filters.direccion = document.getElementById('direccionFilter').value.toLowerCase();
-        
-        // Filtros de selección múltiple
-        filters.tiposDoc = this.getSelectedValues('tipoDoc');
-        filters.sectores = this.getSelectedValues('sector');
-        filters.estadosCiviles = this.getSelectedValues('estadoCivil');
-        filters.religiones = this.getSelectedValues('religion');
-        filters.sexos = this.getSelectedValues('sexo');
-        filters.poblaciones = this.getSelectedValues('poblacion');
-        
-        return filters;
-    }
-
-    static getSelectedValues(name) {
-        return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
-                   .map(cb => cb.value);
-    }
-
-    static filterTable() {
-        const rows = document.querySelectorAll('#TablaHabitantes tbody tr');
-        const filters = this.currentFilters;
-        
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            let showRow = true;
-            
-            // Filtros de texto
-            if (filters.numDoc && !cells[3].textContent.toLowerCase().includes(filters.numDoc)) 
-                showRow = false;
-            if (filters.nombres && !cells[4].textContent.toLowerCase().includes(filters.nombres)) 
-                showRow = false;
-            if (filters.apellidos && !cells[5].textContent.toLowerCase().includes(filters.apellidos)) 
-                showRow = false;
-            if (filters.email && !cells[17].textContent.toLowerCase().includes(filters.email)) 
-                showRow = false;
-            if (filters.celular && !cells[16].textContent.toLowerCase().includes(filters.celular)) 
-                showRow = false;
-            if (filters.direccion && !cells[15].textContent.toLowerCase().includes(filters.direccion)) 
-                showRow = false;
-            
-            // Filtros de selección múltiple
-            if (filters.tiposDoc.length > 0 && !filters.tiposDoc.includes(cells[2].textContent.trim())) 
-                showRow = false;
-            if (filters.sectores.length > 0 && !filters.sectores.some(sector => cells[10].textContent.includes(sector))) 
-                showRow = false;
-            if (filters.estadosCiviles.length > 0 && !filters.estadosCiviles.some(estado => cells[11].textContent.includes(estado))) 
-                showRow = false;
-            if (filters.religiones.length > 0 && !filters.religiones.some(religion => cells[13].textContent.includes(religion))) 
-                showRow = false;
-            if (filters.sexos.length > 0 && !filters.sexos.some(sexo => cells[8].textContent.includes(sexo))) 
-                showRow = false;
-            if (filters.poblaciones.length > 0 && !filters.poblaciones.some(poblacion => cells[12].textContent.includes(poblacion))) 
-                showRow = false;
-            
-            row.style.display = showRow ? '' : 'none';
-        });
-        
-        this.currentPage = 1;
-        this.updatePaginationInfo();
-    }
-
-    static clearAllFilters() {
-        // Limpiar campos de texto
-        document.getElementById('numDocFilter').value = '';
-        document.getElementById('nombresFilter').value = '';
-        document.getElementById('apellidosFilter').value = '';
-        document.getElementById('emailFilter').value = '';
-        document.getElementById('celularFilter').value = '';
-        document.getElementById('direccionFilter').value = '';
-        
-        // Desmarcar checkboxes de filtros
-        const filterCheckboxes = document.querySelectorAll('#filtersModal input[type="checkbox"]:not([id^="col-"])');
-        filterCheckboxes.forEach(cb => cb.checked = false);
-        
-        // Resetear filtros
-        this.currentFilters = {};
-        
-        // Mostrar todas las filas
-        const rows = document.querySelectorAll('#TablaHabitantes tbody tr');
-        rows.forEach(row => row.style.display = '');
-        
-        this.updatePaginationInfo();
-    }
-
-    static nextPage() {
-        const totalPages = Math.ceil(this.filteredData.length / this.pageSize);
-        if (this.currentPage < totalPages) {
-            this.currentPage++;
-            this.renderTable();
-        }
-    }
-
-    static prevPage() {
-        if (this.currentPage > 1) {
-            this.currentPage--;
-            this.renderTable();
-        }
-    }
-
-    static showError(message) {
-        console.error(message);
-        alert(message);
-    }
-}
-
-// Hacer funciones globales disponibles para HTML
-window.HabitantesManager = HabitantesManager;
-window.toggleColumn = (columnClass) => {
-    const columns = document.querySelectorAll(`.col-${columnClass}`);
-    const checkbox = document.getElementById(`col-${columnClass}`);
-    
-    columns.forEach(column => {
-        column.style.display = checkbox.checked ? '' : 'none';
+  const modalEl = document.getElementById('habitanteModal');
+  if (modalEl) {
+    modalEl.addEventListener('hide.bs.modal', () => {
+      // Quita el foco antes de ocultar el modal
+      if (document.activeElement) document.activeElement.blur();
     });
-};
-
-window.toggleAccordion = (section) => {
-    const header = document.querySelector(`#${section}-content`).previousElementSibling;
-    const content = document.getElementById(`${section}-content`);
-    const icon = header.querySelector('.accordion-icon');
-    
-    header.classList.toggle('active');
-    content.classList.toggle('active');
-    
-    if (header.classList.contains('active')) {
-        icon.style.transform = 'rotate(180deg)';
-    } else {
-        icon.style.transform = 'rotate(0deg)';
-    }
-};
-*/
-/*/ Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-    HabitantesManager.init();
-});*/
+  }
+});

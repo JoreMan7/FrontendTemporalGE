@@ -118,7 +118,7 @@ export class DataTable {
       "Religion",
       "TipoSacramento",
       "Telefono",
-      "FechaRegistro", // <-- Agregada fecha de ingreso
+      "FechaRegistro", 
     ]
 
     // Resetear todas las columnas primero
@@ -266,7 +266,7 @@ export class DataTable {
       .map(
         (action) => `
             <button class="btn btn-sm ${action.class || "btn-outline-primary"}" 
-                    onclick="window.habitantesDataTable.handleAction('${action.id}', ${JSON.stringify(rowData).replace(/'/g, "\\'")})}"
+                    onclick='window.habitantesDataTable.handleAction("${action.id}", ${JSON.stringify(rowData).replace(/'/g, "\\'")})'
                     title="${action.title || action.label}">
                 <i class="${action.icon || "fas fa-cog"}"></i>
                 ${action.showLabel ? action.label : ""}

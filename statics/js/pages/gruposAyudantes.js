@@ -97,7 +97,6 @@ function renderTable() {
           <button class="btn btn-sm btn-outline-danger" data-action="delete" title="Desactivar"><i class="fas fa-ban"></i></button>
           <button class="btn btn-sm btn-outline-secondary" data-action="members" title="Miembros"><i class="fas fa-people-group"></i></button>
         </td>
-
       </tr>
     `;
   }).join("");
@@ -121,7 +120,6 @@ function renderTable() {
   $("#paginationInfo").textContent = `${ini}-${fin} de ${total}`;
 }
 
-
 function renderPagination() {
   const total = state.filtered.length;
   const pages = Math.max(1, Math.ceil(total / state.pageSize));
@@ -137,7 +135,6 @@ function renderPagination() {
 }
 
 /* ==== Cargas iniciales ==== */
-// Eliminada función cargarSectores() ya que no se necesita más
 async function cargarGrupos() {
   const data = await ApiClient.request("/api/grupos/");
   state.raw = (data.grupos || data || []);
@@ -149,9 +146,9 @@ async function cargarGrupos() {
 /* ==== CRUD ==== */
 function abrirModalGrupo(titulo) {
   $("#grupoLiderId").value = "";
-$("#grupoBuscarLider").value = "";
-$("#liderResultadosInline").innerHTML = "";
-$("#liderPreview").classList.add("d-none");
+  $("#grupoBuscarLider").value = "";
+  $("#liderResultadosInline").innerHTML = "";
+  $("#liderPreview").classList.add("d-none");
   $("#grupoModalTitle").innerHTML = `<i class="fas fa-users-gear me-2"></i>${titulo}`;
   $("#grupoForm").reset();
   $("#grupoId").value = "";
@@ -202,7 +199,6 @@ async function editarGrupo(id) {
     UIX.toast("No se pudieron cargar los datos del grupo", "error");
   }
 }
-
 
 async function guardarGrupoSubmit(e) {
   e.preventDefault();
@@ -342,13 +338,14 @@ async function verMiembros(id) {
 
     $("#detalleCursosBody").innerHTML = `<tr><td colspan="4" class="text-center text-muted">No disponible en esta vista.</td></tr>`;
     new bootstrap.Modal($("#grupoDetalleModal")).show();
+    
     // Botón para agregar miembro
-$("#btnAgregarMiembro")?.addEventListener("click", () => agregarMiembro(id));
+    $("#btnAgregarMiembro")?.addEventListener("click", () => agregarMiembro(id));
 
-// Botones para eliminar miembros
-$$("button[data-remove]").forEach(btn => {
-  btn.addEventListener("click", () => eliminarMiembro(id, btn.dataset.remove));
-});
+    // Botones para eliminar miembros
+    $$("button[data-remove]").forEach(btn => {
+      btn.addEventListener("click", () => eliminarMiembro(id, btn.dataset.remove));
+    });
 
   } catch {
     UIX.toast("No se pudieron cargar los miembros", "error");
@@ -357,51 +354,339 @@ $$("button[data-remove]").forEach(btn => {
 
 // === Gestión de miembros ===
 async function agregarMiembro(grupoId) {
-  const query = prompt("Ingrese nombre o documento del habitante a agregar:");
-  if (!query) return;
+  // Crear modal para agregar miembros con el estilo definido
+  const modalHtml = `
+    <div class="modal fade" id="agregarMiembroModal" tabindex="-1" data-bs-backdrop="static">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Agregar Miembros al Grupo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group mb-4">
+              <label class="form-label">Buscar habitantes (nombre, apellido o documento)</label>
+              <div class="input-group">
+                <input type="text" id="buscarMiembroInput" class="form-control" placeholder="Ej: María / 1012345678">
+                <button class="btn btn-outline-secondary" type="button" id="btnBuscarMiembro">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Resultados de búsqueda -->
+            <div class="mb-4">
+              <h6 class="text-sm font-semibold text-muted mb-2">Resultados de búsqueda</h6>
+              <div id="miembroResultados" style="max-height: 300px; overflow-y: auto;">
+                <div class="text-muted text-center py-4">
+                  <i class="fas fa-search fa-lg mb-2"></i>
+                  <p>Escriba para buscar habitantes...</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Miembros seleccionados -->
+            <div class="selected-members-section border-top pt-3">
+              <h6 class="font-semibold text-muted mb-3">Miembros seleccionados</h6>
+              <div id="miembrosSeleccionados" class="d-flex flex-wrap gap-2">
+                <div class="text-muted">No hay miembros seleccionados</div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <i class="fas fa-times me-2"></i>Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" id="btnConfirmarAgregarMiembros">
+              <i class="fas fa-save me-2"></i>Agregar Miembros
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 
-  try {
-    // Buscar habitante
-    const data = await ApiClient.request(`/api/habitantes/buscar_grupo?q=${encodeURIComponent(query)}`);
-    const lista = data.habitantes || data.resultados || [];
+  // Agregar modal al DOM si no existe
+  if (!$("#agregarMiembroModal")) {
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+  }
 
-    if (!lista.length) {
-      UIX.toast("No se encontró ningún habitante con ese criterio", "error");
+  const modalElement = $("#agregarMiembroModal");
+  const modal = new bootstrap.Modal(modalElement);
+  
+  // Estado local para miembros seleccionados
+  const miembrosSeleccionados = new Map();
+  
+  // Función para buscar habitantes
+  async function buscarHabitantes() {
+    const query = $("#buscarMiembroInput").value.trim();
+    const cont = $("#miembroResultados");
+    
+    if (!query) {
+      cont.innerHTML = `
+        <div class="text-muted text-center py-4">
+          <i class="fas fa-search fa-lg mb-2"></i>
+          <p>Escriba para buscar habitantes...</p>
+        </div>
+      `;
       return;
     }
-
-    // Seleccionar el primero (simplificado)
-    const h = lista[0];
-    const confirmAdd = await UIX.confirm({
-      title: "Agregar miembro",
-      text: `¿Agregar a ${h.Nombre} ${h.Apellido} al grupo?`,
+    
+    try {
+      cont.innerHTML = `
+        <div class="text-center py-4">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+          <span class="ms-2 text-muted">Buscando habitantes...</span>
+        </div>
+      `;
+      
+      const data = await ApiClient.request(`/api/habitantes/buscar_grupo?q=${encodeURIComponent(query)}`);
+      const resultados = data.habitantes || data.resultados || [];
+      
+      if (!resultados.length) {
+        cont.innerHTML = `
+          <div class="text-muted text-center py-4">
+            <i class="fas fa-search fa-lg mb-2"></i>
+            <p>No se encontraron habitantes</p>
+            <small class="text-xs">Intente con otros términos de búsqueda</small>
+          </div>
+        `;
+        return;
+      }
+      
+      cont.innerHTML = `
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th width="50" class="text-center">Seleccionar</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Documento</th>
+                <th>Teléfono</th>
+                <th>Sector</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${resultados.map(h => {
+                const yaSeleccionado = miembrosSeleccionados.has(h.IdHabitante);
+                const nombreCompleto = `${h.Nombre || ""} ${h.Apellido || ""}`.trim();
+                return `
+                  <tr class="${yaSeleccionado ? 'table-success' : ''}">
+                    <td class="text-center">
+                      <input 
+                        type="checkbox" 
+                        class="form-check-input miembro-check" 
+                        data-id="${h.IdHabitante}"
+                        ${yaSeleccionado ? 'checked' : ''}
+                        ${yaSeleccionado ? 'disabled' : ''}
+                      >
+                    </td>
+                    <td class="text-xs">${h.IdHabitante}</td>
+                    <td>
+                      <div class="fw-medium">${esc(nombreCompleto)}</div>
+                      ${h.CorreoElectronico ? `<small class="text-muted">${esc(h.CorreoElectronico)}</small>` : ''}
+                    </td>
+                    <td class="text-xs">${esc(h.NumeroDocumento || "-")}</td>
+                    <td class="text-xs">${esc(h.Telefono || "-")}</td>
+                    <td class="text-xs">${esc(h.Sector || "-")}</td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+        <div class="text-xs text-muted mt-2 px-1">
+          Mostrando ${resultados.length} resultado(s)
+        </div>
+      `;
+      
+      // Agregar eventos a los checkboxes
+      $$("#miembroResultados .miembro-check").forEach(checkbox => {
+        checkbox.addEventListener("change", (e) => {
+          const id = Number(e.target.dataset.id);
+          const habitante = resultados.find(h => h.IdHabitante === id);
+          
+          if (e.target.checked) {
+            miembrosSeleccionados.set(id, habitante);
+          } else {
+            miembrosSeleccionados.delete(id);
+          }
+          
+          actualizarMiembrosSeleccionados();
+          // Volver a renderizar resultados para actualizar estados
+          buscarHabitantes();
+        });
+      });
+      
+    } catch (error) {
+      console.error("Error buscando habitantes:", error);
+      cont.innerHTML = `
+        <div class="alert alert-danger text-center py-3">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Error al buscar habitantes
+        </div>
+      `;
+    }
+  }
+  
+  // Función para actualizar la vista de miembros seleccionados
+  function actualizarMiembrosSeleccionados() {
+    const cont = $("#miembrosSeleccionados");
+    
+    if (miembrosSeleccionados.size === 0) {
+      cont.innerHTML = '<div class="text-muted text-center w-100 py-2">No hay miembros seleccionados</div>';
+      return;
+    }
+    
+    cont.innerHTML = Array.from(miembrosSeleccionados.values()).map(h => {
+      const nombreCompleto = `${h.Nombre || ""} ${h.Apellido || ""}`.trim();
+      return `
+        <div class="StatusBadge success d-flex align-items-center gap-2 p-2">
+          <i class="fas fa-user-check text-xs"></i>
+          <span class="fw-medium">${esc(nombreCompleto)}</span>
+          <button type="button" class="btn-close btn-close-white btn-sm" 
+                  data-id="${h.IdHabitante}" 
+                  style="font-size: 0.7rem;">
+          </button>
+        </div>
+      `;
+    }).join("");
+    
+    // Agregar eventos para quitar miembros
+    $$("#miembrosSeleccionados .btn-close").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const badge = e.target.closest('.StatusBadge');
+        const id = Number(badge.querySelector('.btn-close').dataset.id);
+        miembrosSeleccionados.delete(id);
+        actualizarMiembrosSeleccionados();
+        buscarHabitantes(); // Actualizar la lista de búsqueda
+      });
+    });
+  }
+  
+  // Función para agregar miembros al grupo
+  async function confirmarAgregarMiembros() {
+    if (miembrosSeleccionados.size === 0) {
+      UIX.toast("Selecciona al menos un miembro", "warning");
+      return;
+    }
+    
+    const confirmacion = await UIX.confirm({
+      title: "Agregar miembros",
+      text: `¿Estás seguro de agregar ${miembrosSeleccionados.size} miembro(s) al grupo?`,
       icon: "question"
     });
-
-    if (!confirmAdd) return;
-
-    // Enviar petición al backend
-    const res = await ApiClient.request(`/api/grupos/${grupoId}/miembros`, {
-      method: "POST",
-      body: JSON.stringify({ id_habitante: h.IdHabitante })
+    
+    if (!confirmacion) return;
+    
+    try {
+      const miembrosArray = Array.from(miembrosSeleccionados.values());
+      let agregados = 0;
+      let errores = 0;
+      const erroresDetalle = [];
+      
+      // Agregar miembros uno por uno
+      for (const miembro of miembrosArray) {
+        try {
+          const res = await ApiClient.request(`/api/grupos/${grupoId}/miembros`, {
+            method: "POST",
+            body: JSON.stringify({ id_habitante: miembro.IdHabitante })
+          });
+          
+          if (res.success) {
+            agregados++;
+          } else {
+            errores++;
+            erroresDetalle.push(`${miembro.Nombre} ${miembro.Apellido}: ${res.message || 'Error desconocido'}`);
+          }
+        } catch (error) {
+          errores++;
+          erroresDetalle.push(`${miembro.Nombre} ${miembro.Apellido}: Error de conexión`);
+          console.error(`Error agregando miembro ${miembro.IdHabitante}:`, error);
+        }
+      }
+      
+      // Mostrar resultado
+      if (errores === 0) {
+        UIX.toast(`✅ ${agregados} miembro(s) agregado(s) correctamente`);
+      } else if (agregados > 0) {
+        UIX.toast(`⚠️ ${agregados} agregado(s), ${errores} error(es)`, "warning");
+        if (erroresDetalle.length > 0) {
+          console.warn("Errores detallados:", erroresDetalle);
+        }
+      } else {
+        UIX.toast("❌ No se pudieron agregar los miembros", "error");
+      }
+      
+      // Cerrar modal y actualizar vista
+      modal.hide();
+      setTimeout(async () => {
+        await verMiembros(grupoId);
+      }, 500);
+      
+    } catch (error) {
+      console.error("Error agregando miembros:", error);
+      UIX.toast("❌ Error al agregar miembros", "error");
+    }
+  }
+  
+  // Configurar eventos del modal
+  function setupModalEvents() {
+    $("#btnBuscarMiembro")?.addEventListener("click", buscarHabitantes);
+    $("#buscarMiembroInput")?.addEventListener("input", buscarHabitantes);
+    $("#btnConfirmarAgregarMiembros")?.addEventListener("click", confirmarAgregarMiembros);
+    
+    // Buscar al abrir el modal
+    modalElement.addEventListener('shown.bs.modal', () => {
+      $("#buscarMiembroInput").focus();
+      // Limpiar búsqueda anterior
+      $("#buscarMiembroInput").value = "";
+      $("#miembroResultados").innerHTML = `
+        <div class="text-muted text-center py-4">
+          <i class="fas fa-search fa-lg mb-2"></i>
+          <p>Escriba para buscar habitantes...</p>
+        </div>
+      `;
+    });
+    
+    // Limpiar al cerrar
+    modalElement.addEventListener('hidden.bs.modal', () => {
+      miembrosSeleccionados.clear();
+      $("#buscarMiembroInput").value = "";
+      $("#miembroResultados").innerHTML = `
+        <div class="text-muted text-center py-4">
+          <i class="fas fa-search fa-lg mb-2"></i>
+          <p>Escriba para buscar habitantes...</p>
+        </div>
+      `;
+      // Remover el modal del DOM para evitar acumulación
+      setTimeout(() => {
+        if ($("#agregarMiembroModal")) {
+          $("#agregarMiembroModal").remove();
+        }
+      }, 300);
     });
 
-    if (res.success) {
-      UIX.toast("Miembro agregado correctamente");
-      await verMiembros(grupoId); // recargar tabla
-    } else {
-      UIX.toast(res.message || "No se pudo agregar el miembro", "error");
-    }
-  } catch (error) {
-    console.error(error);
-    UIX.toast("Error al agregar miembro", "error");
+    // Permitir búsqueda con Enter
+    $("#buscarMiembroInput")?.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        buscarHabitantes();
+      }
+    });
   }
+  
+  // Inicializar
+  setupModalEvents();
+  modal.show();
+  actualizarMiembrosSeleccionados();
 }
 
 async function eliminarMiembro(grupoId, idHabitante) {
   const ok = await UIX.confirm({
     title: "Eliminar miembro",
-    text: "¿Deseas quitar este habitante del grupo?",
+    text: "¿Estás seguro de quitar este habitante del grupo?",
     icon: "warning"
   });
   if (!ok) return;
@@ -412,17 +697,16 @@ async function eliminarMiembro(grupoId, idHabitante) {
     });
 
     if (res.success) {
-      UIX.toast("Miembro eliminado");
+      UIX.toast("✅ Miembro eliminado correctamente");
       await verMiembros(grupoId);
     } else {
-      UIX.toast(res.message || "No se pudo eliminar el miembro", "error");
+      UIX.toast(res.message || "❌ No se pudo eliminar el miembro", "error");
     }
   } catch (error) {
     console.error(error);
-    UIX.toast("Error al eliminar miembro", "error");
+    UIX.toast("❌ Error al eliminar miembro", "error");
   }
 }
-
 
 /* ==== Búsqueda/validación de líder ==== */
 function setLiderPreview(h) {
@@ -484,8 +768,6 @@ async function buscarLiderInline() {
 
 $("#btnBuscarLider")?.addEventListener("click", buscarLiderInline);
 $("#grupoBuscarLider")?.addEventListener("input", buscarLiderInline);
-
-
 
 /* ==== Exportar / imprimir ==== */
 function exportCSV() {

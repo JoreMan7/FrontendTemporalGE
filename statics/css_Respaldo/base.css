@@ -1,0 +1,112 @@
+/* =======================================================
+   📄 ARCHIVO: base.css
+   Descripción:
+   Define variables globales, tipografía, resets y colores 
+   base para todo el proyecto GESTIÓN ECLESIAL.
+   Este archivo debe cargarse PRIMERO antes de cualquier otro.
+   ======================================================= */
+
+/* 🌐 VARIABLES GLOBALES ================================== */
+:root {
+  /* Colores principales */
+  --primary: #4caf50;        /* Verde institucional */
+  --secondary: #2196f3;      /* Azul complementario */
+  --accent: #f59e0b;         /* Amarillo de énfasis */
+
+  /* Escala de grises */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-250: #e0e0e0; /* agregado para legacy */
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Bordes y fondos */
+  --border-light: #dcdcdc;
+  --border-dark: #999;
+  --white: #ffffff;
+  --black: #000000;
+
+  /* Tipografía */
+  --font-family: "Roboto", "Segoe UI", sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+}
+
+/* 🔄 RESET GENERAL ======================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--gray-800);
+  background-color: var(--gray-100);
+}
+
+/* LINKS Y TEXTOS ======================================== */
+a {
+  color: var(--secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+p {
+  line-height: var(--line-height-base);
+}
+
+/* BOTONES BASE ========================================== */
+button {
+  font-family: inherit;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* UTILIDADES BÁSICAS ==================================== */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+
+.align-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+
+/* SCROLLBAR ============================================= */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--gray-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gray-400);
+}

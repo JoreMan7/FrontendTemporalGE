@@ -1,0 +1,286 @@
+/* =======================================================
+   📄 ARCHIVO: unused_legacy.css
+   🎯 PROPÓSITO: Componentes antiguos NO USADOS actualmente
+   ⚠️ IMPORTANTE: Este archivo NO debe cargarse en producción
+   
+   📘 USO:
+   - Revisa cada bloque y muévelo al módulo indicado cuando
+     el componente o vista vuelva a usarse.
+   - Las referencias indican dónde debería integrarse
+     (base.css, layout.css, components.css, responsive.css).
+   ======================================================= */
+
+/* ========================================
+   🏗️ ESTRUCTURA GLOBAL (NO USADA)
+   📍 Mover a: layout.css si se reactiva
+   ======================================== */
+.TituloBienvenida {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 1rem;
+}
+
+/* ========================================
+   🧱 DEMOS Y PLACEHOLDERS (NO USADOS)
+   📍 Mover a: components.css si se reactiva
+   ======================================== */
+.ContenedorDemo,
+.ElementoDemo {
+  background: #f9f9f9;
+  border: 1px dashed #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* ========================================
+   👥 INFORMACIÓN PARROQUIAL (NO USADA)
+   📍 Mover a: layout.css si se reactiva
+   ======================================== */
+.ParishInfo,
+.ParishLogo,
+.ParishDetails,
+.ReportInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.ParishLogo {
+  height: 80px;
+  margin-right: 1rem;
+}
+
+.ParishDetails {
+  text-align: center;
+  color: var(--gray-700);
+  font-weight: 500;
+}
+
+.ReportInfo {
+  margin-left: 20px;
+  text-align: right;
+  color: var(--gray-700);
+}
+
+/* ========================================
+   🧩 CONTENIDO ESTRUCTURAL (NO USADO)
+   📍 Mover a: layout.css si se reactiva
+   ======================================== */
+.ContentHeader {
+  background-color: var(--gray-250);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ContentBody {
+  padding: 1rem;
+  background-color: var(--white);
+}
+
+/* ========================================
+   🔁 NAVEGACIÓN Y PAGINACIÓN (NO USADA)
+   📍 Mover a: components.css si se reactiva
+   ======================================== */
+.nav-arrow {
+  color: var(--gray-600);
+  font-size: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-arrow:hover {
+  color: var(--blue-500);
+}
+
+.pagination-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--gray-300);
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: var(--blue-500);
+}
+
+/* ========================================
+   👤 AVATARES (NO USADOS)
+   📍 Mover a: components.css si se reactiva
+   ======================================== */
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  background-color: var(--blue-500);
+  border-radius: 50%;
+  position: relative;
+}
+
+/* ========================================
+   🗓️ COMPROMISOS / AGENDA (NO USADA)
+   📍 Mover a: components.css si se reactiva
+   ======================================== */
+.commitment-item {
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.commitment-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.commitment-avatar {
+  display: flex;
+  align-items: center;
+  padding-right: 2rem;
+}
+
+.commitment-avatar i {
+  padding-top: 0.5rem;
+  color: var(--white);
+}
+
+.commitment-details {
+  text-align: left;
+}
+
+.commitment-date {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 0.5rem;
+}
+
+.commitment-time {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin-bottom: 0.25rem;
+}
+
+.commitment-reminder {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin-bottom: 0;
+}
+
+/* ========================================
+   📅 CALENDARIO (NO USADO)
+   📍 Mover a: components.css si se reactiva
+   ======================================== */
+.calendar-widget {
+  font-size: 0.875rem;
+}
+
+.calendar-row {
+  margin-bottom: 0.25rem;
+}
+
+.calendar-day-header {
+  background-color: var(--secondary);
+  color: var(--gray-100);
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  margin: 0 1px;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  margin: 0 1px;
+  background-color: var(--white);
+  border: 1px solid transparent;
+}
+
+.calendar-day:hover {
+  background-color: var(--gray-100);
+}
+
+.calendar-day.highlighted {
+  background-color: var(--blue-500);
+  color: var(--white);
+}
+
+.calendar-day.selected {
+  background-color: #e6f7ff;
+  color: var(--blue-500);
+  font-weight: 500;
+  border-color: var(--blue-500);
+}
+
+.calendar-day.today {
+  border: 1px solid var(--blue-500);
+  background-color: var(--blue-500);
+  color: var(--white);
+}
+
+.calendar-day.other-month {
+  color: var(--gray-400);
+  background-color: var(--gray-50);
+}
+
+/* ========================================
+   🧭 SISTEMA DE PESTAÑAS (NO USADO)
+   📍 Mover a: components.css si se reactiva
+   ======================================== */
+.tab-scroll-container {
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-content-container {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* ========================================
+   📱 MEDIA QUERIES LEGACY (NO USADAS)
+   📍 Mover a: responsive.css si se reactiva
+   ======================================== */
+@media (max-width: 768px) {
+  .HeaderActions p {
+    display: none;
+  }
+
+  .btn-help {
+    margin-left: 0.35rem;
+  }
+
+  .Divider {
+    margin: 0 0.1rem;
+  }
+
+  .calendar-day-header,
+  .calendar-day {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.125rem;
+  }
+
+  .tab-scroll-container {
+    height: calc(100vh - 140px);
+  }
+}

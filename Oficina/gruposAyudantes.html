@@ -11,10 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-  <link rel="stylesheet" href="../statics/styles/Style.css">
-  <link rel="stylesheet" href="../statics/styles/Utilidades.css">
-  <link rel="stylesheet" href="../statics/styles/TablasAvanzadas.css">
-  <link rel="stylesheet" href="../statics/styles/UserManagement.css">
+  <link rel="stylesheet" href="../statics/css/app.css">
 </head>
 
 <body class="BodyPlantilla" data-module="gruposAyudantes">
@@ -51,7 +48,36 @@
         <button class="btn btn-logout logout">Cerrar sesión</button>
       </div>
     </header>
+    <!-- Barra de navegación, título y botón atras -->
+    <div class="d-flex align-items-center ms-3 mt-3">
+  <button id="btnVolver" class="btn btn-outline-secondary btn-sm shadow-sm">
+    <i class="fas fa-arrow-left me-1"></i> Volver
+  </button>
+  <!-- 🧭 Título dinámico -->
+  <div class="flex-grow-1 text-center">
+    <h5 id="pageTitle" class="m-0 fw-bold text-uppercase align-middle">Cargando...</h5>
+  </div>
 
+  <!-- Espaciador derecho (para centrar visualmente el título) -->
+  <div class="d-flex align-items-center" style="width: 42px;"></div>
+    </div>
+    <section class="Content">
+    <div class="ContentHeader">
+        <button class="btn btn-green"><i class="bi bi-bar-chart"></i> estadísticas</button>
+
+        <div class="ParishInfo">
+            <img src="../Img/Diocesis-Logo.png" alt="Logo Parroquia" class="ParishLogo"> <!-- Logo de la parroquia -->
+            <div class="ParishDetails">
+                <div>NOMBRE DE LA PARROQUIA</div> <!-- Nombre de la parroquia -->
+                <div>NIT</div> <!-- NIT de la parroquia -->
+                <div>DIRECCIÓN</div> <!-- Dirección de la parroquia -->
+            </div>
+                    <div class="ReportInfo">
+            <div>Fecha del reporte</div> <!-- Fecha del reporte -->
+            <div>DD-MM-AAAA</div> <!-- Fecha del reporte generarse al día de consulta -->
+        </div>
+        </div>
+    </div>
     <!-- Contenido principal -->
     <div class="container-fluid py-3">
       <!-- Header Controls -->
@@ -283,6 +309,7 @@
       </div>
     </div>
   </div>
+  </section>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>

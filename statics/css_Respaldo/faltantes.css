@@ -1,0 +1,324 @@
+/* =======================================================
+   📄 ARCHIVO: unused_legacy_components_FINAL.css
+   Descripción:
+   Contiene todos los estilos antiguos no usados actualmente
+   en los HTML activos del proyecto. Este archivo NO debe 
+   cargarse en producción.
+   📘 Uso:
+   - Revisa cada bloque y muévelo al módulo indicado cuando 
+     el componente o vista vuelva a usarse.
+   - Las referencias indican dónde debería integrarse 
+     (base.css, layout.css, components.css, responsive.css).
+   ======================================================= */
+
+/* =========================================================
+   🏗️ SECCIÓN: ESTRUCTURA GLOBAL
+   Estilos base y de maquetación general.
+   📍 Módulo recomendado: layout.css
+   📄 Uso actual: No detectado en ningún HTML activo.
+   💡 Recomendación: mantener como respaldo para pantallas
+   de bienvenida o landing internas.
+========================================================= */
+
+
+
+.TituloBienvenida {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 1rem;
+}
+
+/* =========================================================
+   🧱 SECCIÓN: DEMOS Y PLACEHOLDERS
+   Elementos visuales de demostración.
+   📍 Módulo recomendado: components.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: mantener como ejemplo visual o sandbox.
+========================================================= */
+
+.ContenedorDemo, .ElementoDemo {
+  background: #f9f9f9;
+  border: 1px dashed #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* =========================================================
+   👥 SECCIÓN: INFORMACIÓN PARROQUIAL Y REPORTES
+   Cabeceras informativas de reportes parroquiales.
+   📍 Módulo recomendado: layout.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: mover a layout.css si se reactivan vistas 
+   de reportes o encabezados institucionales.
+========================================================= */
+
+.ParishInfo, .ParishLogo, .ParishDetails, .ReportInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.ParishLogo {
+  height: 80px;
+  margin-right: 1rem;
+}
+
+.ParishDetails {
+  text-align: center;
+  color: var(--gray-700);
+  font-weight: 500;
+}
+
+.ReportInfo {
+  margin-left: 20px;
+  text-align: right;
+  color: var(--gray-700);
+}
+
+/* =========================================================
+   🧩 SECCIÓN: CONTENIDO ESTRUCTURAL
+   Headers y cuerpos de contenido modular.
+   📍 Módulo recomendado: layout.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: útil para páginas internas o paneles
+   de administración. Colocar junto a Sidebar / Topbar.
+========================================================= */
+
+.ContentHeader {
+  background-color: var(--gray-250);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ContentBody {
+  padding: 1rem;
+  background-color: var(--white);
+}
+
+/* =========================================================
+   🔁 SECCIÓN: NAVEGACIÓN Y PAGINACIÓN
+   Controles visuales de navegación circular o punteada.
+   📍 Módulo recomendado: components.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: usar si se implementan slides, galerías
+   o carruseles personalizados.
+========================================================= */
+
+.nav-arrow {
+  color: var(--gray-600);
+  font-size: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-arrow:hover {
+  color: var(--blue-500);
+}
+
+.pagination-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--gray-300);
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: var(--blue-500);
+}
+
+/* =========================================================
+   👤 SECCIÓN: AVATARES Y USUARIOS
+   Representaciones gráficas de usuarios o perfiles.
+   📍 Módulo recomendado: components.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: mover cerca de estilos de tarjetas o 
+   cabeceras de usuario.
+========================================================= */
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  background-color: var(--blue-500);
+  border-radius: 50%;
+  position: relative;
+}
+
+/* =========================================================
+   🗓️ SECCIÓN: COMPROMISOS / AGENDA
+   Módulo para mostrar eventos o recordatorios.
+   📍 Módulo recomendado: components.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: conservar para futura agenda o calendario.
+========================================================= */
+
+.commitment-item {
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.commitment-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.commitment-avatar {
+  display: flex;
+  align-items: center;
+  padding-right: 2rem;
+}
+
+.commitment-avatar i {
+  padding-top: 0.5rem;
+  color: var(--white);
+}
+
+.commitment-details {
+  text-align: left;
+}
+
+.commitment-date {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 0.5rem;
+}
+
+.commitment-time {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin-bottom: 0.25rem;
+}
+
+.commitment-reminder {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   📅 SECCIÓN: CALENDARIO
+   Estilos del calendario interno.
+   📍 Módulo recomendado: components.css / responsive.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: integrar si se activa el módulo de agenda.
+========================================================= */
+
+.calendar-widget {
+  font-size: 0.875rem;
+}
+
+.calendar-row {
+  margin-bottom: 0.25rem;
+}
+
+.calendar-day-header {
+  background-color: var(--secondary);
+  color: var(--gray-100);
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  margin: 0 1px;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  margin: 0 1px;
+  background-color: var(--white);
+  border: 1px solid transparent;
+}
+
+.calendar-day:hover {
+  background-color: var(--gray-100);
+}
+
+.calendar-day.highlighted {
+  background-color: var(--blue-500);
+  color: var(--white);
+}
+
+.calendar-day.selected {
+  background-color: #e6f7ff;
+  color: var(--blue-500);
+  font-weight: 500;
+  border-color: var(--blue-500);
+}
+
+.calendar-day.today {
+  border: 1px solid var(--blue-500);
+  background-color: var(--blue-500);
+  color: var(--white);
+}
+
+.calendar-day.other-month {
+  color: var(--gray-400);
+  background-color: var(--gray-50);
+}
+
+/* =========================================================
+   🧭 SECCIÓN: SISTEMA DE PESTAÑAS (TABS)
+   Contenedores verticales para secciones o vistas múltiples.
+   📍 Módulo recomendado: components.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: útil para dashboards o secciones largas.
+========================================================= */
+
+.tab-scroll-container {
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-content-container {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* =========================================================
+   📱 SECCIÓN: MEDIA QUERIES ESPECÍFICAS
+   Adaptaciones de los componentes legacy para pantallas
+   pequeñas.
+   📍 Módulo recomendado: responsive.css
+   📄 Uso actual: No detectado.
+   💡 Recomendación: solo integrar si los módulos previos 
+   se reactivan.
+========================================================= */
+
+@media (max-width: 768px) {
+  .HeaderActions p { display: none; }
+  .btn-help { margin-left: 0.35rem; }
+  .Divider { margin: 0 0.1rem; }
+
+  .calendar-day-header,
+  .calendar-day {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.125rem;
+  }
+  
+  .tab-scroll-container {
+    height: calc(100vh - 140px);
+  }
+}

@@ -1,0 +1,440 @@
+/* =======================================================
+   📄 ARCHIVO: layout.css
+   🎯 PROPÓSITO: Estructura visual global del sitio
+   📌 ORDEN DE CARGA: 2/6
+   
+   Contiene:
+   - Sidebar y navegación principal
+   - TopBar (barra superior)
+   - MainContent (contenedor principal)
+   - Estructura de login
+   - Contenedores y wrappers
+   - Grids y layouts de página
+   ======================================================= */
+
+/* ========================================
+   🏗️ ESTRUCTURA PRINCIPAL
+   ======================================== */
+.BodyPlantilla {
+  font-family: "Roboto", sans-serif;
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   📱 SIDEBAR (NAVEGACIÓN LATERAL)
+   ======================================== */
+.Sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 95px;
+  height: 100vh;
+  background: var(--white);
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+  z-index: 200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Sidebar:hover {
+  width: 220px;
+}
+
+.Sidebar:hover .NavText {
+  opacity: 1;
+  width: auto;
+}
+
+.Sidebar:hover ~ .MainContent {
+  margin-left: 205px;
+}
+
+.Sidebar:not(:hover) .Logo {
+  width: 100px;
+}
+
+.Sidebar.mobile-visible {
+  left: 0;
+}
+
+/* Logo del sidebar */
+.LogoContainer {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0 2rem 0;
+  padding-bottom: 10px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.Logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 0.5rem;
+  transition: width 0.3s ease;
+}
+
+.MobileLogo {
+  display: none;
+}
+
+/* Menú de navegación */
+.NavMenu {
+  width: 100%;
+  padding-top: 35px;
+  position: absolute;
+  top: 21%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.NavItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 15px;
+  color: var(--gray-600);
+  text-decoration: none;
+  font-size: 16px;
+  transition: 0.3s;
+  border-radius: var(--radius-sm);
+}
+
+.NavItem i {
+  font-size: 20px;
+  width: 30px;
+  text-align: center;
+}
+
+.NavItem.active {
+  background: var(--gray-100);
+  color: var(--secondary);
+}
+
+.NavItem:hover {
+  background: var(--gray-100);
+  color: var(--secondary);
+}
+
+.NavItem:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+.NavText {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+/* ========================================
+   🔝 TOPBAR (BARRA SUPERIOR)
+   ======================================== */
+.TopBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid var(--gray-200);
+  width: 100%;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.HeaderActions {
+  display: flex;
+  align-items: center;
+}
+
+.UserInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.Divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--gray-300);
+  margin: 0 1rem;
+}
+
+/* ========================================
+   📄 MAIN CONTENT (CONTENIDO PRINCIPAL)
+   ======================================== */
+.MainContent {
+  margin-left: 76px;
+  transition: margin-left 0.3s ease-in-out;
+  flex: 1;
+  padding-left: 1.2rem;
+  padding-top: 0px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.Content {
+  flex: 1;
+  overflow: auto;
+}
+
+/* ========================================
+   🔐 ESTRUCTURA DE LOGIN
+   ======================================== */
+.BodyLogin {
+  font-family: "Roboto", Arial, sans-serif;
+  background-color: var(--gray-100);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.LoginContainer {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+}
+
+.LoginFormContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  background-color: var(--white);
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
+}
+
+.ImageContainer {
+  flex: 1;
+  background-color: var(--white);
+  border-top-right-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.ImageContent {
+  padding-top: 50px;
+  width: 100%;
+  height: 80%;
+}
+
+/* ========================================
+   📊 DASHBOARD Y GRIDS
+   ======================================== */
+.DashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.DashboardGridAbout {
+  grid-template-columns: 30% 60%;
+}
+
+.DashboardScrollContainer {
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ========================================
+   📦 CONTENEDORES Y WRAPPERS
+   ======================================== */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.ContentHeader {
+  background-color: var(--gray-250);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ContentBody {
+  padding: 1rem;
+  background-color: var(--white);
+}
+
+/* ========================================
+   🗂️ SISTEMA DE PESTAÑAS (TABS)
+   ======================================== */
+.tab-scroll-container {
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-nav {
+  display: flex;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-300);
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  justify-content: center;
+}
+
+.tab-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-content-container {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* ========================================
+   👤 PERFIL DE USUARIO
+   ======================================== */
+.profile-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.profile-sidebar {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 20px;
+  text-align: center;
+}
+
+.Content.PerfilSeccion {
+  padding: 1rem;
+  background-color: var(--gray-100);
+}
+
+/* ========================================
+   🍔 HAMBURGER MENU (MÓVIL)
+   ======================================== */
+.Hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-500);
+  position: fixed;
+  bottom: 40px;
+  left: 20px;
+  z-index: 1001;
+  background-color: var(--white);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.Hamburger:hover {
+  background-color: var(--gray-100);
+  transform: scale(1.05);
+}
+
+.SidebarToggle {
+  display: none;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background: none;
+  border: none;
+  color: var(--gray-600);
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 201;
+}
+
+.SidebarToggle:hover {
+  color: var(--gray-800);
+}
+
+/* ========================================
+   🎭 OVERLAY
+   ======================================== */
+.Overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--overlay-color);
+  z-index: 199;
+  backdrop-filter: blur(2px);
+}
+
+.Overlay.show {
+  display: block;
+}
+
+/* ========================================
+   🔔 BARRA DE NOTIFICACIONES
+   ======================================== */
+.NotificationBar {
+  background-color: var(--white);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.5rem;
+  margin-top: -24px;
+  color: var(--gray-500);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ========================================
+   🎨 CONTENEDOR DEMO
+   ======================================== */
+.ContenedorDemo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ElementoDemo {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
