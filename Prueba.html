@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Habitantes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header-controls {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .date-filters {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-filters label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .date-filters input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+        .bulk-actions {
+            padding: 15px 20px;
+            background-color: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+            display: none;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .bulk-actions.active {
+            display: flex;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-success {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background-color: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        th {
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #f3f4f6;
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        .btn-edit {
+            background-color: #f59e0b;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #d97706;
+        }
+
+        .btn-delete {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-print {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background-color: #4b5563;
+        }
+
+        .pagination-container {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .pagination-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-size-selector select {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .page-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .page-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* Cambiando acordeón por modal y mejorando alineación de opciones */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9fafb;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #374151;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close {
+            color: #6b7280;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #374151;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 10px;
+        }
+
+        .accordion-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .accordion-header {
+            padding: 15px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            color: #374151;
+            transition: color 0.2s;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .accordion-header:hover {
+            color: #2563eb;
+        }
+
+        .accordion-header.active {
+            color: #2563eb;
+        }
+
+        .accordion-icon {
+            transition: transform 0.2s;
+            font-size: 16px;
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 15px 0 20px 0;
+        }
+
+        .accordion-content.active {
+            display: block;
+        }
+
+        /* Mejorando alineación de opciones con sistema de columnas */
+        .multi-select {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin: 0;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+            color: #374151;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .column-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 8px 15px;
+            margin-top: 10px;
+        }
+
+        .column-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+        }
+
+        .column-item input[type="checkbox"] {
+            margin: 0;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .column-item label {
+            margin: 0;
+            font-weight: 400;
+            color: #374151;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-group > label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .filter-group select,
+        .filter-group input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input[type="text"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .filter-actions {
+            padding: 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            background-color: #f9fafb;
+            border-radius: 0 0 8px 8px;
+        }
+
+        /* Agregando estilos responsive para el modal */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 2% auto;
+                max-height: 95vh;
+            }
+            
+            .multi-select {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .column-selector {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .filter-actions {
+                flex-direction: column;
+            }
+            
+            .filter-actions button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-header {
+                padding: 15px;
+            }
+            
+            .modal-body {
+                padding: 15px;
+            }
+            
+            .filter-actions {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Controls -->
+        <div class="header-controls">
+            <div class="date-filters">
+                <label>Seleccione período:</label>
+                <input type="date" id="fechaDesde" value="2024-01-01">
+                <span>a</span>
+                <input type="date" id="fechaHasta" value="2024-03-31">
+            </div>
+            <div class="filter-buttons">
+                <button class="btn btn-secondary" onclick="toggleFilters()">Filtros</button>
+                <!-- Cambiado botón de selección por botón de imprimir -->
+                <button class="btn btn-primary">🖨️ Imprimir</button>
+            </div>
+        </div>
+
+        <!-- Reemplazando acordeón por modal -->
+        <div class="modal" id="filtersModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Filtros Avanzados</h3>
+                    <span class="close" onclick="closeFiltersModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <!-- Selector de Columnas -->
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('columns')">
+                            <span>Columnas Visibles</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content" id="columns-content">
+                            <div class="filter-group">
+                                <div class="column-selector">
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-id" checked onchange="toggleColumn('id')">
+                                        <label for="col-id">ID</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-tipo-doc" checked onchange="toggleColumn('tipo-doc')">
+                                        <label for="col-tipo-doc">Tipo Doc</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-num-doc" checked onchange="toggleColumn('num-doc')">
+                                        <label for="col-num-doc">Núm Doc</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-nombres" checked onchange="toggleColumn('nombres')">
+                                        <label for="col-nombres">Nombres</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-apellidos" checked onchange="toggleColumn('apellidos')">
+                                        <label for="col-apellidos">Apellidos</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-fecha-nacimiento" checked onchange="toggleColumn('fecha-nacimiento')">
+                                        <label for="col-fecha-nacimiento">Fecha Nacimiento</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-hijos" checked onchange="toggleColumn('hijos')">
+                                        <label for="col-hijos">Hijos</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-sexo" checked onchange="toggleColumn('sexo')">
+                                        <label for="col-sexo">Sexo</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-familia" checked onchange="toggleColumn('familia')">
+                                        <label for="col-familia">Familia</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-sector" checked onchange="toggleColumn('sector')">
+                                        <label for="col-sector">Sector</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-estado-civil" checked onchange="toggleColumn('estado-civil')">
+                                        <label for="col-estado-civil">Estado Civil</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-poblacion" checked onchange="toggleColumn('poblacion')">
+                                        <label for="col-poblacion">Población</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-religion" checked onchange="toggleColumn('religion')">
+                                        <label for="col-religion">Religión</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-sacramentos" checked onchange="toggleColumn('sacramentos')">
+                                        <label for="col-sacramentos">Sacramentos</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-direccion" checked onchange="toggleColumn('direccion')">
+                                        <label for="col-direccion">Dirección</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-celular" checked onchange="toggleColumn('celular')">
+                                        <label for="col-celular">Celular</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-email" checked onchange="toggleColumn('email')">
+                                        <label for="col-email">Email</label>
+                                    </div>
+                                    <div class="column-item">
+                                        <input type="checkbox" id="col-discapacidad" checked onchange="toggleColumn('discapacidad')">
+                                        <label for="col-discapacidad">Discapacidad para asistir</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros de Documento -->
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('documento')">
+                            <span>Filtros de Documento</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content" id="documento-content">
+                            <div class="filter-group">
+                                <label>Tipos de Documento:</label>
+                                <div class="multi-select">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="cc" name="tipoDoc" value="CC">
+                                        <label for="cc">Cédula de Ciudadanía (CC)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ti" name="tipoDoc" value="TI">
+                                        <label for="ti">Tarjeta de Identidad (TI)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="pasaporte" name="tipoDoc" value="PA">
+                                        <label for="pasaporte">Pasaporte (PA)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ce" name="tipoDoc" value="CE">
+                                        <label for="ce">Cédula de Extranjería (CE)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="rc" name="tipoDoc" value="RC">
+                                        <label for="rc">Registro Civil (RC)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label for="numDocFilter">Número de Documento:</label>
+                                <input type="text" id="numDocFilter" placeholder="Ej: 1134567890">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros Personales -->
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('personales')">
+                            <span>Datos Personales</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content" id="personales-content">
+                            <div class="filter-group">
+                                <label for="nombresFilter">Nombres:</label>
+                                <input type="text" id="nombresFilter" placeholder="Ej: Alejandra">
+                            </div>
+                            <div class="filter-group">
+                                <label for="apellidosFilter">Apellidos:</label>
+                                <input type="text" id="apellidosFilter" placeholder="Ej: Mora">
+                            </div>
+                            <div class="filter-group">
+                                <label>Sexo:</label>
+                                <div class="multi-select">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="masculino" name="sexo" value="Masculino">
+                                        <label for="masculino">Masculino</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="femenino" name="sexo" value="Femenino">
+                                        <label for="femenino">Femenino</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="otro-sexo" name="sexo" value="Otro">
+                                        <label for="otro-sexo">Otro</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros de Ubicación y Estado -->
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('ubicacion')">
+                            <span>Ubicación y Estado Civil</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content" id="ubicacion-content">
+                            <div class="filter-group">
+                                <label>Sector:</label>
+                                <div class="multi-select">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="sector-norte" name="sector" value="Norte">
+                                        <label for="sector-norte">Norte</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="sector-sur" name="sector" value="Sur">
+                                        <label for="sector-sur">Sur</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="sector-este" name="sector" value="Este">
+                                        <label for="sector-este">Este</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="sector-oeste" name="sector" value="Oeste">
+                                        <label for="sector-oeste">Oeste</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="sector-centro" name="sector" value="Centro">
+                                        <label for="sector-centro">Centro</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="sector-undefined" name="sector" value="Sector undefined">
+                                        <label for="sector-undefined">Sin definir</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label>Estado Civil:</label>
+                                <div class="multi-select">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="soltero" name="estadoCivil" value="Soltero">
+                                        <label for="soltero">Soltero</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="casado" name="estadoCivil" value="Casado">
+                                        <label for="casado">Casado</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="divorciado" name="estadoCivil" value="Divorciado">
+                                        <label for="divorciado">Divorciado</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="viudo" name="estadoCivil" value="Viudo">
+                                        <label for="viudo">Viudo</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="union-libre" name="estadoCivil" value="Unión Libre">
+                                        <label for="union-libre">Unión Libre</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros Demográficos -->
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('demograficos')">
+                            <span>Datos Demográficos</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content" id="demograficos-content">
+                            <div class="filter-group">
+                                <label>Población:</label>
+                                <div class="multi-select">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="adulto" name="poblacion" value="Adulto">
+                                        <label for="adulto">Adulto</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="joven" name="poblacion" value="Joven">
+                                        <label for="joven">Joven</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="nino" name="poblacion" value="Niño">
+                                        <label for="nino">Niño</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="adulto-mayor" name="poblacion" value="Adulto Mayor">
+                                        <label for="adulto-mayor">Adulto Mayor</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label>Religión:</label>
+                                <div class="multi-select">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="catolico" name="religion" value="Católico">
+                                        <label for="catolico">Católico</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="cristiano" name="religion" value="Cristiano">
+                                        <label for="cristiano">Cristiano</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="protestante" name="religion" value="Protestante">
+                                        <label for="protestante">Protestante</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="evangelico" name="religion" value="Evangélico">
+                                        <label for="evangelico">Evangélico</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="otra-religion" name="religion" value="Otra">
+                                        <label for="otra-religion">Otra</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ninguna-religion" name="religion" value="Ninguna">
+                                        <label for="ninguna-religion">Ninguna</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros de Contacto -->
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('contacto')">
+                            <span>Información de Contacto</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content" id="contacto-content">
+                            <div class="filter-group">
+                                <label for="emailFilter">Email:</label>
+                                <input type="text" id="emailFilter" placeholder="Ej: alejandra.mora@gmail.com">
+                            </div>
+                            <div class="filter-group">
+                                <label for="celularFilter">Celular:</label>
+                                <input type="text" id="celularFilter" placeholder="Ej: 3012345678">
+                            </div>
+                            <div class="filter-group">
+                                <label for="direccionFilter">Dirección:</label>
+                                <input type="text" id="direccionFilter" placeholder="Ej: Av. Los Alamos">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button class="btn btn-secondary" onclick="clearAllFilters()">Limpiar Filtros</button>
+                    <button class="btn btn-primary" onclick="applyFilters()">Aplicar Filtros</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="bulk-actions" id="bulkActions">
+            <span class="selected-count" id="selectedCount">0 seleccionados</span>
+            <button class="btn btn-success btn-sm">Imprimir seleccionados</button>
+            <button class="btn btn-danger btn-sm">Eliminar seleccionados</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table id="TablaHabitantes">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="SelectAll" onchange="toggleSelectAll()"></th>
+                        <th class="col-id">ID</th>
+                        <th class="col-tipo-doc">Tipo Doc</th>
+                        <th class="col-num-doc">Num Doc</th>
+                        <th class="col-nombres">Nombres</th>
+                        <th class="col-apellidos">Apellidos</th>
+                        <th class="col-fecha-nacimiento">Fecha de Nacimiento</th>
+                        <th class="col-hijos">Hijos</th>
+                        <th class="col-sexo">Sexo</th>
+                        <th class="col-familia">Familia</th>
+                        <th class="col-sector">Sector</th>
+                        <th class="col-estado-civil">Estado Civil</th>
+                        <th class="col-poblacion">Población</th>
+                        <th class="col-religion">Religión</th>
+                        <th class="col-sacramentos">Sacramentos</th>
+                        <th class="col-direccion">Dirección</th>
+                        <th class="col-celular">Celular</th>
+                        <th class="col-email">Email</th>
+                        <th class="col-discapacidad">Discapacidad para asistir</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" onchange="updateBulkActions()"></td>
+                        <td class="col-id">21</td>
+                        <td class="col-tipo-doc">CC</td>
+                        <td class="col-num-doc">1134567890</td>
+                        <td class="col-nombres">Alejandra</td>
+                        <td class="col-apellidos">Mora</td>
+                        <td class="col-fecha-nacimiento">-</td>
+                        <td class="col-hijos">0</td>
+                        <td class="col-sexo">Femenino</td>
+                        <td class="col-familia">Sin familia</td>
+                        <td class="col-sector">Sector undefined</td>
+                        <td class="col-estado-civil">Soltero</td>
+                        <td class="col-poblacion">Adulto</td>
+                        <td class="col-religion">Católico</td>
+                        <td class="col-sacramentos">Ninguno</td>
+                        <td class="col-direccion">Av. Los Alamos #22-12</td>
+                        <td class="col-celular">3012345678</td>
+                        <td class="col-email">alejandra.mora@gmail.com</td>
+                        <td class="col-discapacidad">Ninguna</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-edit btn-sm">Editar</button>
+                                <button class="btn btn-delete btn-sm">Eliminar</button>
+                                <button class="btn btn-print btn-sm">Imprimir</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" onchange="updateBulkActions()"></td>
+                        <td class="col-id">4</td>
+                        <td class="col-tipo-doc">CC</td>
+                        <td class="col-num-doc">1023456789</td>
+                        <td class="col-nombres">Andrés</td>
+                        <td class="col-apellidos">Gómez</td>
+                        <td class="col-fecha-nacimiento">-</td>
+                        <td class="col-hijos">0</td>
+                        <td class="col-sexo">Masculino</td>
+                        <td class="col-familia">Sin familia</td>
+                        <td class="col-sector">Sector undefined</td>
+                        <td class="col-estado-civil">Soltero</td>
+                        <td class="col-poblacion">Adulto</td>
+                        <td class="col-religion">Católico</td>
+                        <td class="col-sacramentos">Ninguno</td>
+                        <td class="col-direccion">Calle 45 #10-22</td>
+                        <td class="col-celular">3024445566</td>
+                        <td class="col-email">andres.gomez@gmail.com</td>
+                        <td class="col-discapacidad">Ninguna</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-edit btn-sm">Editar</button>
+                                <button class="btn btn-delete btn-sm">Eliminar</button>
+                                <button class="btn btn-print btn-sm">Imprimir</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" onchange="updateBulkActions()"></td>
+                        <td class="col-id">5</td>
+                        <td class="col-tipo-doc">CC</td>
+                        <td class="col-num-doc">1034567801</td>
+                        <td class="col-nombres">Camila</td>
+                        <td class="col-apellidos">Rodríguez</td>
+                        <td class="col-fecha-nacimiento">-</td>
+                        <td class="col-hijos">0</td>
+                        <td class="col-sexo">Femenino</td>
+                        <td class="col-familia">Sin familia</td>
+                        <td class="col-sector">Sector undefined</td>
+                        <td class="col-estado-civil">Soltero</td>
+                        <td class="col-poblacion">Adulto</td>
+                        <td class="col-religion">Católico</td>
+                        <td class="col-sacramentos">Ninguno</td>
+                        <td class="col-direccion">Carrera 11 #25-30</td>
+                        <td class="col-celular">3203556677</td>
+                        <td class="col-email">camila.rodriguez@gmail.com</td>
+                        <td class="col-discapacidad">Ninguna</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-edit btn-sm">Editar</button>
+                                <button class="btn btn-delete btn-sm">Eliminar</button>
+                                <button class="btn btn-print btn-sm">Imprimir</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" onchange="updateBulkActions()"></td>
+                        <td class="col-id">9</td>
+                        <td class="col-tipo-doc">CC</td>
+                        <td class="col-num-doc">1045789012</td>
+                        <td class="col-nombres">Carolina</td>
+                        <td class="col-apellidos">Suárez</td>
+                        <td class="col-fecha-nacimiento">-</td>
+                        <td class="col-hijos">0</td>
+                        <td class="col-sexo">Femenino</td>
+                        <td class="col-familia">Sin familia</td>
+                        <td class="col-sector">Sector undefined</td>
+                        <td class="col-estado-civil">Soltero</td>
+                        <td class="col-poblacion">Adulto</td>
+                        <td class="col-religion">Católico</td>
+                        <td class="col-sacramentos">Ninguno</td>
+                        <td class="col-direccion">Calle 27 #5-33</td>
+                        <td class="col-celular">3209990011</td>
+                        <td class="col-email">carolina.suarez@gmail.com</td>
+                        <td class="col-discapacidad">Ninguna</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-edit btn-sm">Editar</button>
+                                <button class="btn btn-delete btn-sm">Eliminar</button>
+                                <button class="btn btn-print btn-sm">Imprimir</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" onchange="updateBulkActions()"></td>
+                        <td class="col-id">27</td>
+                        <td class="col-tipo-doc">CC</td>
+                        <td class="col-num-doc">1189012345</td>
+                        <td class="col-nombres">Catalina</td>
+                        <td class="col-apellidos">Luna</td>
+                        <td class="col-fecha-nacimiento">-</td>
+                        <td class="col-hijos">0</td>
+                        <td class="col-sexo">Femenino</td>
+                        <td class="col-familia">Sin familia</td>
+                        <td class="col-sector">Sector undefined</td>
+                        <td class="col-estado-civil">Soltero</td>
+                        <td class="col-poblacion">Adulto</td>
+                        <td class="col-religion">Católico</td>
+                        <td class="col-sacramentos">Ninguno</td>
+                        <td class="col-direccion">Carrera 15 #5-77</td>
+                        <td class="col-celular">3278901234</td>
+                        <td class="col-email">catalina.luna@gmail.com</td>
+                        <td class="col-discapacidad">Ninguna</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-edit btn-sm">Editar</button>
+                                <button class="btn btn-delete btn-sm">Eliminar</button>
+                                <button class="btn btn-print btn-sm">Imprimir</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Mostrando 1 - 10 de 30 registros
+            </div>
+            <div class="pagination-controls">
+                <div class="page-size-selector">
+                    <select>
+                        <option value="10">10 por página</option>
+                        <option value="20">20 por página</option>
+                        <option value="30">30 por página</option>
+                        <option value="50">50 por página</option>
+                    </select>
+                </div>
+                <div class="pagination-buttons">
+                    <button class="page-btn">Anterior</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Select All functionality
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('SelectAll');
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+            
+            updateBulkActions();
+        }
+
+        // Update bulk actions visibility
+        function updateBulkActions() {
+            const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCount = document.getElementById('selectedCount');
+            
+            if (checkboxes.length > 0) {
+                bulkActions.classList.add('active');
+                selectedCount.textContent = `${checkboxes.length} seleccionados`;
+            } else {
+                bulkActions.classList.remove('active');
+            }
+            
+            // Update select all checkbox state
+            const allCheckboxes = document.querySelectorAll('.row-checkbox');
+            const selectAll = document.getElementById('SelectAll');
+            selectAll.checked = checkboxes.length === allCheckboxes.length;
+        }
+
+        function toggleColumn(columnClass) {
+            const columns = document.querySelectorAll(`.col-${columnClass}`);
+            const checkbox = document.getElementById(`col-${columnClass}`);
+            
+            columns.forEach(column => {
+                if (checkbox.checked) {
+                    column.style.display = '';
+                } else {
+                    column.style.display = 'none';
+                }
+            });
+        }
+
+        function toggleFilters() {
+            const modal = document.getElementById('filtersModal');
+            modal.style.display = 'block';
+        }
+
+        function closeFiltersModal() {
+            const modal = document.getElementById('filtersModal');
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('filtersModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function toggleAccordion(section) {
+            const header = document.querySelector(`#${section}-content`).previousElementSibling;
+            const content = document.getElementById(`${section}-content`);
+            const icon = header.querySelector('.accordion-icon');
+            
+            // Toggle active state
+            header.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            // Rotate icon
+            if (header.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function applyFilters() {
+            // Obtener valores de filtros de texto
+            const numDoc = document.getElementById('numDocFilter').value.toLowerCase();
+            const nombres = document.getElementById('nombresFilter').value.toLowerCase();
+            const apellidos = document.getElementById('apellidosFilter').value.toLowerCase();
+            const email = document.getElementById('emailFilter').value.toLowerCase();
+            const celular = document.getElementById('celularFilter').value.toLowerCase();
+            const direccion = document.getElementById('direccionFilter').value.toLowerCase();
+            
+            // Obtener filtros de selección múltiple
+            const tiposDoc = Array.from(document.querySelectorAll('input[name="tipoDoc"]:checked')).map(cb => cb.value);
+            const sectores = Array.from(document.querySelectorAll('input[name="sector"]:checked')).map(cb => cb.value);
+            const estadosCiviles = Array.from(document.querySelectorAll('input[name="estadoCivil"]:checked')).map(cb => cb.value);
+            const religiones = Array.from(document.querySelectorAll('input[name="religion"]:checked')).map(cb => cb.value);
+            const sexos = Array.from(document.querySelectorAll('input[name="sexo"]:checked')).map(cb => cb.value);
+            const poblaciones = Array.from(document.querySelectorAll('input[name="poblacion"]:checked')).map(cb => cb.value);
+            
+            // Filtrar filas de la tabla
+            const rows = document.querySelectorAll('#TablaHabitantes tbody tr');
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let showRow = true;
+                
+                // Filtros de texto
+                if (numDoc && !cells[3].textContent.toLowerCase().includes(numDoc)) showRow = false; // Adjusted index for Num Doc
+                if (nombres && !cells[4].textContent.toLowerCase().includes(nombres)) showRow = false; // Adjusted index for Nombres
+                if (apellidos && !cells[5].textContent.toLowerCase().includes(apellidos)) showRow = false; // Adjusted index for Apellidos
+                if (email && !cells[17].textContent.toLowerCase().includes(email)) showRow = false; // Adjusted index for Email
+                if (celular && !cells[16].textContent.toLowerCase().includes(celular)) showRow = false; // Adjusted index for Celular
+                if (direccion && !cells[15].textContent.toLowerCase().includes(direccion)) showRow = false; // Adjusted index for Direccion
+                
+                // Filtros de selección múltiple
+                if (tiposDoc.length > 0 && !tiposDoc.includes(cells[2].textContent.trim())) showRow = false; // Adjusted index for Tipo Doc
+                if (sectores.length > 0 && !sectores.some(sector => cells[10].textContent.includes(sector))) showRow = false; // Adjusted index for Sector
+                if (estadosCiviles.length > 0 && !estadosCiviles.some(estado => cells[11].textContent.includes(estado))) showRow = false; // Adjusted index for Estado Civil
+                if (religiones.length > 0 && !religiones.some(religion => cells[13].textContent.includes(religion))) showRow = false; // Adjusted index for Religion
+                if (sexos.length > 0 && !sexos.some(sexo => cells[8].textContent.includes(sexo))) showRow = false; // Adjusted index for Sexo
+                if (poblaciones.length > 0 && !poblaciones.some(poblacion => cells[12].textContent.includes(poblacion))) showRow = false; // Adjusted index for Poblacion
+                
+                // Mostrar u ocultar fila
+                row.style.display = showRow ? '' : 'none';
+            });
+            
+            // Cerrar modal después de aplicar filtros
+            closeFiltersModal();
+            
+            console.log('[v0] Filtros aplicados correctamente');
+        }
+
+        function clearAllFilters() {
+            // Limpiar campos de texto
+            document.getElementById('numDocFilter').value = '';
+            document.getElementById('nombresFilter').value = '';
+            document.getElementById('apellidosFilter').value = '';
+            document.getElementById('emailFilter').value = '';
+            document.getElementById('celularFilter').value = '';
+            document.getElementById('direccionFilter').value = '';
+            
+            // Desmarcar todos los checkboxes de filtros
+            const filterCheckboxes = document.querySelectorAll('#filtersModal input[type="checkbox"]:not([id^="col-"])');
+            filterCheckboxes.forEach(cb => cb.checked = false);
+            
+            alert('Todos los filtros han sido limpiados');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Perfil de Usuario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #45a049;
+            --secondary: #2196F3;
+            --white: #ffffff;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --red-600: #dc2626;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            line-height: 1.5;
+            padding: 20px;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: 20px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .profile-header h1 {
+            color: var(--gray-700);
+            margin-bottom: 10px;
+        }
+
+        .profile-header p {
+            color: var(--gray-500);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-group {
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            background-color: var(--gray-100);
+            transition: all 0.3s ease;
+        }
+
+        .info-group.editable {
+            cursor: pointer;
+        }
+
+        .info-group.editable:hover {
+            background-color: var(--gray-200);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-label i {
+            margin-right: 10px;
+            width: 16px;
+        }
+
+        .info-value {
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .edit-arrow {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            color: var(--gray-700);
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-500);
+        }
+
+        .close-btn:hover {
+            color: var(--gray-700);
+        }
+
+
+
+
+
+
+
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            background-color: var(--white);
+        }
+
+        .error-message {
+            color: var(--red-600);
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-400);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: var(--gray-700);
+            color: var(--white);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1100;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .toast.success {
+            background-color: var(--primary);
+        }
+
+        .toast.error {
+            background-color: var(--red-600);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 90%;
+                margin: 0 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>Perfil de Usuario</h1>
+            <p>Gestiona tu información personal</p>
+        </div>
+        
+        <div class="grid-2">
+            <!-- Nombre -->
+            <div class="info-group editable" onclick="ProfileModule.openFieldModal('nombre')">
+                <div class="info-label"><i class="fas fa-user"></i> Nombre completo</div>
+                <div class="info-value" id="nombreField">Juan Pérez <i class="fas fa-chevron-right edit-arrow"></i></div>
+            </div>
+            
+            <!-- Sexo -->
+            <div class="info-group editable" onclick="ProfileModule.openFieldModal('sexo')">
+                <div class="info-label"><i class="fas fa-venus-mars"></i> Sexo</div>
+                <div class="info-value" id="sexoField">Masculino <i class="fas fa-chevron-right edit-arrow"></i></div>
+            </div>
+            
+            <!-- Documento -->
+            <div class="info-group">
+                <div class="info-label"><i class="fas fa-id-card"></i> Documento de identidad</div>
+                <div class="info-value" id="docField">123456789</div>
+            </div>
+            
+            <!-- Fecha -->
+            <div class="info-group editable" onclick="ProfileModule.openFieldModal('fecha')">
+                <div class="info-label"><i class="fas fa-birthday-cake"></i> Fecha de nacimiento</div>
+                <div class="info-value" id="fechaField">22/09/1975 <i class="fas fa-chevron-right edit-arrow"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para edición de campos -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Editar campo</h2>
+                <button class="close-btn" onclick="ProfileModule.closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label id="fieldLabel" for="fieldValue">Valor:</label>
+                    <input type="text" class="form-control" id="fieldValue">
+                    <select class="form-select" id="fieldSelect" style="display: none;">
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
+                        <option value="Prefiero no decir">Prefiero no decir</option>
+                    </select>
+                    <input type="date" class="form-control" id="fieldDate" style="display: none;">
+                    <div class="error-message" id="fieldError"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="ProfileModule.closeModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="ProfileModule.saveField()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast para notificaciones -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const ProfileModule = (() => {
+            // Datos del usuario (en una aplicación real, estos vendrían de una API)
+            let userData = {
+                nombre: "Juan Pérez",
+                sexo: "Masculino",
+                documento: "123456789",
+                fechaNacimiento: "1975-09-22"
+            };
+            
+            // Campo actualmente siendo editado
+            let currentField = null;
+            
+            // Inicializar el módulo
+            function init() {
+                loadUserData();
+                console.log("Módulo de perfil inicializado");
+            }
+            
+            // Cargar datos del usuario en la interfaz
+            function loadUserData() {
+                document.getElementById('nombreField').innerHTML = `${userData.nombre} <i class="fas fa-chevron-right edit-arrow"></i>`;
+                document.getElementById('sexoField').innerHTML = `${userData.sexo} <i class="fas fa-chevron-right edit-arrow"></i>`;
+                document.getElementById('docField').textContent = userData.documento;
+                
+                // Formatear fecha para mostrar (de YYYY-MM-DD a DD/MM/YYYY)
+                const fechaParts = userData.fechaNacimiento.split('-');
+                const fechaFormateada = `${fechaParts[2]}/${fechaParts[1]}/${fechaParts[0]}`;
+                document.getElementById('fechaField').innerHTML = `${fechaFormateada} <i class="fas fa-chevron-right edit-arrow"></i>`;
+            }
+            
+            // Abrir modal para editar campo
+            function openFieldModal(field) {
+                currentField = field;
+                const modal = document.getElementById('editModal');
+                const title = document.getElementById('modalTitle');
+                const label = document.getElementById('fieldLabel');
+                const input = document.getElementById('fieldValue');
+                const select = document.getElementById('fieldSelect');
+                const dateInput = document.getElementById('fieldDate');
+                const error = document.getElementById('fieldError');
+                
+                // Ocultar todos los inputs primero
+                input.style.display = 'none';
+                select.style.display = 'none';
+                dateInput.style.display = 'none';
+                error.style.display = 'none';
+                
+                // Configurar según el campo
+                switch(field) {
+                    case 'nombre':
+                        title.textContent = 'Editar Nombre';
+                        label.textContent = 'Nombre completo:';
+                        input.style.display = 'block';
+                        input.value = userData.nombre;
+                        input.type = 'text';
+                        break;
+                        
+                    case 'sexo':
+                        title.textContent = 'Editar Sexo';
+                        label.textContent = 'Selecciona tu sexo:';
+                        select.style.display = 'block';
+                        select.value = userData.sexo;
+                        break;
+                        
+                    case 'fecha':
+                        title.textContent = 'Editar Fecha de Nacimiento';
+                        label.textContent = 'Fecha de nacimiento:';
+                        dateInput.style.display = 'block';
+                        dateInput.value = userData.fechaNacimiento;
+                        break;
+                }
+                
+                modal.classList.add('active');
+            }
+            
+            // Cerrar modal
+            function closeModal() {
+                document.getElementById('editModal').classList.remove('active');
+                currentField = null;
+            }
+            
+            // Validar campo según su tipo
+            function validateField(value, field) {
+                switch(field) {
+                    case 'nombre':
+                        if (!value.trim()) {
+                            return "El nombre no puede estar vacío";
+                        }
+                        if (value.trim().length < 2) {
+                            return "El nombre debe tener al menos 2 caracteres";
+                        }
+                        break;
+                        
+                    case 'fecha':
+                        const birthDate = new Date(value);
+                        const today = new Date();
+                        const age = today.getFullYear() - birthDate.getFullYear();
+                        
+                        if (isNaN(birthDate.getTime())) {
+                            return "Fecha inválida";
+                        }
+                        if (age < 13) {
+                            return "Debes tener al menos 13 años";
+                        }
+                        if (age > 120) {
+                            return "Por favor ingresa una fecha de nacimiento válida";
+                        }
+                        break;
+                }
+                
+                return null; // Sin errores
+            }
+            
+            // Guardar campo editado
+            function saveField() {
+                let value;
+                const errorElement = document.getElementById('fieldError');
+                
+                // Obtener valor según el tipo de campo
+                switch(currentField) {
+                    case 'nombre':
+                        value = document.getElementById('fieldValue').value;
+                        break;
+                    case 'sexo':
+                        value = document.getElementById('fieldSelect').value;
+                        break;
+                    case 'fecha':
+                        value = document.getElementById('fieldDate').value;
+                        break;
+                }
+                
+                // Validar campo
+                const error = validateField(value, currentField);
+                if (error) {
+                    errorElement.textContent = error;
+                    errorElement.style.display = 'block';
+                    return;
+                }
+                
+                // Actualizar datos (en una aplicación real, aquí harías una llamada API)
+                if (currentField === 'nombre') {
+                    userData.nombre = value;
+                } else if (currentField === 'sexo') {
+                    userData.sexo = value;
+                } else if (currentField === 'fecha') {
+                    userData.fechaNacimiento = value;
+                }
+                
+                // Actualizar UI
+                loadUserData();
+                
+                // Cerrar modal y mostrar confirmación
+                closeModal();
+                showToast('Cambios guardados correctamente', 'success');
+                
+                // En una aplicación real, aquí enviarías los datos al servidor
+                console.log('Datos actualizados:', userData);
+            }
+            
+            // Mostrar notificación toast
+            function showToast(message, type = 'default') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'toast show';
+                
+                if (type === 'success') {
+                    toast.classList.add('success');
+                } else if (type === 'error') {
+                    toast.classList.add('error');
+                }
+                
+                setTimeout(() => {
+                    toast.className = 'toast';
+                }, 3000);
+            }
+            
+            // Exponer funciones públicas
+            return {
+                init,
+                openFieldModal,
+                closeModal,
+                saveField
+            };
+        })();
+
+        // Inicializar el módulo cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', ProfileModule.init);
+    </script>
+</body>
+</html>
