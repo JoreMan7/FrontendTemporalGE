@@ -40,7 +40,7 @@ export class AuthManager {
   static logout() {
     localStorage.removeItem(this.TOKEN_KEY)
     localStorage.removeItem(this.USER_DATA_KEY)
-    window.location.href = "/Frontend/index.html"
+    window.location.href = "/FrontendTemporalGE/index.html"
   }
 
   // Iniciar sesión
