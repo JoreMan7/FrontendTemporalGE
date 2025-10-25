@@ -1,6 +1,8 @@
 // pages/habitantes.js
 import { DataTable } from "../modules/data-table.js";
 import { ApiClient } from "../modules/api.js";
+import { BASE_URL } from "../modules/config.js";
+
 
 export class HabitantesManager {
     static _opciones = null;
@@ -410,11 +412,11 @@ export class HabitantesManager {
     // Cargar opciones para filtros desde API (y guardar para el modal)
     static async loadOpciones() {
         try {
-            const response = await fetch('http://127.0.0.1:5000/api/opciones/', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-                }
-            });
+            const response = await fetch(`${BASE_URL}/api/opciones/`, {
+    headers: {
+        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+    }
+});
             
             if (response.ok) {
                 const opciones = await response.json();
