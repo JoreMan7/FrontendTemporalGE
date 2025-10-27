@@ -417,7 +417,6 @@ export class HabitantesManager {
         'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
     }
 });
-
             
             if (response.ok) {
                 const opciones = await response.json();
