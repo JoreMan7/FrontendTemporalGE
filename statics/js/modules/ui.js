@@ -176,3 +176,51 @@ export class UIManager {
     }
   }
 }
+
+// ui.js (al final del archivo)
+if (!window.__modalFocusHandlersInstalled) {
+  window.__modalFocusHandlersInstalled = true;
+
+  // Guardar quién abrió el modal
+  document.addEventListener('show.bs.modal', (ev) => {
+    const modal = ev.target;
+    const opener = ev.relatedTarget instanceof HTMLElement ? ev.relatedTarget : document.activeElement;
+    if (opener instanceof HTMLElement) {
+      if (!opener.id) opener.dataset.tmpFocus = '1';
+      modal.dataset.opener = opener.id || '';
+    }
+  });
+
+  // Antes de esconder: si algo dentro del modal tiene foco, quítalo
+  document.addEventListener('hide.bs.modal', (ev) => {
+    const modal = ev.target;
+    if (modal.contains(document.activeElement)) {
+      document.activeElement.blur?.();
+    }
+  });
+
+  // Ya oculto: devolver foco al botón que lo abrió o a un fallback
+  document.addEventListener('hidden.bs.modal', (ev) => {
+    const modal = ev.target;
+    let opener = null;
+    const openerId = modal.dataset.opener || '';
+    if (openerId) opener = document.getElementById(openerId);
+    if (!opener) opener = document.querySelector('[data-tmp-focus="1"]');
+
+    delete modal.dataset.opener;
+
+    if (opener instanceof HTMLElement) {
+      opener.focus();
+      opener.removeAttribute('data-tmp-focus');
+    } else {
+      // Fallback seguro (ajústalo a tu layout)
+      let safe = document.querySelector('.TopBar .btn, .NavItem');
+      if (!safe) {
+        safe = document.body;
+        if (!document.body.hasAttribute('tabindex')) document.body.setAttribute('tabindex', '-1');
+      }
+      safe.focus();
+    }
+  });
+}
+

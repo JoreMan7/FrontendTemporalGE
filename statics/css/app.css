@@ -62,7 +62,7 @@ Aplica a tablas y formularios específicos del sistema de usuarios.
 .UserRole, .UserActions, .UserAvatar, .AvatarCircle
 .UserHeader, .UserFooter, .UserTable
 */
-@import url('usermanagement.css');
+@import url('UserManagement.css');
 
 /*------------------------------------------------------------------------------------------------------------------------------------*/
 

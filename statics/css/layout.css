@@ -438,3 +438,108 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* ========================================
+   📐 Contenedor para cabecera de tablas
+   ======================================== */
+.ContentHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #dcdcdc;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: "Roboto", sans-serif;
+}
+
+.ParishInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  gap: 15px;
+}
+
+/* Logo de la parroquia */
+.ParishLogo {
+  height: 60px;
+  width: auto;
+}
+
+/* Detalles de la parroquia */
+.ParishDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  color: #222;
+  font-weight: 500;
+}
+
+.ParishDetails div:first-child {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* Información del reporte (derecha del logo) */
+.ReportInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  font-size: 13px;
+  color: #333;
+}
+
+.ReportInfo div:first-child {
+  font-weight: bold;
+}
+
+/* Ajustes responsivos (opcional) */
+@media (max-width: 768px) {
+  .ContentHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ParishInfo {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ReportInfo {
+    align-items: center;
+    margin-left: 0;
+  }
+}
+
+/* Layout para encuesta */
+.encuesta-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 0 10%;
+}
+
+@media (max-width: 768px) {
+    .encuesta-container {
+        width: 95%;
+        padding: 0 2.5%;
+    }
+}
+
+/* Ajustes para los campos de sacramentos en identificación */
+.sacramentos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.sacramento-item {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 8px 12px;
+}

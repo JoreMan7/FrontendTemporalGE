@@ -48,114 +48,116 @@
         <button class="btn btn-logout logout">Cerrar sesión</button>
       </div>
     </header>
+    
     <!-- Barra de navegación, título y botón atras -->
     <div class="d-flex align-items-center ms-3 mt-3">
-  <button id="btnVolver" class="btn btn-outline-secondary btn-sm shadow-sm">
-    <i class="fas fa-arrow-left me-1"></i> Volver
-  </button>
-  <!-- 🧭 Título dinámico -->
-  <div class="flex-grow-1 text-center">
-    <h5 id="pageTitle" class="m-0 fw-bold text-uppercase align-middle">Cargando...</h5>
-  </div>
-
-  <!-- Espaciador derecho (para centrar visualmente el título) -->
-  <div class="d-flex align-items-center" style="width: 42px;"></div>
+      <button id="btnVolver" class="btn btn-outline-secondary btn-sm shadow-sm">
+        <i class="fas fa-arrow-left me-1"></i> Volver
+      </button>
+      <!-- 🧭 Título dinámico -->
+      <div class="flex-grow-1 text-center">
+        <h5 id="pageTitle" class="m-0 fw-bold text-uppercase align-middle">Cargando...</h5>
+      </div>
+      <!-- Espaciador derecho (para centrar visualmente el título) -->
+      <div class="d-flex align-items-center" style="width: 42px;"></div>
     </div>
-    <section class="Content">
     
-    <!-- Contenido principal -->
-    <div class="container-fluid">
-      <div class="ContentHeader">
-        <button class="btn btn-green"><i class="bi bi-bar-chart"></i> estadísticas</button>
+    <section class="Content">
+      <!-- Contenido principal -->
+      <div class="container-fluid">
+        <div class="ContentHeader">
+          <button class="btn btn-green"><i class="bi bi-bar-chart"></i> estadísticas</button>
 
-        <div class="ParishInfo">
-            <img src="../Img/Diocesis-Logo.png" alt="Logo Parroquia" class="ParishLogo"> <!-- Logo de la parroquia -->
+          <div class="ParishInfo">
+            <img src="../Img/Diocesis-Logo.png" alt="Logo Parroquia" class="ParishLogo">
             <div class="ParishDetails">
-                <div>NOMBRE DE LA PARROQUIA</div> <!-- Nombre de la parroquia -->
-                <div>NIT</div> <!-- NIT de la parroquia -->
-                <div>DIRECCIÓN</div> <!-- Dirección de la parroquia -->
+              <div>NOMBRE DE LA PARROQUIA</div>
+              <div>NIT</div>
+              <div>DIRECCIÓN</div>
             </div>
-                    <div class="ReportInfo">
-            <div>Fecha del reporte</div> <!-- Fecha del reporte -->
-            <div>DD-MM-AAAA</div> <!-- Fecha del reporte generarse al día de consulta -->
-        </div>
-        </div>
-    </div>
-      <!-- Header Controls -->
-      <div class="card mb-2">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div class="d-flex align-items-center gap-3">
-              <strong>Módulo:</strong>
-              <span class="badge bg-primary">Grupos de Ayudantes</span>
-            </div>
-
-            <div class="d-flex gap-2">
-              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filtersModal">
-                <i class="fas fa-filter me-2"></i>Filtros
-              </button>
-              <button class="btn btn-success" id="btnExportar">
-                <i class="fas fa-file-export me-2"></i>Exportar CSV
-              </button>
-              <button class="btn btn-outline-secondary" id="btnImprimir">
-                <i class="fas fa-print me-2"></i>Imprimir
-              </button>
-              <button class="btn btn-primary" id="btnNuevoGrupo">
-                <i class="fas fa-plus me-2"></i>Nuevo Grupo
-              </button>
+            <div class="ReportInfo">
+              <div>Fecha del reporte</div>
+              <div>DD-MM-AAAA</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Tabla -->
-      <div class="card">
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table id="dataTable" class="table table-striped table-hover mb-0">
-              <thead class="table">
-                <tr>
-                  <th width="50" class="text-center">
-                    <input type="checkbox" id="selectAll" class="form-check-input" title="Seleccionar todos">
-                  </th>
-                  <th class="col-nombre">Nombre del Grupo</th>
-                  <th class="col-lider">Líder</th>
-                  <th class="col-doc-lider">Documento del Líder</th>
-                  <th class="col-tel-lider">Teléfono</th>
-                  <th class="col-miembros">Miembros</th>
-                  <th width="260" class="col-acciones">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="tableBody">
-                <tr>
-                  <td colspan="7" class="text-center py-5">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Cargando…</span>
-                    </div>
-                    <p class="mt-2 text-muted">Cargando grupos…</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Header Controls -->
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <div class="d-flex align-items-center gap-3">
+                <strong>Módulo:</strong>
+                <span class="badge bg-primary">Grupos de Ayudantes</span>
+              </div>
+
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filtersModal">
+                  <i class="fas fa-filter me-2"></i>Filtros
+                </button>
+                <button class="btn btn-success" id="btnExportar">
+                  <i class="fas fa-file-export me-2"></i>Exportar CSV
+                </button>
+                <button class="btn btn-outline-secondary" id="btnImprimir">
+                  <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <button class="btn btn-primary" id="btnNuevoGrupo">
+                  <i class="fas fa-plus me-2"></i>Nuevo Grupo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table id="dataTable" class="table table-striped table-hover mb-0">
+                <thead class="table">
+                  <tr>
+                    <th width="50" class="text-center">
+                      <input type="checkbox" id="selectAll" class="form-check-input" title="Seleccionar todos">
+                    </th>
+                    <th class="col-nombre">Nombre del Grupo</th>
+                    <th class="col-lider">Líder</th>
+                    <th class="col-doc-lider">Documento del Líder</th>
+                    <th class="col-tel-lider">Teléfono</th>
+                    <th class="col-miembros">Miembros</th>
+                    <th width="300" class="col-acciones">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                  <tr>
+                    <td colspan="7" class="text-center py-5">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando…</span>
+                      </div>
+                      <p class="mt-2 text-muted">Cargando grupos…</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div id="paginationInfo" class="text-muted">Cargando…</div>
+          <div class="d-flex align-items-center gap-3">
+            <input id="globalSearch" class="form-control form-control-sm" placeholder="Búsqueda rápida…" style="max-width: 260px;">
+            <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
+              <option value="10">10 por página</option>
+              <option value="20">20 por página</option>
+              <option value="50">50 por página</option>
+              <option value="100">100 por página</option>
+            </select>
+            <div id="paginationButtons" class="d-flex gap-1"></div>
           </div>
         </div>
       </div>
-
-      <!-- Paginación -->
-      <div class="d-flex justify-content-between align-items-center mt-3">
-        <div id="paginationInfo" class="text-muted">Cargando…</div>
-        <div class="d-flex align-items-center gap-3">
-          <input id="globalSearch" class="form-control form-control-sm" placeholder="Búsqueda rápida…" style="max-width: 260px;">
-          <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
-            <option value="10">10 por página</option>
-            <option value="20">20 por página</option>
-            <option value="50">50 por página</option>
-            <option value="100">100 por página</option>
-          </select>
-          <div id="paginationButtons" class="d-flex gap-1"></div>
-        </div>
-      </div>
-    </div>
+    </section>
   </main>
 
   <!-- Modal: Filtros -->
@@ -222,19 +224,57 @@
               <div class="invalid-feedback">El nombre es obligatorio.</div>
             </div>
             <div class="mb-3">
-  <label class="form-label">Buscar líder (nombre, apellido o documento)</label>
-  <div class="input-group">
-    <input type="text" id="grupoBuscarLider" class="form-control" placeholder="Ej: Aitana / 1012345678">
-    <button class="btn btn-outline-secondary" type="button" id="btnBuscarLider"><i class="fas fa-search"></i></button>
-  </div>
-  <div id="liderResultadosInline" class="mt-2" style="max-height: 200px; overflow-y: auto;"></div>
-  <div id="liderPreview" class="alert alert-secondary d-none mt-3 mb-0"></div>
+              <label class="form-label">Buscar líder (nombre, apellido o documento)</label>
+              <div class="input-group">
+                <input type="text" id="grupoBuscarLider" class="form-control" placeholder="Ej: Aitana / 1012345678">
+                <button class="btn btn-outline-secondary" type="button" id="btnBuscarLider"><i class="fas fa-search"></i></button>
+              </div>
+              <div id="liderResultadosInline" class="mt-2" style="max-height: 200px; overflow-y: auto;"></div>
+              <div id="liderPreview" class="alert alert-secondary d-none mt-3 mb-0"></div>
             </div>
-
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="fas fa-times me-2"></i>Cancelar</button>
             <button type="submit" class="btn btn-primary" id="grupoSaveBtn"><i class="fas fa-save me-2"></i>Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Asignar Curso a Grupo -->
+  <div class="modal fade" id="asignarCursoModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="asignarCursoForm" novalidate>
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fas fa-graduation-cap me-2"></i>Asignar Curso al Grupo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="grupoIdAsignar">
+            
+            <div class="mb-3">
+              <label class="form-label">Grupo</label>
+              <input type="text" id="grupoNombreAsignar" class="form-control" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Seleccionar Curso <span class="text-danger">*</span></label>
+              <select id="cursoSelect" class="form-select" required>
+                <option value="">Seleccione un curso...</option>
+              </select>
+              <div class="invalid-feedback">Por favor seleccione un curso.</div>
+            </div>
+            
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle me-2"></i>
+              Esta asignación permitirá al grupo avanzar en los pasos del curso.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Asignar Curso</button>
           </div>
         </form>
       </div>
@@ -260,13 +300,13 @@
           <div class="table-responsive mb-4" style="max-height: 45vh;">
             <h6 class="mb-2">Miembros del grupo</h6>
             <div class="d-flex justify-content-between align-items-center mb-2">
-  <div>
-    <button class="btn btn-sm btn-success" id="btnAgregarMiembro">
-      <i class="fas fa-user-plus me-1"></i>Agregar miembro
-    </button>
-  </div>
-  <small class="text-muted">Haz clic en el icono ❌ para eliminar</small>
-</div>
+              <div>
+                <button class="btn btn-sm btn-success" id="btnAgregarMiembro">
+                  <i class="fas fa-user-plus me-1"></i>Agregar miembro
+                </button>
+              </div>
+              <small class="text-muted">Haz clic en el icono ❌ para eliminar</small>
+            </div>
 
             <table class="table table-sm table-hover">
               <thead>
@@ -287,18 +327,24 @@
 
           <!-- Tabla Resumen Cursos -->
           <div class="table-responsive" style="max-height: 40vh;">
-            <h6 class="mb-2">Cursos asociados (resumen)</h6>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="mb-0">Cursos asociados (resumen)</h6>
+              <button class="btn btn-sm btn-outline-primary" id="btnAsignarCurso">
+                <i class="fas fa-plus me-1"></i>Asignar Curso
+              </button>
+            </div>
             <table class="table table-sm table-hover">
               <thead>
                 <tr>
                   <th>Curso</th>
                   <th>Inicio</th>
-                  <th>Niveles/Pasos</th>
+                  <th>Progreso</th>
                   <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody id="detalleCursosBody">
-                <tr><td colspan="4" class="text-center text-muted">Cargando…</td></tr>
+                <tr><td colspan="5" class="text-center text-muted">Cargando…</td></tr>
               </tbody>
             </table>
           </div>
@@ -310,7 +356,6 @@
       </div>
     </div>
   </div>
-  </section>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>

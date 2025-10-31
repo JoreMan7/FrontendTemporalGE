@@ -3,7 +3,6 @@ import { DataTable } from "../modules/data-table.js";
 import { ApiClient } from "../modules/api.js";
 import { BASE_URL } from "../modules/config.js";
 
-
 export class HabitantesManager {
     static _opciones = null;
 
@@ -14,7 +13,6 @@ export class HabitantesManager {
             // Cargar opciones primero para filtros y selects del modal
             await this.loadOpciones();
             
-            // Configuración de la tabla adaptada al JSON real del backend
             const tableConfig = {
                 tableId: 'dataTable',
                 fetchData: async () => {
@@ -34,13 +32,25 @@ export class HabitantesManager {
                         format: (value) => `<span class="badge bg-secondary">#${value}</span>`
                     },
                     {
-                        key: 'TipoDocumento',
-                        label: 'Tipo Doc',
-                        format: (value) => value || '<span class="text-muted">-</span>'
-                    },
+    key: 'TipoDocumento',
+    label: 'Tipo Doc',
+    format: (value) => {
+        if (!value) return '<span class="text-muted">-</span>';
+
+        const descripcion = String(value);
+        // Truncar a 20 caracteres y mostrar el texto completo como title
+        if (descripcion.length > 20) {
+            return `<span title="${descripcion}">${descripcion.substring(0, 20)}...</span>`;
+        }
+
+        return descripcion;
+    },
+}
+,
                     {
                         key: 'NumeroDocumento',
                         label: 'Núm Doc',
+                        
                         format: (value) => value || '<span class="text-muted">Sin doc</span>'
                     },
                     {
@@ -73,11 +83,23 @@ export class HabitantesManager {
                         label: 'Sexo',
                         format: (value) => value || '<span class="text-muted">No especificado</span>'
                     },
-                    {
-                        key: 'IdGrupoFamiliar',
-                        label: 'Familia',
-                        format: (value) => value ? `Familia ${value}` : '<span class="text-muted">Sin familia</span>'
-                    },
+                   // En la configuración de columnas, cambia a esto:
+{
+    key: 'IdGrupoFamiliar',
+    label: 'Familia',
+    format: (value, row) => {
+        // Si el backend NO devuelve FamiliaDescripcion, mostramos el ID temporalmente
+        if (row.FamiliaDescripcion && row.FamiliaDescripcion !== 'Sin familia') {
+            const descripcion = row.FamiliaDescripcion;
+            // Truncar a 20 caracteres y agregar title
+            if (descripcion.length > 20) {
+                return `<span title="${descripcion}">${descripcion.substring(0, 20)}...</span>`;
+            }
+            return descripcion;
+        }
+        return value ? `Familia ${value}` : '<span class="text-muted">Sin familia</span>';
+    }
+},
                     {
                         key: 'Sector',
                         label: 'Sector',
@@ -98,39 +120,39 @@ export class HabitantesManager {
                         label: 'Religión',
                         format: (value) => value || '<span class="text-muted">-</span>'
                     },
-                   {
-    key: 'TipoSacramento',
-    label: 'Sacramentos',
-    format: (value) => {
-        if (!value || value === 'Ninguno') {
-            return '<span class="text-muted">Ninguno</span>';
-        }
-        
-        const sacramentos = value.split(', ');
-        let html = `<div class="sacramentos-lista">`;
-        
-        // Dividir en grupos de 2
-        for (let i = 0; i < sacramentos.length; i += 2) {
-            const linea = sacramentos.slice(i, i + 2);
-            html += `<div class="d-flex gap-1 mb-1">`;
-            
-            // Primer sacramento de la línea
-            html += `<span class="badge bg-primary flex-fill text-center">${linea[0].trim()}</span>`;
-            
-            // Segundo sacramento (si existe) o espacio vacío
-            if (linea.length > 1) {
-                html += `<span class="badge bg-primary flex-fill text-center">${linea[1].trim()}</span>`;
-            } else {
-                html += `<span class="badge flex-fill" style="visibility: hidden;">-</span>`;
-            }
-            
-            html += `</div>`;
-        }
-        
-        html += `</div>`;
-        return html;
-    }
-},
+                    {
+                        key: 'TipoSacramento',
+                        label: 'Sacramentos',
+                        format: (value) => {
+                            if (!value || value === 'Ninguno') {
+                                return '<span class="text-muted">Ninguno</span>';
+                            }
+                            
+                            const sacramentos = value.split(', ');
+                            let html = `<div class="sacramentos-lista">`;
+                            
+                            // Dividir en grupos de 2
+                            for (let i = 0; i < sacramentos.length; i += 2) {
+                                const linea = sacramentos.slice(i, i + 2);
+                                html += `<div class="d-flex gap-1 mb-1">`;
+                                
+                                // Primer sacramento de la línea
+                                html += `<span class="badge bg-primary flex-fill text-center">${linea[0].trim()}</span>`;
+                                
+                                // Segundo sacramento (si existe) o espacio vacío
+                                if (linea.length > 1) {
+                                    html += `<span class="badge bg-primary flex-fill text-center">${linea[1].trim()}</span>`;
+                                } else {
+                                    html += `<span class="badge flex-fill" style="visibility: hidden;">-</span>`;
+                                }
+                                
+                                html += `</div>`;
+                            }
+                            
+                            html += `</div>`;
+                            return html;
+                        }
+                    },
                     {
                         key: 'Direccion',
                         label: 'Dirección',
@@ -243,53 +265,142 @@ export class HabitantesManager {
 
             const h = res.habitante;
 
-            // ✅ CORRECCIÓN: Asegurar que las opciones estén cargadas ANTES de rellenar el formulario
+            // CORRECCIÓN: Asegurar que las opciones estén cargadas ANTES de rellenar el formulario
             if (!this._opciones) {
                 await this.loadOpciones();
             }
             
-            // ✅ CORRECCIÓN: Poblar los selects del modal antes de establecer los valores
+            // CORRECCIÓN: Poblar los selects del modal antes de establecer los valores
             this.populateModalOptions(this._opciones);
             
+            // CORRECCIÓN: Esperar un ciclo del event loop para que los selects se rendericen
+            await new Promise(resolve => setTimeout(resolve, 50));
+            
             // setear campos
-            const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v ?? ''); };
+            const set = (id, v) => { 
+                const el = document.getElementById(id); 
+                if (el) {
+                    if (el.type === 'checkbox') {
+                        el.checked = !!v;
+                    } else {
+                        el.value = (v ?? ''); 
+                    }
+                }
+            };
+
+            const setSelect = (id, v) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    // Buscar la opción que coincida con el valor
+                    for (let option of el.options) {
+                        if (option.value == v) {
+                            el.value = v;
+                            break;
+                        }
+                    }
+                }
+            };
+
             this.resetHabitanteForm();
 
             set('habitanteId', h.IdHabitante);
             set('habNombre', h.Nombre);
             set('habApellido', h.Apellido);
-            set('habTipoDoc', h.IdTipoDocumento);
+            setSelect('habTipoDoc', h.IdTipoDocumento);
             set('habNumDoc', h.NumeroDocumento);
+            
             if (h.FechaNacimiento) {
-                  const fecha = new Date(h.FechaNacimiento);
-                  set('habFechaNac', !isNaN(fecha) ? fecha.toISOString().split('T')[0] : '');
-                } else {
-                  set('habFechaNac', '');
-                }   
-            set('habSexo', h.IdSexo);
-            set('habEstadoCivil', h.IdEstadoCivil);
-            set('habReligion', h.IdReligion);
-            set('habPoblacion', h.IdTipoPoblacion);
-            set('habSacramento', h.IdTipoSacramento);
-            set('habSector', h.IdSector);
+                const fecha = new Date(h.FechaNacimiento);
+                set('habFechaNac', !isNaN(fecha) ? fecha.toISOString().split('T')[0] : '');
+            } else {
+                set('habFechaNac', '');
+            }
+            
+            setSelect('habSexo', h.IdSexo);
+            setSelect('habEstadoCivil', h.IdEstadoCivil);
+            setSelect('habReligion', h.IdReligion);
+            setSelect('habPoblacion', h.IdTipoPoblacion);
+            setSelect('habSector', h.IdSector);
             set('habDireccion', h.Direccion);
             set('habTelefono', h.Telefono);
             set('habCorreo', h.CorreoElectronico);
             set('habDiscapacidad', h.DiscapacidadParaAsistir);
+            
             const imped = document.getElementById('habTieneImpedimento');
             if (imped) imped.checked = !!h.TieneImpedimentoSalud;
+            
             set('habMotivoImpedimento', h.MotivoImpedimentoSalud);
             set('habHijos', (h.Hijos ?? 0));
-            set('habGrupoFamiliar', h.IdGrupoFamiliar ?? '');
+            
+            // CORRECCIÓN: Cargar grupo familiar usando el buscador
+            await this.cargarGrupoFamiliarEnModal(h.IdGrupoFamiliar);
+
+            // CORRECCIÓN: Manejar sacramentos
+            this.setSacramentosSeleccionados(h.TipoSacramento);
 
             const title = document.getElementById('habitanteModalTitle');
             if (title) title.innerHTML = `<i class="fas fa-user-pen me-2"></i>Editar Habitante`;
 
             new bootstrap.Modal('#habitanteModal').show();
         } catch (e) {
-            console.error(e);
+            console.error('Error en editarHabitante:', e);
             this.showError('No se pudo cargar el habitante para edición');
         }
+    }
+
+    // NUEVO MÉTODO: Cargar grupo familiar en el modal de edición
+   static async cargarGrupoFamiliarEnModal(idGrupoFamiliar) {
+    if (!idGrupoFamiliar) return;
+    
+    try {
+        const grupoData = await ApiClient.request(`/api/grupofamiliar/${idGrupoFamiliar}`, "GET");
+        if (grupoData.success) {
+            const grupo = grupoData.grupo;
+            document.getElementById('habGrupoFamiliar').value = grupo.IdGrupoFamiliar;
+            document.getElementById('habBuscarGrupoFamiliar').value = grupo.NombreGrupo;
+            
+            // MOSTRAR INFORMACIÓN MEJORADA
+            const infoContainer = document.getElementById('infoGrupoSeleccionado');
+            const textoInfo = document.getElementById('textoGrupoSeleccionado');
+            if (infoContainer && textoInfo) {
+                let texto = `Grupo: ${grupo.NombreGrupo}`;
+                
+                // Si hay jefe/familiar asociado, mostrar nombre completo
+                if (grupo.JefeFamilia && grupo.JefeFamilia.trim() !== '') {
+                    texto += ` | Familiar Asociado: ${grupo.JefeFamilia}`;
+                } else {
+                    texto += ` | Familiar Asociado: Por asignar`;
+                }
+                
+                textoInfo.textContent = texto;
+                infoContainer.style.display = 'block';
+            }
+        }
+    } catch (error) {
+        console.error('Error cargando grupo familiar:', error);
+    }
+}
+
+    // NUEVO MÉTODO: Establecer sacramentos seleccionados
+    static setSacramentosSeleccionados(tipoSacramento) {
+        // Limpiar selecciones anteriores
+        const checkboxes = document.querySelectorAll('input[name="sacramentos"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        if (!tipoSacramento || tipoSacramento === 'Ninguno') return;
+
+        // Convertir string de sacramentos a array
+        const sacramentosArray = tipoSacramento.split(', ').map(s => s.trim());
+        
+        // Marcar los checkboxes correspondientes
+        checkboxes.forEach(checkbox => {
+            const sacramentoText = checkbox.parentElement?.textContent?.trim();
+            if (sacramentoText && sacramentosArray.includes(sacramentoText)) {
+                checkbox.checked = true;
+            }
+        });
     }
 
     // Guardar (crear / actualizar) según exista o no habitanteId
@@ -303,40 +414,65 @@ export class HabitantesManager {
 
         const id = (document.getElementById('habitanteId')?.value || '').trim();
 
-        // Construir payload con TODOS los campos de la BD / backend
+        // Construir payload con los nombres exactos que espera el backend - VERSIÓN CORREGIDA
         const payload = {
-            // campos básicos
-            nombre:  document.getElementById('habNombre')?.value.trim() || null,
-            apellido:document.getElementById('habApellido')?.value.trim() || null,
+            // Campos básicos
+            Nombre: document.getElementById('habNombre')?.value.trim() || null,
+            Apellido: document.getElementById('habApellido')?.value.trim() || null,
 
-            // llaves foráneas y datos
-            id_tipo_documento: +(document.getElementById('habTipoDoc')?.value || 0) || null,
-            numero_documento:  document.getElementById('habNumDoc')?.value.trim() || null,
-            fecha_nacimiento:  document.getElementById('habFechaNac')?.value || null,
-            hijos: +(document.getElementById('habHijos')?.value || 0),
+            // Llaves foráneas y datos - USANDO MÉTODOS AUXILIARES CORREGIDOS
+            IdTipoDocumento: this.obtenerValorSelect('habTipoDoc'),
+            NumeroDocumento: document.getElementById('habNumDoc')?.value.trim() || null,
+            FechaNacimiento: document.getElementById('habFechaNac')?.value || null,
+            Hijos: this.obtenerValorNumerico('habHijos', 0),
 
-            id_sexo: +(document.getElementById('habSexo')?.value || 0) || null,
-            id_estado_civil: +(document.getElementById('habEstadoCivil')?.value || 0) || null,
-            id_religion: +(document.getElementById('habReligion')?.value || 0) || null,
-            id_tipo_poblacion: +(document.getElementById('habPoblacion')?.value || 0) || null,
-            id_tipo_sacramento: +(document.getElementById('habSacramento')?.value || 0) || null,
-            id_sector: +(document.getElementById('habSector')?.value || 0) || null,
+            IdSexo: this.obtenerValorSelect('habSexo'),
+            IdEstadoCivil: this.obtenerValorSelect('habEstadoCivil'),
+            IdReligion: this.obtenerValorSelect('habReligion'),
+            IdTipoPoblacion: this.obtenerValorSelect('habPoblacion'),
+            IdSector: this.obtenerValorSelect('habSector'),
 
-            direccion: document.getElementById('habDireccion')?.value.trim() || null,
-            telefono:  document.getElementById('habTelefono')?.value.trim() || null,
-            correo_electronico: document.getElementById('habCorreo')?.value.trim() || null,
+            Direccion: document.getElementById('habDireccion')?.value.trim() || null,
+            Telefono: document.getElementById('habTelefono')?.value.trim() || null,
+            CorreoElectronico: document.getElementById('habCorreo')?.value.trim() || null,
 
-            discapacidad_para_asistir: document.getElementById('habDiscapacidad')?.value.trim() || 'Ninguna',
-            tiene_impedimento_salud: !!document.getElementById('habTieneImpedimento')?.checked,
-            motivo_impedimento_salud: document.getElementById('habMotivoImpedimento')?.value.trim() || null,
+            DiscapacidadParaAsistir: document.getElementById('habDiscapacidad')?.value.trim() || 'Ninguna',
+            TieneImpedimentoSalud: document.getElementById('habTieneImpedimento')?.checked ? 1 : 0,
+            MotivoImpedimentoSalud: document.getElementById('habMotivoImpedimento')?.value.trim() || 'Ninguno',
 
-            id_grupo_familiar: +(document.getElementById('habGrupoFamiliar')?.value || 0) || null
+            IdGrupoFamiliar: this.obtenerValorNumerico('habGrupoFamiliar'),
+            Activo: 1,
+            Observaciones: null,
+
+            // Sacramentos (array de IDs)
+            Sacramentos: this.obtenerSacramentosSeleccionados(),
+
+            // Asignar como jefe si está marcado
+            AsignarComoJefe: false // Por defecto false, ajusta si tienes este campo
         };
+
+        // Validar campos obligatorios
+        const camposObligatorios = [
+            'Nombre', 'Apellido', 'IdTipoDocumento', 'NumeroDocumento', 
+            'FechaNacimiento', 'IdSexo', 'IdEstadoCivil', 'IdReligion',
+            'IdTipoPoblacion', 'IdSector', 'Direccion', 'Telefono',
+            'CorreoElectronico', 'IdGrupoFamiliar'
+        ];
+
+        const camposFaltantes = camposObligatorios.filter(campo => {
+            const valor = payload[campo];
+            return valor === null || valor === undefined || valor === '';
+        });
+
+        if (camposFaltantes.length > 0) {
+            this.showError(`Faltan campos obligatorios: ${camposFaltantes.join(', ')}`);
+            return;
+        }
 
         try {
             let res;
             if (id) {
-                // Actualizar (PUT) — requiere rol Administrador en backend
+                // Actualizar (PUT)
                 res = await ApiClient.request(`/api/habitantes/${id}`, {
                     method: 'PUT',
                     body: JSON.stringify(payload)
@@ -362,6 +498,32 @@ export class HabitantesManager {
             console.error(err);
             this.showError(err.message || 'Error al guardar el habitante');
         }
+    }
+
+    // MÉTODOS AUXILIARES CORREGIDOS PARA OBTENER VALORES
+    static obtenerValorSelect(id) {
+        const select = document.getElementById(id);
+        if (!select || !select.value) return null;
+        const valor = parseInt(select.value);
+        return isNaN(valor) ? null : valor;
+    }
+
+    static obtenerValorNumerico(id, defaultValue = null) {
+        const input = document.getElementById(id);
+        if (!input || !input.value) return defaultValue;
+        const valor = parseInt(input.value);
+        return isNaN(valor) ? defaultValue : valor;
+    }
+
+    // Método auxiliar para obtener sacramentos seleccionados
+    static obtenerSacramentosSeleccionados() {
+        const sacramentos = [];
+        const checkboxes = document.querySelectorAll('input[name="sacramentos"]:checked');
+        checkboxes.forEach(checkbox => {
+            const valor = parseInt(checkbox.value);
+            if (!isNaN(valor)) sacramentos.push(valor);
+        });
+        return sacramentos;
     }
 
     // Desactivar (soft delete)
@@ -405,6 +567,18 @@ export class HabitantesManager {
         set('habitanteId', '');
         const imped = document.getElementById('habTieneImpedimento');
         if (imped) imped.checked = false;
+        
+        // Limpiar sacramentos
+        const checkboxes = document.querySelectorAll('input[name="sacramentos"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        // Limpiar grupo familiar
+        set('habGrupoFamiliar', '');
+        set('habBuscarGrupoFamiliar', '');
+        const infoContainer = document.getElementById('infoGrupoSeleccionado');
+        if (infoContainer) infoContainer.style.display = 'none';
     }
 
     // =============================== Opciones (filtros + modal) ===============================
@@ -413,10 +587,10 @@ export class HabitantesManager {
     static async loadOpciones() {
         try {
             const response = await fetch(`${BASE_URL}/api/opciones/`, {
-    headers: {
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-    }
-});
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+                }
+            });
             
             if (response.ok) {
                 const opciones = await response.json();
@@ -453,8 +627,8 @@ export class HabitantesManager {
         if (sexoContainer && opciones.sexos) {
             sexoContainer.innerHTML = opciones.sexos.map(sexo => `
                 <div class="form-check">
-                    <input class="form-check-input sexo-filter" type="checkbox" value="${sexo.Nombre}" id="sexo-${sexo.IdSexo}">
-                    <label class="form-check-label" for="sexo-${sexo.IdSexo}">${sexo.Nombre}</label>
+                    <input class="form-check-input sexo-filter" type="checkbox" value="${sexo.Nombre}" id="sexo-${sexo.id}">
+                    <label class="form-check-label" for="sexo-${sexo.id}">${sexo.Nombre}</label>
                 </div>
             `).join('');
         }
@@ -464,8 +638,8 @@ export class HabitantesManager {
         if (estadoCivilContainer && opciones.estadosCiviles) {
             estadoCivilContainer.innerHTML = opciones.estadosCiviles.map(estado => `
                 <div class="form-check">
-                    <input class="form-check-input estado-civil-filter" type="checkbox" value="${estado.Nombre}" id="ec-${estado.IdEstadoCivil}">
-                    <label class="form-check-label" for="ec-${estado.IdEstadoCivil}">${estado.Nombre}</label>
+                    <input class="form-check-input estado-civil-filter" type="checkbox" value="${estado.Nombre}" id="ec-${estado.id}">
+                    <label class="form-check-label" for="ec-${estado.id}">${estado.Nombre}</label>
                 </div>
             `).join('');
         }
@@ -475,8 +649,8 @@ export class HabitantesManager {
         if (poblacionContainer && opciones.poblaciones) {
             poblacionContainer.innerHTML = opciones.poblaciones.map(poblacion => `
                 <div class="form-check">
-                    <input class="form-check-input poblacion-filter" type="checkbox" value="${poblacion.Nombre}" id="pob-${poblacion.IdTipoPoblacion}">
-                    <label class="form-check-label" for="pob-${poblacion.IdTipoPoblacion}">${poblacion.Nombre}</label>
+                    <input class="form-check-input poblacion-filter" type="checkbox" value="${poblacion.Nombre}" id="pob-${poblacion.id}">
+                    <label class="form-check-label" for="pob-${poblacion.id}">${poblacion.Nombre}</label>
                 </div>
             `).join('');
         }
@@ -486,8 +660,8 @@ export class HabitantesManager {
         if (religionContainer && opciones.religiones) {
             religionContainer.innerHTML = opciones.religiones.map(religion => `
                 <div class="form-check">
-                    <input class="form-check-input religion-filter" type="checkbox" value="${religion.Nombre}" id="rel-${religion.IdReligion}">
-                    <label class="form-check-label" for="rel-${religion.IdReligion}">${religion.Nombre}</label>
+                    <input class="form-check-input religion-filter" type="checkbox" value="${religion.Nombre}" id="rel-${religion.id}">
+                    <label class="form-check-label" for="rel-${religion.id}">${religion.Nombre}</label>
                 </div>
             `).join('');
         }
@@ -512,22 +686,43 @@ export class HabitantesManager {
             if (current) el.value = current;
         };
 
-        setOptions('habTipoDoc', opciones.tiposDocumento, 'IdTipoDocumento', 'Descripcion');
-        setOptions('habSexo', opciones.sexos, 'IdSexo', 'Nombre');
-        setOptions('habEstadoCivil', opciones.estadosCiviles, 'IdEstadoCivil', 'Nombre');
-        setOptions('habReligion', opciones.religiones, 'IdReligion', 'Nombre');
-        setOptions('habPoblacion', opciones.poblaciones, 'Idpoblaciones', 'Nombre');
-        setOptions('habSacramento', opciones.sacramentos, 'Idsacramentos', 'Descripcion');
-        setOptions('habSector', opciones.sectores, 'IdSector', 'Descripcion');
+        // CORREGIDO: Usar 'id' en lugar de 'IdTipoDocumento', etc.
+        setOptions('habTipoDoc', opciones.tiposDocumento, 'id', 'Descripcion');
+        setOptions('habSexo', opciones.sexos, 'id', 'Nombre');
+        setOptions('habEstadoCivil', opciones.estadosCiviles, 'id', 'Nombre');
+        setOptions('habReligion', opciones.religiones, 'id', 'Nombre');
+        setOptions('habPoblacion', opciones.poblaciones, 'id', 'Nombre');
+        setOptions('habSector', opciones.sectores, 'id', 'Descripcion');
+
+        // Poblar sacramentos como checkboxes
+        this.populateSacramentosCheckboxes(opciones.sacramentos);
+    }
+
+    // NUEVO MÉTODO: Poblar checkboxes de sacramentos
+    static populateSacramentosCheckboxes(sacramentos) {
+        const container = document.getElementById('sacramentosContainer');
+        if (!container || !Array.isArray(sacramentos)) return;
+
+        container.innerHTML = sacramentos.map(sacramento => `
+            <div class="col-md-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="sacramentos" 
+                           value="${sacramento.id}" id="sacramento-${sacramento.id}">
+                    <label class="form-check-label" for="sacramento-${sacramento.id}">
+                        ${sacramento.Descripcion}
+                    </label>
+                </div>
+            </div>
+        `).join('');
     }
 
     // =============================== Eventos extra ===============================
 
     // Configurar eventos adicionales
     static setupAdditionalEvents() {
-        // Botón nuevo habitante
+        // Botón nuevo habitante - REDIRIGIR A ENCUESTAS
         document.getElementById('btnNuevo')?.addEventListener('click', () => {
-            this.nuevoHabitante();
+            window.location.href = '/frontend/oficina/encuestas.html';    
         });
 
         // Botón exportar
@@ -558,6 +753,220 @@ export class HabitantesManager {
                 this.guardarHabitante();
             });
             form.dataset.bound = '1';
+        }
+
+        // ✅ Inicializar buscador de grupo familiar en el modal
+        this.inicializarBuscadorGrupoFamiliar();
+    }
+
+    // NUEVO MÉTODO: Inicializar buscador de grupo familiar (similar al encuestador)
+    static inicializarBuscadorGrupoFamiliar() {
+        const inputBusqueda = document.getElementById('habBuscarGrupoFamiliar');
+        const resultadosContainer = document.getElementById('resultadosGrupoFamiliar');
+        const inputHidden = document.getElementById('habGrupoFamiliar');
+        const infoContainer = document.getElementById('infoGrupoSeleccionado');
+        const textoInfo = document.getElementById('textoGrupoSeleccionado');
+        const btnLimpiar = document.getElementById('btnLimpiarBusqueda');
+
+        if (!inputBusqueda) return;
+
+        let busquedaTimeout = null;
+
+        // Evento de búsqueda
+        inputBusqueda.addEventListener('input', function(e) {
+            const query = e.target.value.trim();
+            
+            if (busquedaTimeout) {
+                clearTimeout(busquedaTimeout);
+            }
+            
+            busquedaTimeout = setTimeout(() => {
+                if (query.length === 0) {
+                    if (resultadosContainer) resultadosContainer.style.display = 'none';
+                    return;
+                }
+                buscarGruposFamiliar(query);
+            }, 300);
+        });
+
+        // Evento focus
+        inputBusqueda.addEventListener('focus', function() {
+            if (inputBusqueda.value.trim().length > 0) {
+                buscarGruposFamiliar(inputBusqueda.value.trim());
+            }
+        });
+
+        // Evento blur (ocultar resultados después de un delay)
+        inputBusqueda.addEventListener('blur', function() {
+            setTimeout(() => {
+                if (resultadosContainer) resultadosContainer.style.display = 'none';
+            }, 200);
+        });
+
+        // Botón limpiar
+        if (btnLimpiar) {
+            btnLimpiar.addEventListener('click', function() {
+                inputBusqueda.value = '';
+                if (inputHidden) inputHidden.value = '';
+                if (infoContainer) infoContainer.style.display = 'none';
+                if (resultadosContainer) resultadosContainer.style.display = 'none';
+            });
+        }
+
+        async function buscarGruposFamiliar(query) {
+            try {
+                const data = await ApiClient.request(`/api/grupofamiliar/buscar_dinamico?q=${encodeURIComponent(query)}`, "GET");
+                
+                if (!resultadosContainer) return;
+                
+                resultadosContainer.innerHTML = '';
+                
+                if (data.success && data.grupos.length > 0) {
+                    // Mostrar grupos existentes
+                    // En la función buscarGruposFamiliar, mejora la información mostrada:
+data.grupos.forEach(grupo => {
+    const item = document.createElement('button');
+    item.className = 'dropdown-item text-start';
+    item.type = 'button';
+    item.innerHTML = `
+        <div class="d-flex flex-column">
+            <strong class="text-dark">${grupo.NombreGrupo}</strong>
+            <small class="text-muted mt-1">
+                ${grupo.JefeFamilia ? `Familiar Asociado: ${grupo.JefeFamilia}` : 'Familiar Asociado: Por asignar'}
+            </small>
+        </div>
+    `;
+    item.addEventListener('click', () => seleccionarGrupo(grupo));
+    resultadosContainer.appendChild(item);
+});
+                }
+                
+                // Opción para crear nuevo grupo
+                const crearItem = document.createElement('button');
+                crearItem.className = 'dropdown-item text-primary';
+                crearItem.type = 'button';
+                crearItem.innerHTML = `<i class="bi bi-plus-circle me-2"></i>Crear nuevo grupo: "${query}"`;
+                crearItem.addEventListener('click', () => mostrarModalCrearGrupo(query));
+                resultadosContainer.appendChild(crearItem);
+                
+                resultadosContainer.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error buscando grupos familiares:', error);
+            }
+        }
+
+        function seleccionarGrupo(grupo) {
+    inputBusqueda.value = grupo.NombreGrupo;
+    if (inputHidden) inputHidden.value = grupo.IdGrupoFamiliar;
+    
+    // MOSTRAR INFORMACIÓN MEJORADA - Familiar Asociado (Nombre y Apellido)
+    if (textoInfo && infoContainer) {
+        let texto = `Grupo: ${grupo.NombreGrupo}`;
+        
+        // Si hay jefe/familiar asociado, mostrar nombre completo
+        if (grupo.JefeFamilia && grupo.JefeFamilia.trim() !== '') {
+            texto += ` | Familiar Asociado: ${grupo.JefeFamilia}`;
+        } else {
+            texto += ` | Familiar Asociado: Por asignar`;
+        }
+        
+        textoInfo.textContent = texto;
+        infoContainer.style.display = 'block';
+    }
+    
+    if (resultadosContainer) resultadosContainer.style.display = 'none';
+}
+
+        async function mostrarModalCrearGrupo(nombreSugerido = '') {
+            try {
+                const modalHTML = `
+                    <div class="modal fade" id="modalCrearGrupo" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Crear Nuevo Grupo Familiar</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre del Grupo <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nombreGrupoNuevo" value="${nombreSugerido}" required>
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        <small>El habitante será asignado a este grupo familiar.</small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" id="btnConfirmarCrearGrupo">Crear Grupo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                const modalElement = document.getElementById('modalCrearGrupo');
+                const modal = new bootstrap.Modal(modalElement);
+                
+                document.getElementById('btnConfirmarCrearGrupo').addEventListener('click', async () => {
+                    await crearGrupoFamiliar();
+                });
+                
+                modal.show();
+                
+                // Limpiar modal cuando se cierre
+                modalElement.addEventListener('hidden.bs.modal', function() {
+                    this.remove();
+                });
+                
+            } catch (error) {
+                console.error('Error mostrando modal:', error);
+                alert('Error al cargar el formulario de creación');
+            }
+        }
+
+        async function crearGrupoFamiliar() {
+            const nombre = document.getElementById('nombreGrupoNuevo').value.trim();
+
+            if (!nombre) {
+                alert('El nombre del grupo es obligatorio');
+                return;
+            }
+
+            try {
+                const data = await ApiClient.request('/api/grupofamiliar/crear_simple', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        nombre: nombre
+                    })
+                });
+
+                if (data.success) {
+                    // Cerrar modal
+                    bootstrap.Modal.getInstance(document.getElementById('modalCrearGrupo')).hide();
+                    
+                    // Seleccionar el grupo recién creado
+                    const grupoCreado = {
+                        IdGrupoFamiliar: data.id,
+                        NombreGrupo: nombre,
+                        Descripcion: 'Grupo recién creado'
+                    };
+                    
+                    seleccionarGrupo(grupoCreado);
+                    
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire('Éxito', 'Grupo familiar creado exitosamente', 'success');
+                    }
+                } else {
+                    alert('Error al crear grupo: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error creando grupo:', error);
+                alert('Error al crear grupo familiar');
+            }
         }
     }
 
@@ -618,7 +1027,7 @@ export class HabitantesManager {
 
     // =============================== Otras acciones UI (tus originales) ===============================
 
-    // Ver (manteniendo tu estilo)
+    // Ver (manteniendo tu estilo) - ACTUALIZADO con FamiliaDescripcion
     static verHabitante(habitante) {
         if (typeof Swal !== 'undefined') {
             Swal.fire({
@@ -631,6 +1040,7 @@ export class HabitantesManager {
                         <p><strong>Sexo:</strong> ${habitante.Sexo || '-'}</p>
                         <p><strong>Estado Civil:</strong> ${habitante.EstadoCivil || '-'}</p>
                         <p><strong>Religión:</strong> ${habitante.Religion || '-'}</p>
+                        <p><strong>Familia:</strong> ${habitante.FamiliaDescripcion || 'Sin familia'}</p>
                         <p><strong>Dirección:</strong> ${habitante.Direccion || 'No registrada'}</p>
                         <p><strong>Teléfono:</strong> ${habitante.Telefono || 'No registrado'}</p>
                         <p><strong>Email:</strong> ${habitante.CorreoElectronico || 'No registrado'}</p>
@@ -640,7 +1050,7 @@ export class HabitantesManager {
                 confirmButtonText: 'Cerrar'
             });
         } else {
-            alert(`Habitante: ${habitante.Nombre} ${habitante.Apellido}\nDocumento: ${habitante.TipoDocumento || ''} ${habitante.NumeroDocumento || ''}`);
+            alert(`Habitante: ${habitante.Nombre} ${habitante.Apellido}\nDocumento: ${habitante.TipoDocumento || ''} ${habitante.NumeroDocumento || ''}\nFamilia: ${habitante.FamiliaDescripcion || 'Sin familia'}`);
         }
     }
 
@@ -732,11 +1142,11 @@ document.addEventListener('DOMContentLoaded', () => {
         HabitantesManager.init();
     }
 
-  const modalEl = document.getElementById('habitanteModal');
-  if (modalEl) {
-    modalEl.addEventListener('hide.bs.modal', () => {
-      // Quita el foco antes de ocultar el modal
-      if (document.activeElement) document.activeElement.blur();
-    });
-  }
+    const modalEl = document.getElementById('habitanteModal');
+    if (modalEl) {
+        modalEl.addEventListener('hide.bs.modal', () => {
+            // Quita el foco antes de ocultar el modal
+            if (document.activeElement) document.activeElement.blur();
+        });
+    }
 });

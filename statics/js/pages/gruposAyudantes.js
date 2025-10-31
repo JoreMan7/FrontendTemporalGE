@@ -2,7 +2,7 @@
 // Página: Grupos de Ayudantes. Manejador principal llamado por app.js
 import { ApiClient } from '../modules/api.js';
 
-/* ==== HTTP & UI helpers (reutiliza si existen; fallback si no) ==== */
+/* ==== HTTP & UI helpers ==== */
 const UIX = {
   async confirm({ title = "¿Confirmar?", text = "", icon = "question" } = {}) {
     if (window.Swal?.fire) {
@@ -14,6 +14,10 @@ const UIX = {
   toast(msg, type = "success") {
     if (window.Swal?.fire) return Swal.fire({ toast: true, icon: type, title: msg, timer: 2200, position: "top-end", showConfirmButton: false });
     alert(msg);
+  },
+  error(msg) {
+    if (window.Swal?.fire) return Swal.fire("Error", msg, "error");
+    alert(`Error: ${msg}`);
   }
 };
 
@@ -23,8 +27,8 @@ const state = {
   filtered: [],
   pageSize: 10,
   currentPage: 1,
-  filters: { nombre: "", lider: "", estado: "" }, // Eliminado sector
-  habitantesCache: []
+  filters: { nombre: "", lider: "", estado: "" }, 
+  currentGrupoId: null
 };
 
 /* ==== Utils DOM ==== */
@@ -94,20 +98,27 @@ function renderTable() {
         <td class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
           <button class="btn btn-sm btn-outline-primary" data-action="edit" title="Editar"><i class="fas fa-pen"></i></button>
           <button class="btn btn-sm btn-outline-info" data-action="view" title="Ver"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-sm btn-outline-success" data-action="cursos" title="Gestionar Cursos"><i class="bi bi-mortarboard"></i></button>
           <button class="btn btn-sm btn-outline-danger" data-action="delete" title="Desactivar"><i class="fas fa-ban"></i></button>
-          <button class="btn btn-sm btn-outline-secondary" data-action="members" title="Miembros"><i class="fas fa-people-group"></i></button>
         </td>
       </tr>
     `;
   }).join("");
 
-  tb.querySelectorAll("button[data-action]").forEach(btn => {
+  // Bind eventos de los botones
+  tb.addEventListener("click", (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    
     const id = Number(btn.closest("tr")?.dataset.id);
-    const a = btn.dataset.action;
-    if (a === "edit") btn.addEventListener("click", () => editarGrupo(id));
-    if (a === "view") btn.addEventListener("click", () => verGrupo(id));
-    if (a === "delete") btn.addEventListener("click", () => desactivarGrupo(id));
-    if (a === "members") btn.addEventListener("click", () => verMiembros(id));
+    const action = btn.dataset.action;
+    
+    switch(action) {
+      case "edit": editarGrupo(id); break;
+      case "view": verMiembros(id); break;
+      case "cursos": asignarCurso(id); break;
+      case "delete": desactivarGrupo(id); break;
+    }
   });
 
   $("#selectAll")?.addEventListener("change", e => {
@@ -143,7 +154,7 @@ async function cargarGrupos() {
   renderPagination();
 }
 
-/* ==== CRUD ==== */
+/* ==== CRUD Grupos ==== */
 function abrirModalGrupo(titulo) {
   $("#grupoLiderId").value = "";
   $("#grupoBuscarLider").value = "";
@@ -166,18 +177,15 @@ async function crearGrupo() { abrirModalGrupo("Nuevo Grupo"); }
 
 async function editarGrupo(id) {
   try {
-    // 🔹 Obtener datos actuales del grupo desde el backend
     const data = await ApiClient.request(`/api/grupos/${id}`);
     const g = data.grupo || data;
 
-    // 🔹 Rellenar los campos del formulario antes de abrir el modal
     $("#grupoId").value = g.IdGrupoAyudantes ?? g.id ?? "";
     $("#grupoNombre").value = g.Nombre ?? g.nombre ?? "";
 
     const liderId = g.IdHabitanteLider ?? g.lider?.id ?? null;
     $("#grupoLiderId").value = liderId || "";
 
-    // 🔹 Mostrar vista previa del líder si existe
     if (liderId) {
       setLiderPreview({
         IdHabitante: liderId,
@@ -190,7 +198,6 @@ async function editarGrupo(id) {
       $("#liderPreview").classList.add("d-none");
     }
 
-    // 🔹 Mostrar el modal con los valores cargados
     $("#grupoModalTitle").innerHTML = `<i class="fas fa-pen me-2"></i>Editar Grupo`;
     new bootstrap.Modal($("#grupoModal")).show();
 
@@ -242,14 +249,10 @@ async function desactivarGrupo(id) {
       method: "PATCH"
     });
     
-    console.log("Respuesta del servidor:", r); // 🔹 DEBUG
-    
-    // 🔹 CORRECCIÓN: Verificar explícitamente el éxito
     if (r && r.success === true) {
       UIX.toast("Grupo desactivado");
-      await cargarGrupos(); // 🔹 Esto debería actualizar la vista
+      await cargarGrupos();
     } else {
-      // 🔹 Mostrar el mensaje real del servidor
       const errorMsg = r?.message || r?.error || "No se pudo desactivar";
       UIX.toast(errorMsg, "error");
     }
@@ -259,96 +262,300 @@ async function desactivarGrupo(id) {
   }
 }
 
-/* ==== Detalle: Ver grupo (info, miembros, cursos) ==== */
-async function verGrupo(id) {
+/* ==== Gestión de Cursos ==== */
+async function asignarCurso(id) {
   try {
-    const [gData, mData, cData] = await Promise.all([
-      ApiClient.request(`/api/grupos/${id}`).catch(() => ({})),
+    // Obtener información del grupo
+    const grupoData = await ApiClient.request(`/api/grupos/${id}`);
+    const grupo = grupoData.grupo || grupoData;
+    
+    if (!grupo) {
+      UIX.toast("No se pudo cargar la información del grupo", "error");
+      return;
+    }
+
+    // Llenar datos del modal
+    $("#grupoIdAsignar").value = id;
+    $("#grupoNombreAsignar").value = grupo.Nombre || grupo.nombre || "";
+
+    // Cargar cursos disponibles
+    await cargarCursosDisponibles(id);
+
+    // Mostrar modal
+    new bootstrap.Modal($("#asignarCursoModal")).show();
+  } catch (e) {
+    console.error(e);
+    UIX.toast("No se pudo cargar la información para asignar el curso", "error");
+  }
+}
+
+async function cargarCursosDisponibles(idGrupo) {
+  try {
+    // Obtener todos los cursos activos
+    const res = await ApiClient.request('/api/cursos/');
+    const cursos = res?.data?.cursos || res?.cursos || [];
+    
+    const select = $("#cursoSelect");
+    select.innerHTML = '<option value="">Seleccione un curso...</option>';
+    
+    if (!cursos.length) {
+      select.innerHTML += '<option value="" disabled>No hay cursos disponibles</option>';
+      return;
+    }
+
+    // Obtener cursos ya asignados al grupo
+    const cursosAsignadosRes = await ApiClient.request(`/api/grupos/${idGrupo}/cursos`);
+    const cursosAsignados = cursosAsignadosRes?.cursos || [];
+    
+    // Filtrar cursos que no estén ya asignados activamente
+    const cursosDisponibles = cursos.filter(curso => {
+      const yaAsignado = cursosAsignados.some(asig => 
+        asig.id_tipo_curso === curso.IdTipoCurso
+      );
+      return !yaAsignado;
+    });
+
+    // Agregar opciones al select
+    cursosDisponibles.forEach(curso => {
+      const option = document.createElement('option');
+      option.value = curso.IdTipoCurso;
+      option.textContent = curso.Descripcion || curso.nombre || `Curso #${curso.IdTipoCurso}`;
+      select.appendChild(option);
+    });
+
+    if (cursosDisponibles.length === 0) {
+      select.innerHTML = '<option value="" disabled>No hay cursos disponibles para asignar</option>';
+    }
+
+  } catch (e) {
+    console.error(e);
+    UIX.toast("Error al cargar los cursos", "error");
+  }
+}
+
+async function guardarAsignacionCurso(e) {
+  e.preventDefault();
+  const form = $("#asignarCursoForm");
+  form.classList.add("was-validated");
+  
+  if (!form.checkValidity()) return;
+
+  const idGrupo = $("#grupoIdAsignar").value;
+  const idCurso = $("#cursoSelect").value;
+
+  if (!idGrupo || !idCurso) {
+    UIX.error("Datos incompletos");
+    return;
+  }
+
+  try {
+    const payload = { id_tipo_curso: parseInt(idCurso) };
+    const r = await ApiClient.request(`/api/grupos/${idGrupo}/cursos`, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+
+    if (r?.success === false) throw new Error(r?.message || "No se pudo asignar el curso");
+
+    bootstrap.Modal.getInstance($("#asignarCursoModal"))?.hide();
+    UIX.toast("Curso asignado al grupo exitosamente");
+    
+    // Si estamos viendo el detalle del grupo, actualizarlo
+    if (state.currentGrupoId === parseInt(idGrupo)) {
+      await verMiembros(state.currentGrupoId);
+    }
+    
+  } catch (err) {
+    console.error(err);
+    UIX.error(err.message || "Error al asignar el curso al grupo");
+  }
+}
+
+/* ==== Funciones para avanzar y desasignar cursos ==== */
+async function avanzarCurso(idGrupo, idAsignacion) {
+  try {
+    const confirmacion = await UIX.confirm({
+      title: "Avanzar curso",
+      text: "¿Estás seguro de avanzar al siguiente paso del curso?",
+      icon: "question"
+    });
+    
+    if (!confirmacion) return;
+
+    const r = await ApiClient.request(`/api/grupos/${idGrupo}/cursos/${idAsignacion}/avanzar`, {
+      method: "POST"
+    });
+
+    if (r?.success) {
+      UIX.toast(r.message || "Curso avanzado correctamente");
+      await verMiembros(idGrupo);
+    } else {
+      UIX.toast(r?.message || "No se pudo avanzar el curso", "error");
+    }
+  } catch (error) {
+    console.error("Error avanzando curso:", error);
+    UIX.toast("Error al avanzar el curso", "error");
+  }
+}
+
+async function desasignarCurso(idGrupo, idAsignacion) {
+  const ok = await UIX.confirm({
+    title: "Desasignar curso",
+    text: "¿Estás seguro de quitar este curso del grupo? Se perderá todo el progreso.",
+    icon: "warning"
+  });
+  if (!ok) return;
+
+  try {
+    // PATCH para desactivar la asignación
+    const r = await ApiClient.request(
+      `/api/cursos/asignaciones/grupo/${idGrupo}/curso/${idAsignacion}/desactivar`, 
+      { method: "PATCH" }
+    );
+    
+    if (r?.success) {
+      UIX.toast("Curso desasignado correctamente");
+      await verMiembros(idGrupo);
+    } else {
+      UIX.toast(r?.message || "No se pudo desasignar el curso", "error");
+    }
+  } catch (error) {
+    console.error("Error desasignando curso:", error);
+    UIX.toast("Error al desasignar el curso", "error");
+  }
+}
+
+/* ==== Detalle del Grupo (Miembros y Cursos) ==== */
+async function verMiembros(id) {
+  try {
+    state.currentGrupoId = id;
+    
+    // Trae miembros y cursos en paralelo
+    const [mData, cData] = await Promise.all([
       ApiClient.request(`/api/grupos/${id}/miembros`).catch(() => ({ miembros: [] })),
-      ApiClient.request(`/api/grupos/${id}/cursos`).catch(() => ({ cursos: null }))
+      ApiClient.request(`/api/grupos/${id}/cursos`).catch(() => ({ cursos: [] })),
     ]);
 
-    const g = gData.grupo || gData || {};
+    // ===== INFO BÁSICA =====
+    const grupoInfo = await ApiClient.request(`/api/grupos/${id}`);
+    const grupo = grupoInfo.grupo || grupoInfo;
+    $("#detalleInfo").innerHTML = `
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-2"><strong>Grupo:</strong> ${esc(grupo.Nombre || grupo.nombre || "")}</div>
+          <div class="mb-2"><strong>Líder:</strong> ${esc(grupo.lider?.nombre || grupo.NombreLider || "")} ${esc(grupo.lider?.apellido || grupo.ApellidoLider || "")}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-2"><strong>Documento Líder:</strong> ${esc(grupo.lider?.documento || grupo.DocumentoLider || "-")}</div>
+          <div class="mb-2"><strong>Teléfono:</strong> ${esc(grupo.lider?.telefono || grupo.TelefonoLider || "-")}</div>
+        </div>
+      </div>
+    `;
+
+    // ===== MIEMBROS =====
     const miembros = mData.miembros || [];
-    const cursos = cData.cursos;
-
-    // Info general
-    const badge = String(g.activo ?? g.Activo ?? 1) === "1"
-      ? `<span class="badge bg-success">Activo</span>`
-      : `<span class="badge bg-secondary">Inactivo</span>`;
-    const infoHtml = `
-      <div class="row g-2">
-        <div class="col-md-3"><strong>ID:</strong> ${esc(g.id ?? g.IdGrupoAyudantes ?? "-")}</div>
-        <div class="col-md-4"><strong>Nombre:</strong> ${esc(g.nombre ?? g.Nombre ?? "-")} ${badge}</div>
-        <div class="col-md-12"><strong>Líder:</strong> ${esc(`${g.lider?.nombre ?? ""} ${g.lider?.apellido ?? ""}`.trim() || "-")} (${esc(g.lider?.documento ?? "-")}) — ${esc(g.lider?.telefono ?? "-")}</div>
-      </div>`;
-    $("#detalleInfo").innerHTML = infoHtml;
-
-    // Miembros (manteniendo sector para miembros individuales)
     $("#detalleMiembrosBody").innerHTML = miembros.length
       ? miembros.map(m => `
           <tr>
-            <td>${m.id_habitante ?? m.IdHabitante ?? ""}</td>
+            <td>${m.id_habitante ?? ""}</td>
             <td>${esc(`${m.Nombre || ""} ${m.Apellido || ""}`.trim())}</td>
             <td>${esc(m.NumeroDocumento || "-")}</td>
             <td>${esc(m.Telefono || "-")}</td>
             <td>${esc(m.CorreoElectronico || "-")}</td>
-            <td>${esc(m.Sector || "-")}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" data-remove="${m.id_habitante}">
+                <i class="fas fa-times"></i>
+              </button>
+            </td>
           </tr>
         `).join("")
       : `<tr><td colspan="6" class="text-center text-muted">Sin miembros.</td></tr>`;
 
-    // Cursos (resumen)
-    if (Array.isArray(cursos)) {
-      $("#detalleCursosBody").innerHTML = cursos.length
-        ? cursos.map(c => `
+    // ===== CURSOS =====
+    const cursos = cData.cursos || [];
+    $("#detalleCursosBody").innerHTML = cursos.length
+      ? cursos.map(c => {
+          const nombre = c.Curso || c.nombre || c.Nombre || "-";
+          const inicio = c.fecha_asignacion || c.inicio || c.FechaInicio || null;
+          const total  = Number(c.total_pasos ?? c.PasosTotales ?? 0);
+          const done   = Number(c.pasos_completados ?? c.PasosCompletados ?? 0);
+          const porcentaje = total > 0 ? Math.round((done / total) * 100) : 0;
+          const estado = (total > 0)
+            ? (done >= total ? '<span class="badge bg-success">Completado</span>' : '<span class="badge bg-warning">En progreso</span>')
+            : '<span class="badge bg-secondary">Sin pasos</span>';
+
+          return `
             <tr>
-              <td>${esc(c.nombre || c.Nombre || "-")}</td>
-              <td>${esc(formatDate(c.inicio || c.FechaInicio))}</td>
-              <td>${esc(String(c.niveles ?? c.Pasos ?? c.pasos ?? "-"))}</td>
-              <td>${esc(c.estado || c.Estado || "-")}</td>
+              <td>
+                <div><strong>${esc(nombre)}</strong></div>
+                <small class="text-muted">ID: ${c.id_grupo_ayudantes_curso}</small>
+              </td>
+              <td>${esc(formatDate?.(inicio) ?? (inicio ?? "-"))}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="progress flex-grow-1" style="height: 20px;">
+                    <div class="progress-bar ${porcentaje === 100 ? 'bg-success' : 'bg-primary'}" 
+                         style="width: ${porcentaje}%">
+                      ${done}/${total}
+                    </div>
+                  </div>
+                  <small class="text-muted">${porcentaje}%</small>
+                </div>
+              </td>
+              <td>${estado}</td>
+              <td>
+                <div class="d-flex gap-1">
+                  ${done < total ? `
+                    <button class="btn btn-sm btn-outline-success" data-avanzar="${c.id_grupo_ayudantes_curso}" title="Avanzar paso">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                  ` : ''}
+                  <button class="btn btn-sm btn-outline-danger" data-desasignar="${c.id_grupo_ayudantes_curso}" title="Desasignar curso">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
             </tr>
-          `).join("")
-        : `<tr><td colspan="4" class="text-center text-muted">Sin cursos asociados.</td></tr>`;
-    } else {
-      $("#detalleCursosBody").innerHTML = `<tr><td colspan="4" class="text-center text-muted">No disponible en backend.</td></tr>`;
-    }
+          `;
+        }).join("")
+      : `<tr><td colspan="5" class="text-center text-muted">No hay cursos asignados</td></tr>`;
 
+    // ===== MODAL =====
     new bootstrap.Modal($("#grupoDetalleModal")).show();
-  } catch {
-    UIX.toast("No se pudo cargar el detalle", "error");
-  }
-}
 
-async function verMiembros(id) {
-  try {
-    const data = await ApiClient.request(`/api/grupos/${id}/miembros`);
-    $("#detalleInfo").innerHTML = `<div class="mb-2"><strong>Grupo:</strong> #${id}</div>`;
-    $("#detalleMiembrosBody").innerHTML = (data.miembros || []).map(m => `
-  <tr>
-    <td>${m.id_habitante ?? ""}</td>
-    <td>${esc(`${m.Nombre || ""} ${m.Apellido || ""}`.trim())}</td>
-    <td>${esc(m.NumeroDocumento || "-")}</td>
-    <td>${esc(m.Telefono || "-")}</td>
-    <td>${esc(m.CorreoElectronico || "-")}</td>
-    <td>${esc(m.Sector || "-")}</td>
-    <td><button class="btn btn-sm btn-outline-danger" data-remove="${m.id_habitante}"><i class="fas fa-times"></i></button></td>
-  </tr>
-`).join("") || `<tr><td colspan="7" class="text-center text-muted">Sin miembros.</td></tr>`;
-
-    $("#detalleCursosBody").innerHTML = `<tr><td colspan="4" class="text-center text-muted">No disponible en esta vista.</td></tr>`;
-    new bootstrap.Modal($("#grupoDetalleModal")).show();
-    
     // Botón para agregar miembro
     $("#btnAgregarMiembro")?.addEventListener("click", () => agregarMiembro(id));
 
-    // Botones para eliminar miembros
-    $$("button[data-remove]").forEach(btn => {
-      btn.addEventListener("click", () => eliminarMiembro(id, btn.dataset.remove));
+    // Botón para asignar curso
+    $("#btnAsignarCurso")?.addEventListener("click", () => {
+      bootstrap.Modal.getInstance($("#grupoDetalleModal")).hide();
+      setTimeout(() => asignarCurso(id), 300);
     });
 
-  } catch {
-    UIX.toast("No se pudieron cargar los miembros", "error");
+    // Bind eventos después de un pequeño delay para asegurar que el DOM esté listo
+    setTimeout(() => {
+      // Botones para eliminar miembros
+      $$("#detalleMiembrosBody button[data-remove]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const idHabitante = btn.dataset.remove;
+          eliminarMiembro(id, idHabitante);
+        });
+      });
+
+      // Botones para avanzar cursos
+      $$("button[data-avanzar]").forEach(btn => {
+        btn.addEventListener("click", () => avanzarCurso(id, btn.dataset.avanzar));
+      });
+
+      // Botones para desasignar cursos
+      $$("button[data-desasignar]").forEach(btn => {
+        btn.addEventListener("click", () => desasignarCurso(id, btn.dataset.desasignar));
+      });
+    }, 100);
+
+  } catch (e) {
+    console.error(e);
+    UIX.toast("No se pudieron cargar los miembros/cursos", "error");
   }
 }
 
@@ -692,9 +899,10 @@ async function eliminarMiembro(grupoId, idHabitante) {
   if (!ok) return;
 
   try {
-    const res = await ApiClient.request(`/api/grupos/${grupoId}/miembros/${idHabitante}`, {
-      method: "DELETE"
-    });
+    const res = await ApiClient.request(
+      `/api/grupos/${grupoId}/miembros/${idHabitante}/desactivar`,
+      { method: "PATCH" }
+    );
 
     if (res.success) {
       UIX.toast("✅ Miembro eliminado correctamente");
@@ -766,9 +974,6 @@ async function buscarLiderInline() {
   }
 }
 
-$("#btnBuscarLider")?.addEventListener("click", buscarLiderInline);
-$("#grupoBuscarLider")?.addEventListener("input", buscarLiderInline);
-
 /* ==== Exportar / imprimir ==== */
 function exportCSV() {
   const headers = ["ID","Nombre del Grupo","Líder","Documento del Líder","Teléfono","Miembros","Estado"];
@@ -818,8 +1023,13 @@ function bindFilters() {
 function bindEvents() {
   $("#btnNuevoGrupo")?.addEventListener("click", crearGrupo);
   $("#grupoForm")?.addEventListener("submit", guardarGrupoSubmit);
+  $("#asignarCursoForm")?.addEventListener("submit", guardarAsignacionCurso);
   $("#btnExportar")?.addEventListener("click", exportCSV);
   $("#btnImprimir")?.addEventListener("click", imprimir);
+  
+  // Búsqueda de líder
+  $("#btnBuscarLider")?.addEventListener("click", buscarLiderInline);
+  $("#grupoBuscarLider")?.addEventListener("input", buscarLiderInline);
 }
 
 export async function init() {

@@ -492,6 +492,7 @@
     </div>
   </div>
   <!-- Modal: Crear / Editar Habitante -->
+    <!-- Modal: Crear / Editar Habitante -->
 <div class="modal fade" id="habitanteModal" tabindex="-1" data-bs-backdrop="static">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -550,10 +551,15 @@
               <label class="form-label">Población</label>
               <select id="habPoblacion" class="form-select"></select>
             </div>
-            <div class="col-md-4">
-              <label class="form-label">Sacramento</label>
-              <select id="habSacramento" class="form-select"></select>
+            
+            <div class="col-12">
+              <label class="form-label">Sacramentos</label>
+              <div class="row g-2" id="sacramentosContainer">
+                  <!-- Los checkboxes se llenarán dinámicamente aquí -->
+                  <div class="text-muted">Cargando sacramentos...</div>
+              </div>
             </div>
+            
             <div class="col-md-4">
               <label class="form-label">Sector</label>
               <select id="habSector" class="form-select"></select>
@@ -594,10 +600,36 @@
               <label class="form-label"># Hijos</label>
               <input type="number" id="habHijos" class="form-control" min="0" step="1" value="0">
             </div>
+            
+            <!-- GRUPO FAMILIAR - VERSIÓN CORREGIDA -->
             <div class="col-md-4">
-              <label class="form-label">Grupo Familiar (ID)</label>
-              <input type="number" id="habGrupoFamiliar" class="form-control" min="0" step="1">
+              <label class="form-label">Grupo Familiar <span class="text-danger">*</span></label>
+              
+              <!-- Contenedor principal con posición relativa -->
+              <div class="position-relative">
+                  <div class="input-group">
+                      <input type="text" id="habBuscarGrupoFamiliar" class="form-control" placeholder="Buscar grupo familiar..." required>
+                      <button class="btn btn-outline-secondary" type="button" id="btnLimpiarBusqueda">
+                          <i class="fas fa-times"></i>
+                      </button>
+                  </div>
+                  
+                  <!-- Dropdown con posición absoluta -->
+                  <div class="position-absolute w-100" style="z-index: 1050; top: 100%; left: 0;">
+                      <div class="dropdown-menu w-100 show" id="resultadosGrupoFamiliar" style="display: none; max-height: 200px; overflow-y: auto;"></div>
+                  </div>
+              </div>
+              
+              <input type="hidden" id="habGrupoFamiliar" required>
+              
+              <!-- Información del grupo seleccionado -->
+              <div class="alert alert-info mt-2 py-2" id="infoGrupoSeleccionado" style="display: none;">
+                  <small><i class="fas fa-info-circle me-1"></i> <span id="textoGrupoSeleccionado"></span></small>
+              </div>
+              <div class="invalid-feedback">Seleccione un grupo familiar</div>
             </div>
+            <!-- FIN GRUPO FAMILIAR -->
+            
           </div>
         </div>
 
@@ -611,6 +643,8 @@
         </div>
       </form>
     </div>
+  </div>
+</div>
   </div>
 </div>
 
