@@ -722,7 +722,7 @@ export class HabitantesManager {
     static setupAdditionalEvents() {
         // Botón nuevo habitante - REDIRIGIR A ENCUESTAS
         document.getElementById('btnNuevo')?.addEventListener('click', () => {
-            window.location.href = '/frontend/oficina/encuestas.html';    
+            window.location.href = '/FrontendTemporalGE/Oficina/Encuestas.html';    
         });
 
         // Botón exportar

@@ -30,7 +30,7 @@ export class AuthManager {
     if (!this.REDIRECTING) {
       this.REDIRECTING = true
       // Usa tu ruta actual al login:
-      window.location.href = "/Frontend/index.html"
+      window.location.href = "/FrontendTemporalGE/index.html"
     }
   }
 
