@@ -9,39 +9,93 @@ import { GruposAyudantesManager } from "./pages/gruposAyudantes.js"
 import { CursosManager } from './pages/cursos.js';
 import { UsuariosManager } from './pages/usuarios.js';
 import { EncuestaHabitanteManager } from "./pages/encuestaHabitante.js";
+import { SessionManager } from "./modules/SessionManager.js"
 
 
 class App {
+  
+
   constructor() {
     this.init()
   }
 
-  init() {
-    document.addEventListener("DOMContentLoaded", () => {
-      console.log("App inicializando...")
-      console.log("Página actual:", window.location.pathname)
-      console.log("Usuario autenticado:", AuthManager.isAuthenticated())
-      setDynamicPageTitle()
-
-
-
-
-      if (!AuthManager.shouldHaveAccess()) {
-        console.log("Redirección bloqueada por shouldHaveAccess")
+  
+  async init() {
+  document.addEventListener("DOMContentLoaded", async () => {
+    console.log("App inicializando...")
+    console.log("Página actual:", window.location.pathname)
+    
+    // 1. Establecer título dinámico de la página
+    setDynamicPageTitle()
+    
+    // 2. DEBUG: Verificar estado de autenticación
+    console.log("🔐 Estado autenticación:", {
+      isLoginPage: AuthManager.isLoginPage(),
+      isAuthenticated: AuthManager.isAuthenticated(),
+      hasToken: !!AuthManager.getToken()
+    })
+    
+    // 3. Verificar acceso y autenticación
+    try {
+      const access = await Promise.race([
+        AuthManager.shouldHaveAccess(),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Timeout')), 5000)
+        )
+      ])
+      
+      if (!access) {
+        console.log("Redirección por shouldHaveAccess")
         return
       }
-
-      this.setupBasicFeatures()
-      UIManager.initCommonUI()
-
-      if (!AuthManager.isLoginPage() && AuthManager.isAuthenticated()) {
-        UIManager.init()
+    } catch (error) {
+      console.warn("Auth verification timeout or error, continuing:", error)
+      // En caso de error, verificar localmente
+      if (!AuthManager.isAuthenticated() && !AuthManager.isLoginPage()) {
+        AuthManager.redirectToLogin()
+        return
       }
+    }
 
-      this.initPageSpecificModules()
-      this.setupModalHandling()
-    })
-  }
+    // 4. Configurar características básicas
+    this.setupBasicFeatures()
+    
+    // 5. Inicializar UI común
+    UIManager.initCommonUI()
+
+    // 6. Inicializar módulos específicos de la página
+    this.initPageSpecificModules()
+    
+    // 7. Configurar manejo de modales
+    this.setupModalHandling()
+
+    // 8. FINAL: Inicializar SessionManager solo si está autenticado y no es página de login
+    if (!AuthManager.isLoginPage() && AuthManager.isAuthenticated()) {
+      console.log("✅ Usuario autenticado, inicializando SessionManager...")
+      
+      try {
+        console.log("📁 Importando SessionManager...")
+        const { SessionManager } = await import("./modules/SessionManager.js")
+        console.log("✅ SessionManager importado correctamente")
+        
+        // Inicializar SessionManager
+        SessionManager.init()
+        console.log("✅ SessionManager inicializado - Control de inactividad ACTIVADO")
+        
+      } catch (error) {
+        console.error("❌ Error crítico al inicializar SessionManager:", error)
+      }
+    } else {
+      console.log("ℹ️ SessionManager no requerido:", {
+        isLoginPage: AuthManager.isLoginPage(),
+        isAuthenticated: AuthManager.isAuthenticated()
+      })
+    }
+    
+    console.log("🎯 App completamente inicializada")
+  })
+}
+
 
   setupBasicFeatures() {
     if (document.getElementById("CurrentDate")) {
@@ -69,6 +123,47 @@ class App {
       LoginManager.init()
       return
     }
+
+    // Página de Citas
+    // Agregar en initPageSpecificModules() después de GruposAyudantes
+if (
+  currentPage === "citas.html" ||
+  currentPage === "Citas.html" ||
+  fullPath.includes("/Citas.html") ||
+  fullPath.toLowerCase().includes("/citas.html") ||
+  document.querySelector('[data-module="citas"]') ||
+  document.querySelector("title")?.textContent?.toUpperCase().includes("CITAS")
+) {
+  console.log("Inicializando módulo de Citas...");
+  import('./pages/citas.js')
+    .then((mod) => {
+      if (!mod?.CitasManager?.init) {
+        console.error("CitasManager.init no encontrado. Revisa el export en pages/citas.js");
+        return;
+      }
+      mod.CitasManager.init();
+    })
+    .catch((err) => console.error("Error al importar CitasManager:", err));
+  return;
+}
+
+  // En initPageSpecificModules(), reemplaza la parte del dashboard con:
+if (
+    document.querySelector(".DashboardScrollContainer") ||
+    currentPage === "NavInicio.html" || 
+    currentPage === "index.html" || 
+    currentPage === "" || 
+    fullPath.includes("NavInicio")
+) {
+    console.log("Inicializando dashboard...");
+    import('./pages/dashboard.js')
+        .then((mod) => {
+            if (mod?.DashboardManager?.init) {
+                mod.DashboardManager.init();
+            }
+        })
+        .catch((err) => console.error("Error al importar DashboardManager:", err));
+}
 
     // Página de dashboard/inicio
     if (
@@ -110,46 +205,46 @@ class App {
     }
 
     // Página de Cursos 
-if (
-  currentPage === "cursos.html" ||
-  currentPage === "Cursos.html" ||
-  fullPath.includes("cursos") ||
-  fullPath.includes("Cursos") ||
-  document.querySelector('[data-module="cursos"]') ||
-  document.querySelector("title")?.textContent?.includes("Cursos")
-) {
-  console.log("Inicializando módulo de Cursos...")
-  CursosManager.init()
-  return
-}
-// Página de Usuarios
-if (
-  currentPage === "usuarios.html" ||
-  currentPage === "Usuarios.html" ||
-  fullPath.includes("usuarios") ||
-  document.querySelector('[data-module="usuarios"]') ||
-  document.querySelector("title")?.textContent?.includes("Usuarios")
-) {
-  console.log("Inicializando módulo de Usuarios…")
-  UsuariosManager.init()
-  return
-}
+    if (
+      currentPage === "cursos.html" ||
+      currentPage === "Cursos.html" ||
+      fullPath.includes("cursos") ||
+      fullPath.includes("Cursos") ||
+      document.querySelector('[data-module="cursos"]') ||
+      document.querySelector("title")?.textContent?.includes("Cursos")
+    ) {
+      console.log("Inicializando módulo de Cursos...")
+      CursosManager.init()
+      return
+    }
+    // Página de Usuarios
+    if (
+      currentPage === "usuarios.html" ||
+      currentPage === "Usuarios.html" ||
+      fullPath.includes("usuarios") ||
+      document.querySelector('[data-module="usuarios"]') ||
+      document.querySelector("title")?.textContent?.includes("Usuarios")
+    ) {
+      console.log("Inicializando módulo de Usuarios…")
+      UsuariosManager.init()
+      return
+    }
 
 
-// Página de Encuesta de Habitante
-if (
-  currentPage === "encuestaHabitante.html" ||
-  currentPage === "EncuestaHabitante.html" ||
-  fullPath.includes("encuestaHabitante") ||
-  fullPath.includes("EncuestaHabitante") ||
-  document.querySelector('[data-module="encuestaHabitante"]') ||
-  document.querySelector("title")?.textContent?.includes("Encuesta de Habitante") ||
-  document.querySelector("title")?.textContent?.includes("Encuesta del Habitante")
-) {
-  console.log("Inicializando módulo de Encuesta de Habitante…")
-  EncuestaHabitanteManager.init()
-  return
-}
+    // Página de Encuesta de Habitante
+    if (
+      currentPage === "encuestaHabitante.html" ||
+      currentPage === "EncuestaHabitante.html" ||
+      fullPath.includes("encuestaHabitante") ||
+      fullPath.includes("EncuestaHabitante") ||
+      document.querySelector('[data-module="encuestaHabitante"]') ||
+      document.querySelector("title")?.textContent?.includes("Encuesta de Habitante") ||
+      document.querySelector("title")?.textContent?.includes("Encuesta del Habitante")
+    ) {
+      console.log("Inicializando módulo de Encuesta de Habitante…")
+      EncuestaHabitanteManager.init()
+      return
+    }
 
 
 
@@ -303,5 +398,8 @@ handleModalFocus(modal) {
 }
 }
 
+
+
 // Inicializar la aplicación
 new App()
+

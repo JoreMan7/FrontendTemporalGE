@@ -67,12 +67,21 @@ export function setDynamicPageTitle() {
   const titleElement = document.getElementById("pageTitle")
   if (!titleElement) return
 
-  let titulo = document.title || ""
+  // Esperar a que el DOM esté completamente cargado
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setDynamicPageTitle()
+    })
+    return
+  }
+
+  let titulo = document.title || "Sistema Eclesial" // Valor por defecto
 
   if (titulo.includes(" - ")) {
     titulo = titulo.split(" - ")[0]
   }
 
+  // Remover acentos y convertir a mayúsculas
   titulo = titulo
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")

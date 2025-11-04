@@ -1,58 +1,84 @@
 import { AuthManager } from "./auth.js"
 import { BASE_URL } from "./config.js"
+import { SessionManager } from "./SessionManager.js"
 
 export class ApiClient {
   static BASE_URL = BASE_URL
 
   static async request(endpoint, options = {}) {
-    const url = `${this.BASE_URL}${endpoint}`
-    const token = AuthManager.getToken()
+  const url = `${this.BASE_URL}${endpoint}`
+  
+  // Verificar token localmente primero
+  const token = AuthManager.getToken()
+  if (!token || AuthManager.isTokenExpired(token)) {
+    console.warn("[ApiClient] Token missing or expired locally")
+    
+    // Intentar refresh antes de proceder
+    const refreshed = await this.tryRefreshToken()
+    if (!refreshed) {
+      AuthManager.redirectToLogin()
+      throw new Error("Authentication required")
+    }
+  }
 
-    const config = {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  }
+
+  let response = await fetch(url, { ...options, headers })
+
+  // Si el access token venció → intenta refresh UNA vez
+  if (response.status === 401) {
+    console.log("[ApiClient] 401 received, attempting token refresh...")
+    const refreshed = await this.tryRefreshToken()
+    if (refreshed) {
+      const newToken = AuthManager.getToken()
+      const retryHeaders = { ...headers, Authorization: `Bearer ${newToken}` }
+      response = await fetch(url, { ...options, headers: retryHeaders })
+    } else {
+      console.log("[ApiClient] Token refresh failed, redirecting to login")
+      AuthManager.redirectToLogin()
+      throw new Error("Unauthorized")
+    }
+  }
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(text || `HTTP ${response.status}`)
+  }
+
+  // Actividad de red válida → resetea inactividad
+  SessionManager?.networkActivityPing?.()
+
+  return response.headers.get("content-type")?.includes("application/json")
+    ? response.json()
+    : response.text()
+}
+
+  static async tryRefreshToken() {
+    const refreshToken = localStorage.getItem("refresh_token")
+    if (!refreshToken) return false
+
+    const r = await fetch(`${BASE_URL}/api/auth/refresh`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token ? `Bearer ${token}` : "",
-      },
-      ...options,
-    }
-
-    try {
-      console.log(`Request to: ${url}`)
-      const response = await fetch(url, config)
-
-      if (response.status === 401) {
-        console.log("Token inválido - Redirigiendo al login")
-        AuthManager.redirectToLogin()
-        return { success: false, error: "Unauthorized", status: 401 }
+        "Authorization": `Bearer ${refreshToken}`
       }
+    })
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
+    if (!r.ok) return false
+    const d = await r.json().catch(() => ({}))
+    if (!d.access_token) return false
 
-      const data = await response.json()
-      return data
-    } catch (error) {
-      console.error("API request failed:", error)
-      return {
-        success: false,
-        error: error.message,
-      }
-    }
+    AuthManager.setToken(d.access_token)
+    return true
   }
 
-  // Obtener habitantes
-  static async getHabitantes() {
-    return await this.request("/api/habitantes/")
-  }
-
-  // Verificar token
-  static async verifyToken() {
-    return await this.request("/api/auth/verify")
-  }
-
-  // Obtener perfil de usuario
-  static async getUserProfile() {
-    return await this.request("/api/user/profile")
-  }
+  // helpers que ya usas
+  static async getHabitantes() { return await this.request("/api/habitantes/") }
+  static async verifyToken() { return await this.request("/api/auth/verify") }
+  static async getUserProfile() { return await this.request("/api/user/profile") }
 }

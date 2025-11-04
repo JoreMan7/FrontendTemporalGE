@@ -1,236 +1,375 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citas - GESTIÓN ECLESIAL</title>
-    <link rel="shortcut icon" href="../Img/Logo_Favicon.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!--<link rel="stylesheet" href="stylePruebas.css">-->
-    <link rel="stylesheet" href="../statics/css/app.css">
-    <!-- Bootstrap -->
-
-    <!-- Iconos de Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citas - GESTIÓN ECLESIAL</title>
+  <link rel="shortcut icon" href="../Img/Logo_Favicon.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../statics/css/app.css">
 </head>
 
-<body class="BodyPlantilla">
-    <!--Inicio de Plantilla-->
-    <aside class="Sidebar" id="sidebar">
-        <div class="LogoContainer">
-            <img src="../Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
+<body class="BodyPlantilla" data-module="citas">
+  <!-- Sidebar -->
+  <aside class="Sidebar" id="sidebar">
+    <div class="LogoContainer">
+      <img src="../Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
+    </div>
+    <nav class="NavMenu">
+      <a href="../NavInicio.html" class="NavItem"><i class="fas fa-home"></i><span class="NavText">Inicio</span></a>
+      <a href="../NavOficina.html" class="NavItem active"><i class="bi bi-suitcase-lg-fill"></i><span class="NavText">Oficina</span></a>
+      <a href="../NavEstadisticas.html" class="NavItem"><i class="fas fa-calculator"></i><span class="NavText">Estadísticas</span></a>
+      <a href="../NavAjustes.html" class="NavItem"><i class="fas fa-cog"></i><span class="NavText">Ajustes</span></a>
+      <a href="../About.html" class="NavItem"><i class="bi-info-circle"></i><span class="NavText">Acerca De</span></a>
+    </nav>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="MainContent">
+    <header class="TopBar">
+      <div class="UserInfo">
+        <img src="../Img/sacerdote.jpg" alt="Usuario" class="UserAvatar">
+        <div class="UserDetails">
+          <h2 class="UserName">Oficina Parroquial</h2>
+          <p class="CurrentDate" id="CurrentDate"></p>
         </div>
-        <nav class="NavMenu">
-            <a href="../NavInicio.html" class="NavItem">
-                <i class="fas fa-home"></i>
-                <span class="NavText">Inicio</span>
-            </a>
-            <a href="../NavOficina.html" class="NavItem active">
-                <i class="bi bi-suitcase-lg-fill"></i>
-                <span class="NavText">Oficina</span>
-            </a>
-            <a href="../NavEstadisticas.html" class="NavItem">
-                <i class="fas fa-calculator"></i>
-                <span class="NavText">estadísticas</span>
-            </a>
-            <a href="../NavAjustes.html" class="NavItem">
-                <i class="fas fa-cog"></i>
-                <span class="NavText">Ajustes</span>
-            </a>
-            <a href="../About.html" class="NavItem">
-                <i class="bi bi-info-circle-fill"></i>
-                <span class="NavText">Acerca De</span>
-            </a>
-        </nav>
-    </aside>
-    <main class="MainContent">
-        <header class="TopBar">
-            <div class="UserInfo">
-                <img src="../Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
-                <div class="UserDetails">
-                    <h2 class="UserName">Héctor Lemus</h2>
-                    <p class="CurrentDate" id="CurrentDate"></p>
-                </div>
+      </div>
+      <div class="MobileLogo">
+        <img src="../Img/Logo_Mobile.png" alt="Logo Eclesial">
+      </div>
+      <div class="HeaderActions">
+        <button class="btn btn-help help">Ayuda</button>
+        <div class="Divider"></div>
+        <button class="btn btn-logout logout">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <!-- Barra: Volver + Título -->
+    <div class="d-flex align-items-center ms-3 mt-3">
+      <button id="btnVolver" class="btn btn-outline-secondary btn-sm shadow-sm">
+        <i class="fas fa-arrow-left me-1"></i> Volver
+      </button>
+      <div class="flex-grow-1 text-center">
+        <h5 id="pageTitle" class="m-0 fw-bold text-uppercase">Gestión de Citas</h5>
+      </div>
+      <div style="width: 42px;"></div>
+    </div>
+
+    <section class="Content">
+      <div class="container-fluid">
+        <!-- Header Controls -->
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <div class="d-flex align-items-center gap-3">
+                <strong>Módulo:</strong>
+                <span class="badge bg-primary">Citas Parroquiales</span>
+              </div>
+
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filtersModal">
+                  <i class="fas fa-filter me-2"></i>Filtros
+                </button>
+                <button class="btn btn-success" id="btnExportar">
+                  <i class="fas fa-file-export me-2"></i>Exportar CSV
+                </button>
+                <button class="btn btn-outline-secondary" id="btnImprimir">
+                  <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <button class="btn btn-primary" id="btnNuevaCita">
+                  <i class="fas fa-plus me-2"></i>Nueva Cita
+                </button>
+              </div>
             </div>
-            <div class="MobileLogo">
-                <img src="../Img/Logo_Mobile.png" alt="Logo Eclesial">
-            </div>
-
-            <div class="HeaderActions">
-                <button class="btn btn-help help">Ayuda</button>
-                <div class="Divider"></div>
-                <button class="btn btn-logout logout">Cerrar sesión</button>
-                <div class="profile">
-                    <button class="profile-btn">
-                        <img src="../Img/sacerdote.jpg" alt="Usuario"><i class="bi bi-caret-down-fill"></i></button>
-                    <div class="profile-menu">
-                        <div class="profile-header">
-                            <img src="../Img/sacerdote.jpg" alt="Usuario">
-                            <div>
-                                <h4>Héctor Lemus</h4>
-                                <small>Administrador</small>
-                            </div>
-                        </div>
-                        <hr>
-                        <button class="help"><i class="bi bi-question-circle"></i> Ayuda</button>
-                        <button class="logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</button>
-                    </div>
-                </div>
-            </div>
-        </header>
-       <!-- <div class="NotificationBar">
-            Acá mostrar una notificación de recordatorio de algo
-        </div>-->
-        <!--Fin de Plantilla-->
-
-        <!-- Tabla con encabezado -->
-
-
-        <section class="Content">
-            <!--<i id="IconBack" class="bi bi-arrow-left-circle-fill"></i> --- botón atras  -->
-            <div class="ContentHeader">
-                <a href="./Citas/AgendarCita.html" class="btn btn-green">
-                    <i class="fas fa-calendar"></i> Agendar Cita
-                </a>
-
-                <div class="ParishInfo">
-                    <img src="../Img/Diocesis-Logo.png" alt="Logo Parroquia" class="ParishLogo">
-                    <!-- Logo de la parroquia -->
-                    <div class="ParishDetails">
-                        <div>NOMBRE DE LA PARROQUIA</div> <!-- Nombre de la parroquia -->
-                        <div>NIT</div> <!-- NIT de la parroquia -->
-                        <div>DIRECCIÓN</div> <!-- Dirección de la parroquia -->
-                    </div>
-                    <div class="ReportInfo">
-                        <div>Fecha del reporte</div> <!-- Fecha del reporte -->
-                        <div>DD-MM-AAAA</div> <!-- Fecha del reporte generarse al día de consulta -->
-                    </div>
-                </div>
-
-
-
-                <div>
-                    <button class="btn btn-blue"><i class="fas fa-print"></i> Imprimir</button>
-                </div>
-            </div>
-
-            <div class="ContentBody">
-                <div class="FiltersContainer">
-                    <div class="DateFilter">
-                        <span>Seleccione período</span>
-                        <input type="text" id="StartDate" value="De Ene 1, 2024" readonly>
-                        <input type="text" id="EndDate" value="A Mar 31, 2024" readonly>
-                    </div>
-
-                    <div class="SearchFilter">
-                        <div class="SearchBox">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Buscar...">
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-outline dropdown-toggle" id="FilterButton">
-                                <i class="fas fa-filter"></i> Filtros
-                            </button>
-                            <div class="dropdown-menu" id="FilterMenu">
-                                <div class="FilterGroup">
-                                    <h4>Sacerdote</h4>
-                                    <div class="FilterOptions">
-                                        <label><input type="checkbox"> Padre Juan</label>
-                                        <label><input type="checkbox"> Padre Pedro</label>
-                                        <label><input type="checkbox"> Padre Miguel</label>
-                                    </div>
-                                </div>
-                                <div class="FilterGroup">
-                                    <h4>Estado</h4>
-                                    <div class="FilterOptions">
-                                        <label><input type="checkbox"> Cumplida</label>
-                                        <label><input type="checkbox"> Pendiente</label>
-                                        <label><input type="checkbox"> Cancelada</label>
-                                        <label><input type="checkbox"> No asistió</label>
-                                    </div>
-                                </div>
-                                <div class="FilterActions">
-                                    <button class="btn btn-sm btn-outline">Limpiar</button>
-                                    <button class="btn btn-sm btn-blue">Aplicar</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-outline dropdown-toggle">
-                                Selección
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Table -->
-                <div class="TableContainer">
-                    <table id="TablaCitas">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="SelectAll"></th>
-                                <th>Número de Cita</th>
-                                <th>Fecha de la cita</th>
-                                <th>Solicitado por</th>
-                                <th>Tipo de Documento</th>
-                                <th>Número de Documento</th>
-                                <th>Día de la semana</th>
-                                <th>Sacerdote</th>
-                                <th>Motivo de la cita</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Table will be populated from database -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Date picker modal -->
-        <div id="datePickerModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Seleccionar Fecha</h3>
-                    <span class="close">&times;</span>
-                </div>
-                <div class="modal-body">
-                    <div class="calendar-container">
-                        <div class="calendar-header">
-                            <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
-                            <h4 id="currentMonth">Enero 2024</h4>
-                            <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                        <div class="calendar-grid">
-                            <div class="weekday">Dom</div>
-                            <div class="weekday">Lun</div>
-                            <div class="weekday">Mar</div>
-                            <div class="weekday">Mié</div>
-                            <div class="weekday">Jue</div>
-                            <div class="weekday">Vie</div>
-                            <div class="weekday">Sáb</div>
-                            <!-- Calendar days will be generated by JavaScript -->
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-outline" id="cancelDate">Cancelar</button>
-                        <button class="btn btn-blue" id="applyDate">Aplicar</button>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-        <!-- Fin Tabla con encabezado -->
-    </main>
 
-    <!--<script src="../statics/scriptPrueba.js" ></script> -->
-    <script src="../statics/script.js"></script>
-    <script src="../statics/prueba.js"></script>
+        <!-- Tabla -->
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table id="dataTable" class="table table-striped table-hover mb-0">
+                <thead class="table">
+                  <tr>
+                    <th width="50" class="text-center">
+                      <input type="checkbox" id="selectAll" class="form-check-input">
+                    </th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Padre</th>
+                    <th>Tipo</th>
+                    <th>Solicitante</th>
+                    <th>Celular</th>
+                    <th>Estado</th>
+                    <th width="200">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                  <tr>
+                    <td colspan="9" class="text-center py-5">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                      </div>
+                      <p class="mt-2 text-muted">Cargando citas...</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div id="paginationInfo" class="text-muted">Cargando...</div>
+          <div class="d-flex align-items-center gap-3">
+            <input id="globalSearch" class="form-control form-control-sm" placeholder="Búsqueda rápida..." style="max-width: 260px;">
+            <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
+              <option value="10">10 por página</option>
+              <option value="20">20 por página</option>
+              <option value="50">50 por página</option>
+              <option value="100">100 por página</option>
+            </select>
+            <div id="paginationButtons" class="d-flex gap-1"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal: Filtros -->
+  <div class="modal fade" id="filtersModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-filter me-2"></i>Filtros - Citas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Estado</label>
+              <select id="fEstado" class="form-select">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tipo de Cita</label>
+              <select id="fTipo" class="form-select">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Desde</label>
+              <input type="date" id="fDesde" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Hasta</label>
+              <input type="date" id="fHasta" class="form-control">
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Buscar (solicitante, celular, padre)</label>
+              <input type="text" id="fBuscar" class="form-control" placeholder="Texto a buscar...">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Cancelar
+          </button>
+          <div>
+            <button type="button" class="btn btn-outline-danger me-2" id="btnClearFilters">
+              <i class="fas fa-broom me-2"></i>Limpiar
+            </button>
+            <button type="button" class="btn btn-primary" id="btnApplyFilters">
+              <i class="fas fa-check me-2"></i>Aplicar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Crear/Editar Cita - VERSIÓN ACTUALIZADA -->
+<div class="modal fade" id="citaModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="citaForm" novalidate>
+        <div class="modal-header">
+          <h5 class="modal-title" id="citaModalTitle">
+            <i class="fas fa-calendar-plus me-2"></i>Nueva Cita
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="citaId">
+          
+          <div class="row g-3">
+            <!-- Fecha y Hora -->
+            <div class="col-md-6">
+              <label class="form-label">Fecha <span class="text-danger">*</span></label>
+              <input type="date" id="citaFecha" class="form-control" required>
+              <div class="invalid-feedback">La fecha es obligatoria</div>
+            </div>
+            
+            <div class="col-md-6">
+              <label class="form-label">Hora <span class="text-danger">*</span></label>
+              <input type="time" id="citaHora" class="form-control" required>
+              <div class="invalid-feedback">La hora es obligatoria</div>
+            </div>
+            
+            <!-- Tipo de Cita -->
+            <div class="col-md-6">
+              <label class="form-label">Tipo de Cita <span class="text-danger">*</span></label>
+              <select id="citaTipo" class="form-select" required>
+                <option value="">Seleccionar tipo...</option>
+              </select>
+              <div class="invalid-feedback">El tipo es obligatorio</div>
+            </div>
+            
+            <!-- Padre Asignado -->
+            <div class="col-md-6">
+              <label class="form-label">Padre Asignado <span class="text-danger">*</span></label>
+              <select id="padreSelect" class="form-select" required>
+                <option value="">Seleccionar padre...</option>
+              </select>
+              <div class="invalid-feedback">Debe seleccionar un padre</div>
+            </div>
+            
+            <!-- Información del Solicitante -->
+            <div class="col-12">
+              <h6 class="border-bottom pb-2 mb-3">Información del Solicitante</h6>
+            </div>
+            
+            <div class="col-md-4">
+              <label class="form-label">Tipo Documento <span class="text-danger">*</span></label>
+              <select id="citaTipoDocumento" class="form-select" required>
+                <option value="">Seleccionar...</option>
+              </select>
+              <div class="invalid-feedback">El tipo de documento es obligatorio</div>
+            </div>
+            
+            <div class="col-md-8">
+              <label class="form-label">Número Documento <span class="text-danger">*</span></label>
+              <input type="text" id="citaNumeroDocumento" class="form-control" required>
+              <div class="invalid-feedback">El número de documento es obligatorio</div>
+            </div>
+            
+            <div class="col-md-6">
+              <label class="form-label">Nombre Solicitante <span class="text-danger">*</span></label>
+              <input type="text" id="citaSolicitante" class="form-control" required>
+              <div class="invalid-feedback">El nombre es obligatorio</div>
+            </div>
+            
+            <div class="col-md-6">
+              <label class="form-label">Celular <span class="text-danger">*</span></label>
+              <input type="tel" id="citaCelular" class="form-control" required>
+              <div class="invalid-feedback">El celular es obligatorio</div>
+            </div>
+            
+            <div class="col-12">
+              <label class="form-label">Descripción</label>
+              <textarea id="citaDescripcion" class="form-control" rows="3" 
+                        placeholder="Motivo o notas adicionales de la cita..."></textarea>
+            </div>
+            
+            <!-- Estado (solo visible en edición) -->
+            <div class="col-12" id="estadoContainer" style="display: none;">
+              <label class="form-label">Estado de la Cita</label>
+              <select id="citaEstado" class="form-select">
+                <option value="">Seleccionar estado...</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-2"></i>Guardar Cita
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+  <!-- Modal: Buscar Padre -->
+  <div class="modal fade" id="buscarPadreModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-user-tie me-2"></i>Buscar Padre</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <input type="text" id="buscarPadreInput" class="form-control" 
+                   placeholder="Buscar por nombre, apellido o documento...">
+            <button class="btn btn-outline-primary" type="button" id="btnBuscarPadre">
+              <i class="fas fa-search me-2"></i>Buscar
+            </button>
+          </div>
+          
+          <div class="table-responsive" style="max-height: 400px;">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Documento</th>
+                  <th>Teléfono</th>
+                  <th>Correo</th>
+                  <th width="100">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="padresBody">
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-3">
+                    Ingrese un criterio de búsqueda...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Detalle Cita -->
+  <div class="modal fade" id="detalleModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-eye me-2"></i>Detalle de Cita</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <dl class="row" id="detalleBody">
+            <!-- Se llena dinámicamente -->
+          </dl>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="../statics/js/app.js"></script>
 </body>
-
 </html>
