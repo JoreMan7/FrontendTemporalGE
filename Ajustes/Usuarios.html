@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="../statics/css/app.css">
 </head>
 
-
 <body class="BodyPlantilla" data-module="usuarios">
   <!-- Sidebar -->
   <aside class="Sidebar" id="sidebar">
@@ -192,10 +191,17 @@
                 <label class="form-label">Tipo Doc.</label>
                 <select id="TipoDocumento" class="form-select" required>
                   <option value="">Seleccione…</option>
-                  <option value="CC">CC</option>
-                  <option value="TI">TI</option>
-                  <option value="CE">CE</option>
-                  <option value="PAS">PAS</option>
+                  <!-- valores = IdTipoDocumento (1..10) -->
+                  <option value="1">Cédula de Ciudadanía</option>
+                  <option value="2">Tarjeta de Identidad</option>
+                  <option value="3">Registro Civil de Nacimiento</option>
+                  <option value="4">Cédula de Extranjería</option>
+                  <option value="5">Pasaporte</option>
+                  <option value="6">Permiso Especial de Permanencia</option>
+                  <option value="7">NIT</option>
+                  <option value="8">Salvoconducto de Permanencia</option>
+                  <option value="9">Documento Nacional de Identidad Extranjero</option>
+                  <option value="10">Otro</option>
                 </select>
                 <div class="invalid-feedback">Requerido</div>
               </div>
@@ -317,12 +323,10 @@
     </div>
   </div>
 
-  </section>
-  </main>
-
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Respetamos tu modularidad: solo app.js, que internamente carga usuarios.js según data-module -->
   <script type="module" src="../statics/js/app.js"></script>
 </body>
 </html>

@@ -5,8 +5,8 @@
 //   GET    /api/usuarios/                   (listar)
 //   GET    /api/usuarios/<id>/              (detalle)
 //   GET    /api/usuarios/roles              (listar roles)
-//   GET    /api/usuarios/verificar_habitante?tipo_documento=CC&numero_documento=123
-//   POST   /api/usuarios/                   (crear: {tipo_documento, numero_documento, id_tipo_usuario, password})
+//   GET    /api/usuarios/verificar_habitante?id_tipo_documento=CC&numero_documento=123
+//   POST   /api/usuarios/                   (crear: {id_tipo_documento, numero_documento, id_tipo_usuario, password})
 //   PUT    /api/usuarios/<id>/rol           (cambiar rol: {id_tipo_usuario})
 //   PATCH  /api/usuarios/<id>/password      (cambiar contraseña: {password})
 //   PATCH  /api/usuarios/<id>/desactivar    (inactivar)
@@ -215,17 +215,22 @@ function abrirModalNuevo() {
 async function buscarHabitante() {
   const tipo = $("#TipoDocumento").value.trim();
   const numero = $("#NumeroDocumento").value.trim();
+ 
+  console.log(tipoTexto)
   if (!tipo || !numero) {
     UIX.toast("Indique tipo y número de documento", "warning");
     return;
   }
+
   try {
     const url = `/api/usuarios/verificar_habitante?tipo_documento=${encodeURIComponent(tipo)}&numero_documento=${encodeURIComponent(numero)}`;
     const res = await ApiClient.request(url);
+
     if (res?.success) {
       const h = res.habitante || res.data?.habitante || {};
       $("#IdHabitanteSeleccionado").value = h.id ?? "";
-      $("#HabitanteInfoText").textContent = `Habitante: ${h.nombre ?? ""} ${h.apellido ?? ""} (${h.tipo_documento ?? tipo} ${h.numero_documento ?? numero})`;
+      $("#HabitanteInfoText").textContent =
+        `Habitante: ${h.nombre ?? ""} ${h.apellido ?? ""} (${h.id_tipo_documento ?? tipo} ${h.numero_documento ?? numero})`;
       $("#HabitanteInfo").hidden = false;
       UIX.toast("Habitante válido para crear usuario");
     } else {
@@ -235,11 +240,48 @@ async function buscarHabitante() {
     }
   } catch (e) {
     console.error(e);
+    let msg = e.message || "Error al verificar habitante";
+
+    // Intentar leer JSON del backend
+    try {
+      const parsed = JSON.parse(msg);
+      if (parsed?.message) msg = parsed.message;
+
+      // Caso especial: habitante no existe
+      if (msg.includes("No se encontró habitante")) {
+  if (window.Swal?.fire) {
+    const select = document.getElementById("TipoDocumento");
+    const tipoTexto = select.options[select.selectedIndex].text;   // 👈 AQUÍ
+    const r = await Swal.fire({
+      icon: "warning",
+      title: "Habitante no encontrado",
+      text: `No existe un habitante con ${tipoTexto} ${numero}. ¿Deseas ir a la Encuesta para crearlo?`,
+      showCancelButton: true,
+      confirmButtonText: "Ir a Encuesta",
+      cancelButtonText: "Seguir aquí"
+    });
+
+          if (r.isConfirmed) {
+            const qs = new URLSearchParams({ td: tipo, doc: numero });
+            window.location.href = `../Oficina/Encuestas.html?${qs.toString()}`;
+          }
+        } else {
+          const go = confirm(`${msg}\n\n¿Ir a la Encuesta para crear el habitante?`);
+          if (go) window.location.href = "../Oficina/Encuestas.html";
+        }
+        return;
+      }
+    } catch (_) {
+      // no era JSON
+    }
+
     $("#IdHabitanteSeleccionado").value = "";
     $("#HabitanteInfo").hidden = true;
-    UIX.toast("Error al verificar habitante", "error");
+    UIX.toast(msg, "error");
   }
 }
+
+
 
 async function crearUsuario(e) {
   e.preventDefault();
@@ -271,11 +313,50 @@ async function crearUsuario(e) {
     bootstrap.Modal.getInstance($("#usuarioModal"))?.hide();
     //document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
     await cargarUsuarios();
-  } catch (e) {
+    } catch (e) {
     console.error(e);
-    UIX.toast(e.message || "Error al crear usuario", "error");
+    let msg = e.message || "Error al crear usuario";
+
+    // Intentar leer JSON devuelto por el backend
+    try {
+      const parsed = JSON.parse(msg);
+      if (parsed?.message) msg = parsed.message;
+    } catch (_) {
+      // no era JSON
+    }
+
+    // Si el problema es que NO existe el habitante → ofrecer crear desde Encuesta
+    if (msg.includes("No se encontró habitante")) {
+  const select = document.getElementById("TipoDocumento");
+  const tipoTexto = select.options[select.selectedIndex].text;   // 🔹 nombre
+  const numero = document.getElementById("NumeroDocumento").value.trim();
+
+  if (window.Swal?.fire) {
+    const r = await Swal.fire({
+      icon: "warning",
+      title: "Habitante no encontrado",
+      text: `No existe un habitante con ${tipoTexto} ${numero}. ¿Deseas ir a la Encuesta para crearlo?`,
+      showCancelButton: true,
+      confirmButtonText: "Ir a Encuesta",
+      cancelButtonText: "Seguir editando"
+    });
+
+    if (r.isConfirmed) {
+      const qs = new URLSearchParams({ td: select.value, doc: numero });
+      window.location.href = `../Oficina/Encuestas.html?${qs.toString()}`;
+    }
+  }
+  return;
+}
+
+
+    // Otros errores (contraseña, rol, etc.)
+    UIX.toast(msg, "error");
   }
 }
+
+
+
 
 async function abrirModalRol(idUsuario) {
   $("#rolForm").reset();
@@ -360,7 +441,8 @@ async function activarUsuario(id) {
 
 async function verDetalle(id) {
   try {
-    const res = await ApiClient.request(`/api/usuarios/${id}/`);
+    // 🔁 sin slash final
+    const res = await ApiClient.request(`/api/usuarios/${id}`);
     const u = res?.data || res || {};
     $("#detId").textContent = u.IdUsuario ?? id;
     $("#detNombre").textContent = `${u.Nombre ?? ""} ${u.Apellido ?? ""}`.trim() || "-";
@@ -374,6 +456,7 @@ async function verDetalle(id) {
     UIX.toast("No se pudo obtener el detalle", "error");
   }
 }
+
 
 // =====================
 // Exportar / imprimir

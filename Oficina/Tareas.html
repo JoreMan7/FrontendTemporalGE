@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tareas - GESTIÓN ECLESIAL</title>
+
+  <link rel="shortcut icon" href="../Img/Logo_Favicon.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../statics/css/app.css">
+</head>
+
+<body class="BodyPlantilla" data-module="tareas">
+  <!-- Sidebar -->
+  <aside class="Sidebar" id="sidebar">
+    <div class="LogoContainer">
+      <img src="../Img/Logo_(Vertical).png" alt="Eclesial Logo" class="Logo">
+    </div>
+    <nav class="NavMenu">
+      <a href="../NavInicio.html" class="NavItem"><i class="fas fa-home"></i><span class="NavText">Inicio</span></a>
+      <a href="../NavOficina.html" class="NavItem active"><i class="bi bi-suitcase-lg-fill"></i><span class="NavText">Oficina</span></a>
+      <a href="../NavEstadisticas.html" class="NavItem"><i class="fas fa-calculator"></i><span class="NavText">Estadísticas</span></a>
+      <a href="../NavAjustes.html" class="NavItem"><i class="fas fa-cog"></i><span class="NavText">Ajustes</span></a>
+      <a href="../About.html" class="NavItem"><i class="bi-info-circle"></i><span class="NavText">Acerca De</span></a>
+    </nav>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="MainContent">
+    <header class="TopBar">
+      <div class="UserInfo">
+        <img src="../Img/sacerdote.jpg" alt="Héctor Lemus" class="UserAvatar">
+        <div class="UserDetails">
+          <h2 class="UserName">Héctor Lemus</h2>
+          <p class="CurrentDate" id="CurrentDate"></p>
+        </div>
+      </div>
+      <div class="MobileLogo">
+        <img src="../Img/Logo_Mobile.png" alt="Logo Eclesial">
+      </div>
+      <div class="HeaderActions">
+        <button class="btn btn-help help">Ayuda</button>
+        <div class="Divider"></div>
+        <button class="btn btn-logout logout">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <!-- Barra de navegación y título -->
+    <div class="d-flex align-items-center ms-3 mt-3">
+      <button id="btnVolver" class="btn btn-outline-secondary btn-sm shadow-sm">
+        <i class="fas fa-arrow-left me-1"></i> Volver
+      </button>
+      <div class="flex-grow-1 text-center">
+        <h5 id="pageTitle" class="m-0 fw-bold text-uppercase align-middle">Cargando...</h5>
+      </div>
+      <div class="d-flex align-items-center" style="width: 42px;"></div>
+    </div>
+
+    <section class="Content">
+      <div class="container-fluid">
+        <div class="ContentHeader">
+          <button class="btn btn-green"><i class="bi bi-bar-chart"></i> estadísticas</button>
+          <div class="ParishInfo">
+            <img src="../Img/Diocesis-Logo.png" alt="Logo Parroquia" class="ParishLogo">
+            <div class="ParishDetails">
+              <div>NOMBRE DE LA PARROQUIA</div>
+              <div>NIT</div>
+              <div>DIRECCIÓN</div>
+            </div>
+            <div class="ReportInfo">
+              <div>Fecha del reporte</div>
+              <div>DD-MM-AAAA</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Módulo -->
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <div class="d-flex align-items-center gap-3">
+                <strong>Módulo:</strong>
+                <span class="badge bg-primary">Tareas</span>
+                <span class="text-muted small">
+                  Catálogo de tipos de tarea y administración de tareas asignadas a grupos.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 1: Tipos de Tarea -->
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0"><i class="fas fa-list-check me-2"></i>Catálogo de Tipos de Tarea</h6>
+            <button class="btn btn-sm btn-primary" id="btnNuevoTipo">
+              <i class="fas fa-plus me-1"></i>Nuevo tipo de tarea
+            </button>
+          </div>
+
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th width="80">ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th width="120">Estado</th>
+                    <th width="160">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tipoTableBody">
+                  <tr>
+                    <td colspan="5" class="text-center py-3 text-muted">
+                      Cargando tipos de tarea…
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card-footer d-flex flex-wrap justify-content-between align-items-center">
+            <div id="tipoPaginationInfo" class="text-muted small">Sin registros.</div>
+            <div class="d-flex align-items-center gap-2">
+              <select id="tipoPageSizeSelect" class="form-select form-select-sm" style="width: auto;">
+                <option value="10">10 por página</option>
+                <option value="20">20 por página</option>
+                <option value="50">50 por página</option>
+                <option value="100">100 por página</option>
+              </select>
+              <div id="tipoPaginationButtons" class="d-flex gap-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 2: Asignaciones -->
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Tareas asignadas a grupos</h6>
+            <small class="text-muted">Gestiona aquí las fechas, estados y grupos que tienen tareas.</small>
+          </div>
+
+          <div class="card-body pt-3 pb-0">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filtersModal">
+                  <i class="fas fa-filter me-2"></i>Filtros (Asignaciones)
+                </button>
+                <button class="btn btn-success" id="btnExportar">
+                  <i class="fas fa-file-export me-2"></i>Exportar CSV
+                </button>
+                <button class="btn btn-outline-secondary" id="btnImprimir">
+                  <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <button class="btn btn-primary" id="btnNuevaAsignacion">
+                  <i class="fas fa-plus me-2"></i>Nueva Asignación
+                </button>
+              </div>
+
+              <div class="d-flex align-items-center gap-2">
+                <input id="globalSearch" class="form-control form-control-sm"
+                       placeholder="Buscar en asignaciones…" style="max-width: 220px;">
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-striped table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th width="50" class="text-center">
+                      <input type="checkbox" id="selectAll" class="form-check-input" title="Seleccionar todos">
+                    </th>
+                    <th>Grupo</th>
+                    <th>Tarea</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th width="260">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="asigTableBody">
+                  <tr>
+                    <td colspan="6" class="text-center py-5">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando…</span>
+                      </div>
+                      <p class="mt-2 text-muted">Cargando tareas asignadas…</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card-footer d-flex flex-wrap justify-content-between align-items-center">
+            <div id="paginationInfo" class="text-muted small">Cargando…</div>
+            <div class="d-flex align-items-center gap-2">
+              <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
+                <option value="10">10 por página</option>
+                <option value="20">20 por página</option>
+                <option value="50">50 por página</option>
+                <option value="100">100 por página</option>
+              </select>
+              <div id="paginationButtons" class="d-flex gap-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal: Filtros Asignaciones -->
+  <div class="modal fade" id="filtersModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-filter me-2"></i>Filtros - Tareas asignadas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Grupo</label>
+              <input type="text" id="fGrupo" class="form-control" placeholder="Nombre del grupo…">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tipo de tarea</label>
+              <select id="fTipoTarea" class="form-select">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label d-block">Estado</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="fEstado" id="fEstadoTodos" value="" checked>
+                <label class="form-check-label" for="fEstadoTodos">Todos</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="fEstado" id="fEstadoPendiente" value="Pendiente">
+                <label class="form-check-label" for="fEstadoPendiente">Pendiente</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="fEstado" id="fEstadoProgreso" value="En progreso">
+                <label class="form-check-label" for="fEstadoProgreso">En progreso</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="fEstado" id="fEstadoCumplida" value="Cumplida">
+                <label class="form-check-label" for="fEstadoCumplida">Cumplida</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="fEstado" id="fEstadoCancelada" value="Cancelada">
+                <label class="form-check-label" for="fEstadoCancelada">Cancelada</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha desde</label>
+              <input type="date" id="fFechaDesde" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha hasta</label>
+              <input type="date" id="fFechaHasta" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Cancelar
+          </button>
+          <div>
+            <button type="button" class="btn btn-outline-danger me-2" id="btnClearFilters">
+              <i class="fas fa-broom me-2"></i>Limpiar
+            </button>
+            <button type="button" class="btn btn-primary" id="btnApplyFilters">
+              <i class="fas fa-check me-2"></i>Aplicar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Tipo de Tarea -->
+  <div class="modal fade" id="tipoModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="tipoForm" novalidate>
+          <div class="modal-header">
+            <h5 class="modal-title" id="tipoModalTitle">
+              <i class="fas fa-list-check me-2"></i>Nuevo Tipo de Tarea
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="tipoId">
+            <div class="mb-3">
+              <label class="form-label">Nombre de la tarea <span class="text-danger">*</span></label>
+              <input type="text" id="tipoNombre" class="form-control" required>
+              <div class="invalid-feedback">El nombre es obligatorio.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Descripción (opcional)</label>
+              <textarea id="tipoDescripcion" class="form-control" rows="3"
+                        placeholder="Descripción breve o detalle de la tarea…"></textarea>
+            </div>
+            <p class="text-muted small mb-0">
+              Los tipos de tarea se usan luego para asignarlos a grupos en una fecha específica.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <i class="fas fa-times me-2"></i>Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save me-2"></i>Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Asignación -->
+  <div class="modal fade" id="asigModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="asigForm" novalidate>
+          <div class="modal-header">
+            <h5 class="modal-title" id="asigModalTitle">
+              <i class="fas fa-clipboard-list me-2"></i>Nueva Asignación
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="asigId">
+            <div class="mb-3">
+              <label class="form-label">Grupo <span class="text-danger">*</span></label>
+              <select id="asigGrupo" class="form-select" required>
+                <option value="">Seleccione grupo...</option>
+              </select>
+              <div class="invalid-feedback">Seleccione un grupo.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tipo de tarea <span class="text-danger">*</span></label>
+              <select id="asigTipo" class="form-select" required>
+                <option value="">Seleccione tipo...</option>
+              </select>
+              <div class="invalid-feedback">Seleccione un tipo de tarea.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Fecha de la tarea <span class="text-danger">*</span></label>
+              <input type="date" id="asigFecha" class="form-control" required>
+              <div class="invalid-feedback">La fecha es obligatoria.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Estado</label>
+              <select id="asigEstado" class="form-select" required>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En progreso">En progreso</option>
+                <option value="Cumplida">Cumplida</option>
+                <option value="Cancelada">Cancelada</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <i class="fas fa-times me-2"></i>Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save me-2"></i>Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Detalle Asignación -->
+  <div class="modal fade" id="asigDetalleModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-eye me-2"></i>Detalle de Tarea Asignada
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Grupo</dt>
+            <dd class="col-sm-8" id="detalleGrupo">-</dd>
+            <dt class="col-sm-4">Tarea</dt>
+            <dd class="col-sm-8" id="detalleTipoTarea">-</dd>
+            <dt class="col-sm-4">Fecha</dt>
+            <dd class="col-sm-8" id="detalleFecha">-</dd>
+            <dt class="col-sm-4">Estado</dt>
+            <dd class="col-sm-8" id="detalleEstado">-</dd>
+          </dl>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="../statics/js/app.js"></script>
+</body>
+</html>

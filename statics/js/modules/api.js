@@ -80,5 +80,25 @@ export class ApiClient {
   // helpers que ya usas
   static async getHabitantes() { return await this.request("/api/habitantes/") }
   static async verifyToken() { return await this.request("/api/auth/verify") }
-  static async getUserProfile() { return await this.request("/api/user/profile") }
+  // Perfil
+static async getUserProfile() { 
+  return await this.request("/api/auth/profile") 
+}
+
+static async updateUserProfile(payload) {
+  return await this.request("/api/auth/profile", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+}
+
+// (opcional) subir avatar en multipart/form-data
+static async uploadAvatar(formData) {
+  return await this.request("/api/auth/profile/avatar", {
+    method: "POST",
+    body: formData
+  })
+}
+
 }

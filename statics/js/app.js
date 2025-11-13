@@ -7,8 +7,10 @@ import { DashboardManager } from "./pages/dashboard.js"
 import { HabitantesManager } from "./pages/habitantes.js"
 import { GruposAyudantesManager } from "./pages/gruposAyudantes.js"
 import { CursosManager } from './pages/cursos.js';
+import { ProfileManager } from "./modules/profile.js"
 import { UsuariosManager } from './pages/usuarios.js';
 import { EncuestaHabitanteManager } from "./pages/encuestaHabitante.js";
+import { TareasManager } from "./pages/tareas.js"
 import { SessionManager } from "./modules/SessionManager.js"
 
 
@@ -61,7 +63,9 @@ class App {
     this.setupBasicFeatures()
     
     // 5. Inicializar UI común
-    UIManager.initCommonUI()
+    UIManager.init()
+    console.log("Usuario en localStorage:", AuthManager.getUser());
+
 
     // 6. Inicializar módulos específicos de la página
     this.initPageSpecificModules()
@@ -110,6 +114,8 @@ class App {
     })
   }
 
+  
+
   initPageSpecificModules() {
     const currentPage = window.location.pathname.split("/").pop()
     const fullPath = window.location.pathname
@@ -124,9 +130,37 @@ class App {
       return
     }
 
-    // Página de Citas
-    // Agregar en initPageSpecificModules() después de GruposAyudantes
-if (
+    // Página de Tareas
+    if (
+      currentPage === "tareas.html" ||
+      currentPage === "Tareas.html" ||
+      fullPath.includes("tareas") ||
+      fullPath.includes("Tareas") ||
+      document.querySelector('[data-module="tareas"]') ||
+      document.querySelector("title")?.textContent?.includes("Tareas")
+    ) {
+      console.log("Inicializando módulo de Tareas...");
+      TareasManager.init();
+      return;
+    }
+
+    // Página de Perfil
+  
+    // Página de Perfil
+    if (
+  currentPage === "perfil.html" ||
+  currentPage === "Perfil.html" ||
+  fullPath.includes("/Ajustes/Perfil") ||
+  document.querySelector('[data-module="perfil"]') ||
+  document.querySelector("title")?.textContent?.includes("Perfil -")
+) {
+  console.log("Inicializando módulo de Perfil…")
+  ProfileManager.init()   // <— sin await
+  return
+}
+
+
+    if (
   currentPage === "citas.html" ||
   currentPage === "Citas.html" ||
   fullPath.includes("/Citas.html") ||
@@ -147,8 +181,7 @@ if (
   return;
 }
 
-  // En initPageSpecificModules(), reemplaza la parte del dashboard con:
-if (
+  if (
     document.querySelector(".DashboardScrollContainer") ||
     currentPage === "NavInicio.html" || 
     currentPage === "index.html" || 

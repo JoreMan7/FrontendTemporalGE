@@ -170,7 +170,7 @@ export class UIManager {
       // Actualizar rol si está disponible
       if (user.role) {
         document.querySelectorAll(".profile-header small").forEach((el) => {
-          el.textContent = user.role
+          el.textContent = user.rol
         })
       }
     }
